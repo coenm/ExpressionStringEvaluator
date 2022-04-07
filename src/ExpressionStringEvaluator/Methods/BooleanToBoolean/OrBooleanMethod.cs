@@ -2,29 +2,26 @@
 {
     using System;
 
-    public class OrBooleanMethod : IMethod
+    public class OrBooleanMethod : MethodBase, IMethod
     {
         public bool CanHandle(string method)
         {
-            return "any".Equals(method, StringComparison.InvariantCultureIgnoreCase) || "Or".Equals(method, StringComparison.InvariantCultureIgnoreCase);
+            return IsMethod(method, "Or", "Any");
         }
 
         public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] arg)
         {
-            if (arg.Length == 0)
-            {
-                throw new Exception();
-            }
+            ExpectAtLeastArgumentCount(1, arg);
 
             foreach (var item in arg)
             {
-                if (item.Type == typeof(bool) && item.Bool == true)
+                if (!item.IsNull() && item.Type == typeof(bool) && item.Bool)
                 {
-                    return new CombinedTypeContainer(true);
+                    return CombinedTypeContainer.TrueInstance;
                 }
             }
 
-            return new CombinedTypeContainer(false);
+            return CombinedTypeContainer.FalseInstance;
         }
     }
 }

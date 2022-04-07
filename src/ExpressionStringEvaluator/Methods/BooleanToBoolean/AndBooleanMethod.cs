@@ -2,34 +2,36 @@
 {
     using System;
 
-    public class AndBooleanMethod : IMethod
+    public class AndBooleanMethod : MethodBase, IMethod
     {
         public bool CanHandle(string method)
         {
-            return "And".Equals(method, StringComparison.InvariantCultureIgnoreCase) || "all".Equals(method, StringComparison.InvariantCultureIgnoreCase);
+            return IsMethod(method, "And", "All");
         }
 
         public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] arg)
         {
-            if (arg.Length == 0)
-            {
-                throw new Exception();
-            }
+            ExpectAtLeastArgumentCount(1, arg);
 
             foreach (var item in arg)
             {
-                if (item.Type != typeof(bool))
+                if (item.IsNull())
                 {
-                    return new CombinedTypeContainer(false);
+                    return CombinedTypeContainer.FalseInstance;
                 }
 
-                if (item.Bool == false)
+                if (item.Type != typeof(bool))
                 {
-                    return new CombinedTypeContainer(false);
+                    return CombinedTypeContainer.FalseInstance;
+                }
+
+                if (!item.Bool)
+                {
+                    return CombinedTypeContainer.FalseInstance;
                 }
             }
 
-            return new CombinedTypeContainer(true);
+            return CombinedTypeContainer.TrueInstance;
         }
     }
 }

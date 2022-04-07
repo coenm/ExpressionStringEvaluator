@@ -3,33 +3,24 @@
     using System;
     using System.Linq;
 
-    public class NotBooleanMethod : IMethod
+    public class NotBooleanMethod : MethodBase, IMethod
     {
         public bool CanHandle(string method)
         {
-            return "Not".Equals(method, StringComparison.InvariantCultureIgnoreCase);
+            return IsMethod(method, "Not");
         }
 
         public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] arg)
         {
-            if (arg.Length == 0)
-            {
-                throw new Exception();
-            }
+            ExpectArgumentCount(1, arg);
 
-            if (arg.Length > 1)
-            {
-                throw new Exception();
-            }
+            var item = arg.Single();
 
-            var item = arg.First();
+            ExpectBoolean(item);
 
-            if (item.Type != typeof(bool))
-            {
-                throw new Exception();
-            }
-
-            return new CombinedTypeContainer(!item.Bool);
+            return item.Bool
+                ? CombinedTypeContainer.FalseInstance
+                : CombinedTypeContainer.TrueInstance;
         }
     }
 }
