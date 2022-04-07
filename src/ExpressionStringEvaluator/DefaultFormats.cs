@@ -1,4 +1,4 @@
-﻿namespace Core
+﻿namespace ExpressionStringEvaluator
 {
     public readonly struct DefaultFormats
     {

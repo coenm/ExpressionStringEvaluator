@@ -1,9 +1,9 @@
-﻿namespace Core.VariableProviders
-{
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 
+namespace ExpressionStringEvaluator.VariableProviders
+{
     public class PathSeparatorVariableProvider : IVariableProvider
     {
         private const string KEY = "PathSeparator";

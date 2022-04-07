@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Core.Methods.BooleanToBoolean;
+namespace ExpressionStringEvaluator.Methods.BooleanToBoolean;
 
 public class NotBooleanMethod : IMethod
 {

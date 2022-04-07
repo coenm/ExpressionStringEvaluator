@@ -1,4 +1,4 @@
-﻿namespace Core.Methods
+﻿namespace ExpressionStringEvaluator.Methods
 {
     public interface IMethod
     {

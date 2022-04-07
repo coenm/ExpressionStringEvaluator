@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Web;
 
-namespace Core.Methods.StringToString
+namespace ExpressionStringEvaluator.Methods.StringToString
 {
     public class UrlEncodeStringMethod : IMethod
     {

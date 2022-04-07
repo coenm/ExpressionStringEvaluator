@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Core.Methods.StringToBoolean;
+namespace ExpressionStringEvaluator.Methods.StringToBoolean;
 
 public class StringEqualsStringMethod : IMethod
 {

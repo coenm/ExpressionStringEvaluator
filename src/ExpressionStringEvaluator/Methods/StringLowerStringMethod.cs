@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Core.Methods.StringToString
+namespace ExpressionStringEvaluator.Methods
 {
     public class IfThenElseMethod : IMethod
     {

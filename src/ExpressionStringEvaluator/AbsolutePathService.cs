@@ -1,8 +1,8 @@
-﻿namespace Core
-{
-    using System;
-    using System.IO;
+﻿using System;
+using System.IO;
 
+namespace ExpressionStringEvaluator
+{
     public class AbsolutePathService : IAbsolutePathService
     {
         public string GetExistingAbsoluteFilename(string filename)

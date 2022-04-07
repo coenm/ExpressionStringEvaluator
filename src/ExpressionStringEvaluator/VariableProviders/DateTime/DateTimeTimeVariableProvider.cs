@@ -1,10 +1,9 @@
-﻿namespace Core.VariableProviders.DateTime
+﻿using System;
+using System.Collections.Generic;
+using ExpressionStringEvaluator.Formatters;
+
+namespace ExpressionStringEvaluator.VariableProviders.DateTime
 {
-    using System;
-    using System.Collections.Generic;
-
-    using Core.Formatters;
-
     public class DateTimeTimeVariableProvider : IVariableProvider
     {
         private const string KEY = "Time";

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Core.Methods;
+namespace ExpressionStringEvaluator.Methods;
 
 public class CombinedTypeContainer
 {

@@ -1,8 +1,8 @@
-﻿namespace Core
-{
-    using System;
-    using System.IO;
+﻿using System;
+using System.IO;
 
+namespace ExpressionStringEvaluator
+{
     public readonly struct Context
     {
         public Context(DateTime now, string filename, DefaultFormats defaultDateFormats)

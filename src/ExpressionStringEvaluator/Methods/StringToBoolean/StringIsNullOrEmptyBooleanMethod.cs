@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Core.Methods.StringToBoolean;
+namespace ExpressionStringEvaluator.Methods.StringToBoolean;
 
 public class StringIsNullOrEmptyBooleanMethod : IMethod
 {

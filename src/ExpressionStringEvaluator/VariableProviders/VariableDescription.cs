@@ -1,4 +1,4 @@
-﻿namespace Core.VariableProviders
+﻿namespace ExpressionStringEvaluator.VariableProviders
 {
     public readonly struct VariableDescription
     {

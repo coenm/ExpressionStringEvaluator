@@ -1,11 +1,9 @@
-﻿namespace Core.VariableProviders.DateTime
+﻿using System;
+using System.Collections.Generic;
+using ExpressionStringEvaluator.Formatters;
+
+namespace ExpressionStringEvaluator.VariableProviders.DateTime
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-
-    using Core.Formatters;
-
     public class DateTimeNowVariableProvider : IVariableProvider
     {
         private const string KEY = "Now";

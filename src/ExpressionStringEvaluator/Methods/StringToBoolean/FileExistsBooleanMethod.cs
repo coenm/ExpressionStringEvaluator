@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Core.Methods.StringToBoolean;
+namespace ExpressionStringEvaluator.Methods.StringToBoolean;
 
 public class FileExistsBooleanMethod : IMethod
 {

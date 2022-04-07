@@ -1,14 +1,11 @@
 ﻿using System;
-using Core.Methods;
+using System.Collections.Generic;
+using System.Linq;
+using ExpressionStringEvaluator.Methods;
+using ExpressionStringEvaluator.VariableProviders;
 
-namespace Core.Parser
+namespace ExpressionStringEvaluator.Parser
 {
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Core.Formatters;
-    using Core.VariableProviders;
-
     public class LanguageVisitor : LanguageBaseVisitor<CombinedTypeContainer>
     {
         private readonly List<IMethod> _methods;

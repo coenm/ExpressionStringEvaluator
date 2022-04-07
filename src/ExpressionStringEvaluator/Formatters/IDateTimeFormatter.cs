@@ -1,7 +1,7 @@
-﻿namespace Core.Formatters
-{
-    using System;
+﻿using System;
 
+namespace ExpressionStringEvaluator.Formatters
+{
     public interface IDateTimeFormatter
     {
         string FormatDateTime(DateTime dateTime, Context context, string format = null);

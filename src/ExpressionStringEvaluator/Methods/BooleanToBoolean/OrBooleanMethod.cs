@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Core.Methods.BooleanToBoolean;
+namespace ExpressionStringEvaluator.Methods.BooleanToBoolean;
 
 public class OrBooleanMethod : IMethod
 {

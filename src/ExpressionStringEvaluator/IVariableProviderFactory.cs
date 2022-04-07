@@ -1,9 +1,8 @@
-﻿namespace Core
+﻿using System.Collections.Generic;
+using ExpressionStringEvaluator.VariableProviders;
+
+namespace ExpressionStringEvaluator
 {
-    using System.Collections.Generic;
-
-    using Core.VariableProviders;
-
     public interface IVariableProviderFactory
     {
         IEnumerable<IVariableProvider> CreateVariableProviders();

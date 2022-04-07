@@ -1,8 +1,8 @@
-﻿namespace Core.VariableProviders.FileInfo
-{
-    using System;
-    using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
+namespace ExpressionStringEvaluator.VariableProviders.FileInfo
+{
     public class FileExtensionVariableProvider : IVariableProvider
     {
         private const string KEY = "FileExtension";

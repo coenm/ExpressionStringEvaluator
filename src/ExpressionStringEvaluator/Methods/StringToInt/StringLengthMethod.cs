@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Core.Methods.StringToInt
+namespace ExpressionStringEvaluator.Methods.StringToInt
 {
     public class StringLengthMethod : IMethod
     {

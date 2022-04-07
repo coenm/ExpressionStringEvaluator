@@ -1,8 +1,8 @@
-﻿namespace Core.VariableProviders
-{
-    using System;
-    using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
+namespace ExpressionStringEvaluator.VariableProviders
+{
     public class EnvironmentVariableVariableProvider : IVariableProvider
     {
         private const string PREFIX = "Env.";

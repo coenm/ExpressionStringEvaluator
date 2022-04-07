@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Linq;
 
-namespace Core.Methods.StringToString
+namespace ExpressionStringEvaluator.Methods.StringToString
 {
     public class StringTrimEndStringMethod : IMethod
     {

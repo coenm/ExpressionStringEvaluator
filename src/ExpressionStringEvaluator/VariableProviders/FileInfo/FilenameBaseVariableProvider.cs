@@ -1,9 +1,9 @@
-﻿namespace Core.VariableProviders.FileInfo
-{
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 
+namespace ExpressionStringEvaluator.VariableProviders.FileInfo
+{
     public class FilenameBaseVariableProvider : IVariableProvider
     {
         private const string KEY = "FilenameBase";
