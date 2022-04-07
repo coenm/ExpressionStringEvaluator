@@ -1,39 +1,45 @@
-﻿namespace ExpressionStringEvaluator.Methods.StringToBoolean
+﻿
+namespace ExpressionStringEvaluator.Methods.StringToBoolean
 {
     using System;
     using System.Linq;
 
-    public class StringEqualsStringMethod : IMethod
+    public class StringEqualsStringMethod : MethodBase, IMethod
     {
         public bool CanHandle(string method)
         {
-            return "StringEquals".Equals(method, StringComparison.InvariantCultureIgnoreCase);
+            return IsMethod(method, "StringEquals");
         }
 
         public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] arg)
         {
-            return new CombinedTypeContainer(HandleInner(method, arg.Select(x => x.ToString()).ToArray()));
-        }
+            ExpectAtLeastArgumentCount(2, arg);
+            var count = ExpectAtMostArgumentCount(3, arg);
 
-        private bool HandleInner(string method, params string[] arg)
-        {
-            if (arg.Length == 2)
+            ExpectStrings(arg);
+
+            if (count == 2)
             {
-                return arg[0].Equals(arg[1]);
+                return string.Equals(arg[0].String, arg[1].String)
+                    ? CombinedTypeContainer.TrueInstance
+                    : CombinedTypeContainer.FalseInstance;
             }
 
-            if (arg.Length == 3)
+            if (count == 3)
             {
                 var sc = StringComparison.CurrentCultureIgnoreCase;
-                if ("CurrentCultureIgnoreCase".Equals(arg[2], StringComparison.CurrentCultureIgnoreCase))
+
+                if ("CurrentCultureIgnoreCase".Equals(arg[2].String, StringComparison.CurrentCultureIgnoreCase))
                 {
                     sc = StringComparison.CurrentCultureIgnoreCase;
                 }
 
-                return arg[0].Equals(arg[1], sc);
+                return string.Equals(arg[0].String, arg[1].String, sc)
+                    ? CombinedTypeContainer.TrueInstance
+                    : CombinedTypeContainer.FalseInstance;
             }
 
-            throw new Exception();
+            throw new NotImplementedException();
         }
     }
 }

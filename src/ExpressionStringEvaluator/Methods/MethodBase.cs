@@ -23,20 +23,70 @@
             }
         }
 
-
-        public void ExpectAtLeastArgumentCount(int expectCount, params CombinedTypeContainer[] arg)
+        public int ExpectAtLeastArgumentCount(int expectCount, params CombinedTypeContainer[] arg)
         {
             if (arg.Length < expectCount)
             {
                 throw new Exception($"Expected at least {expectCount} arguments but found {arg.Length}.");
             }
+
+            return arg.Length;
         }
 
-        public void ExpectBoolean(CombinedTypeContainer arg)
+        public int ExpectAtMostArgumentCount(int expectCount, params CombinedTypeContainer[] arg)
+        {
+            if (arg.Length > expectCount)
+            {
+                throw new Exception($"Expected at most {expectCount} arguments but found {arg.Length}.");
+            }
+
+            return arg.Length;
+        }
+
+        public string ExpectString(CombinedTypeContainer arg)
+        {
+            if (arg.IsNull())
+            {
+                throw new Exception($"Expected string type but but found null.");
+            }
+
+            if (arg.Type != typeof(string))
+            {
+                throw new Exception($"Expected string type but but found {arg.Type.Name}.");
+            }
+
+            return arg.String;
+        }
+
+        public string ExpectSingleString(CombinedTypeContainer[] args)
+        {
+            ExpectArgumentCount(1, args);
+            return ExpectString(args[0]);
+        }
+
+        public void ExpectStrings(CombinedTypeContainer[] arg)
+        {
+            foreach (var a in arg)
+            {
+                ExpectString(a);
+            }
+        }
+
+        public bool ExpectBoolean(CombinedTypeContainer arg)
         {
             if (arg.Type != typeof(bool))
             {
                 throw new Exception($"Expected boolean type but but found {arg.Type.Name}.");
+            }
+
+            return arg.Bool;
+        }
+
+        public void ExpectNotNull(CombinedTypeContainer[] args)
+        {
+            if (args.Any(item => item == null))
+            {
+                throw new Exception("Expected all items not to be null.");
             }
         }
     }

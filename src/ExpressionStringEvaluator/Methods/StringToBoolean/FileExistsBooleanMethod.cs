@@ -3,26 +3,20 @@
     using System;
     using System.IO;
 
-    public class FileExistsBooleanMethod : IMethod
+    public class FileExistsBooleanMethod : MethodBase, IMethod
     {
         public bool CanHandle(string method)
         {
-            return "FileExists".Equals(method, StringComparison.InvariantCultureIgnoreCase);
+            return IsMethod(method, "FileExists");
         }
 
         public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] arg)
         {
-            if (arg.Length == 0)
-            {
-                throw new Exception();
-            }
+            ExpectArgumentCount(1, arg);
 
-            if (arg.Length > 1)
-            {
-                throw new Exception();
-            }
+            var filename = ExpectString(arg[0]);
 
-            return new CombinedTypeContainer(File.Exists(arg[0].ToString()));
+            return new CombinedTypeContainer(File.Exists(filename));
         }
     }
 }

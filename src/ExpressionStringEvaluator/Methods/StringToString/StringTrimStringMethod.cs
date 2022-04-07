@@ -3,24 +3,17 @@
     using System;
     using System.Linq;
 
-    public class StringTrimStringMethod : IMethod
+    public class StringTrimStringMethod : MethodBase, IMethod
     {
         public bool CanHandle(string method)
         {
-            return "Trim".Equals(method, StringComparison.InvariantCultureIgnoreCase);
-        }
-
-        private string Handle(string method, params string[] arg)
-        {
-            if (arg[0] == null)
-                return null;
-
-            return arg[0].Trim();
+            return IsMethod(method, "Trim");
         }
 
         public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] arg)
         {
-            return new CombinedTypeContainer(Handle(method, arg.Select(x => x.ToString()).ToArray()));
+            string stringValue = ExpectSingleString(arg);
+            return new CombinedTypeContainer(stringValue.Trim());
         }
     }
 }

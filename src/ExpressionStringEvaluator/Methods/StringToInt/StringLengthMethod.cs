@@ -2,28 +2,18 @@
 {
     using System;
 
-    public class StringLengthMethod : IMethod
+    public class StringLengthMethod : MethodBase, IMethod
     {
         public bool CanHandle(string method)
         {
-            return "length".Equals(method, StringComparison.InvariantCultureIgnoreCase);
+            return IsMethod(method, "length");
         }
 
         public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] arg)
         {
-            if (arg == null || arg.Length != 1)
-            {
-                throw new Exception("Expected one argument");
-            }
-
-            if (arg[0].Type != typeof(string))
-            {
-                throw new Exception("Expected string argument");
-            }
-
-            var len = arg[0].String.Length;
-
-            return new CombinedTypeContainer(len);
+            ExpectArgumentCount(1, arg);
+            var stringValue = ExpectString(arg[0]);
+            return new CombinedTypeContainer(stringValue.Length);
         }
     }
 }

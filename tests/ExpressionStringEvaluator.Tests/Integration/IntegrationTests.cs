@@ -1,4 +1,6 @@
-﻿namespace ExpressionStringEvaluator.Tests.Integration
+﻿using ExpressionStringEvaluator.Methods.Flow;
+
+namespace ExpressionStringEvaluator.Tests.Integration
 {
     using System;
     using System.Collections.Generic;

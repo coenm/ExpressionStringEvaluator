@@ -4,24 +4,17 @@
     using System.Linq;
     using System.Web;
 
-    public class UrlDecodeStringMethod : IMethod
+    public class UrlDecodeStringMethod : MethodBase, IMethod
     {
         public bool CanHandle(string method)
         {
-            return "UrlDecode".Equals(method, StringComparison.InvariantCultureIgnoreCase);
-        }
-
-        private string Handle(string method, params string[] arg)
-        {
-            if (arg == null)
-                return null;
-
-            return HttpUtility.UrlDecode(arg[0]);
+            return IsMethod(method, "UrlDecode");
         }
 
         public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] arg)
         {
-            return new CombinedTypeContainer(Handle(method, arg.Select(x => x.ToString()).ToArray()));
+            string stringValue = ExpectSingleString(arg);
+            return new CombinedTypeContainer(HttpUtility.UrlDecode(stringValue));
         }
     }
 }

@@ -2,26 +2,20 @@
 {
     using System;
 
-    public class StringIsNullOrEmptyBooleanMethod : IMethod
+    public class StringIsNullOrEmptyBooleanMethod : MethodBase, IMethod
     {
         public bool CanHandle(string method)
         {
-            return "IsNullOrEmpty".Equals(method, StringComparison.InvariantCultureIgnoreCase);
+            return IsMethod(method, "IsNullOrEmpty");
         }
 
         public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] arg)
         {
-            if (arg.Length == 0)
-            {
-                throw new Exception();
-            }
-
-            if (arg.Length > 1)
-            {
-                throw new Exception();
-            }
-
-            return new CombinedTypeContainer(string.IsNullOrEmpty(arg[0].ToString()));
+            ExpectArgumentCount(1, arg);
+            var stringValue = ExpectString(arg[0]);
+            return string.IsNullOrEmpty(stringValue)
+                ? CombinedTypeContainer.TrueInstance
+                : CombinedTypeContainer.FalseInstance;
         }
     }
 }

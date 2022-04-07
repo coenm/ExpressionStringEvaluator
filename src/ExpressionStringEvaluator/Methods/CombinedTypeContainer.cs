@@ -5,7 +5,7 @@
 
     public class CombinedTypeContainer
     {
-        private bool _isNull = false;
+        private readonly bool _isNull = false;
 
         private CombinedTypeContainer()
         {
@@ -47,7 +47,9 @@
         public int Int { get; set; }
 
         public static CombinedTypeContainer NullInstance { get; } = new CombinedTypeContainer();
+
         public static CombinedTypeContainer TrueInstance { get; } = new CombinedTypeContainer(true);
+
         public static CombinedTypeContainer FalseInstance { get; } = new CombinedTypeContainer(false);
 
         public bool IsNull() => _isNull;
