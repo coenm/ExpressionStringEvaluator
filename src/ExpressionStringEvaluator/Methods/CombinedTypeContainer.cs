@@ -1,93 +1,94 @@
-﻿using System;
-using System.Linq;
-
-namespace ExpressionStringEvaluator.Methods;
-
-public class CombinedTypeContainer
+﻿namespace ExpressionStringEvaluator.Methods
 {
-    private bool _isNull = false;
+    using System;
+    using System.Linq;
 
-    private CombinedTypeContainer()
+    public class CombinedTypeContainer
     {
-        _isNull = true;
-    }
+        private bool _isNull = false;
 
-    public CombinedTypeContainer(string s)
-    {
-        String = s;
-        Type = typeof(string);
-    }
-
-    public CombinedTypeContainer(bool b)
-    {
-        Bool = b;
-        Type = typeof(bool);
-    }
-
-    public CombinedTypeContainer(int i)
-    {
-        Int = i;
-        Type = typeof(int);
-    }
-
-    public CombinedTypeContainer(CombinedTypeContainer[] array)
-    {
-        Items = array;
-        Type = typeof(CombinedTypeContainer[]);
-    }
-
-    public CombinedTypeContainer[] Items { get; }
-
-    public Type Type { get; }
-
-    public string String { get; set; }
-
-    public bool Bool { get; set; }
-
-    public int Int { get; set; }
-
-    public static CombinedTypeContainer NullInstance { get; } = new CombinedTypeContainer();
-
-    public bool IsNull() => _isNull;
-
-    public override string ToString()
-    {
-        if (_isNull)
+        private CombinedTypeContainer()
         {
-            return string.Empty;
+            _isNull = true;
         }
 
-        if (Type == typeof(string))
+        public CombinedTypeContainer(string s)
         {
-            return String ?? string.Empty;
+            String = s;
+            Type = typeof(string);
         }
 
-        if (Type == typeof(bool))
+        public CombinedTypeContainer(bool b)
         {
-            return Bool ? "true" : "false";
+            Bool = b;
+            Type = typeof(bool);
         }
 
-        if (Type == typeof(int))
+        public CombinedTypeContainer(int i)
         {
-            return Int.ToString();
+            Int = i;
+            Type = typeof(int);
         }
 
-        if (Type == typeof(CombinedTypeContainer[]))
+        public CombinedTypeContainer(CombinedTypeContainer[] array)
         {
-            if (Items.Length == 0)
+            Items = array;
+            Type = typeof(CombinedTypeContainer[]);
+        }
+
+        public CombinedTypeContainer[] Items { get; }
+
+        public Type Type { get; }
+
+        public string String { get; set; }
+
+        public bool Bool { get; set; }
+
+        public int Int { get; set; }
+
+        public static CombinedTypeContainer NullInstance { get; } = new CombinedTypeContainer();
+
+        public bool IsNull() => _isNull;
+
+        public override string ToString()
+        {
+            if (_isNull)
             {
                 return string.Empty;
             }
 
-            if (Items.Length == 1)
+            if (Type == typeof(string))
             {
-                return Items[0].ToString();
+                return String ?? string.Empty;
             }
 
-            return string.Join(",", Items.AsEnumerable());
+            if (Type == typeof(bool))
+            {
+                return Bool ? "true" : "false";
+            }
+
+            if (Type == typeof(int))
+            {
+                return Int.ToString();
+            }
+
+            if (Type == typeof(CombinedTypeContainer[]))
+            {
+                if (Items.Length == 0)
+                {
+                    return string.Empty;
+                }
+
+                if (Items.Length == 1)
+                {
+                    return Items[0].ToString();
+                }
+
+                return string.Join(",", Items.AsEnumerable());
+            }
+
+
+            throw new Exception();
         }
-
-
-        throw new Exception();
     }
 }

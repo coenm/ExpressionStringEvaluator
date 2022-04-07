@@ -1,10 +1,8 @@
-﻿namespace Core.Tests.Integration
+﻿namespace ExpressionStringEvaluator.Tests.Integration
 {
     using System;
     using System.Collections.Generic;
     using Antlr4.Runtime;
-    using Core;
-    using ExpressionStringEvaluator;
     using ExpressionStringEvaluator.Formatters;
     using ExpressionStringEvaluator.Methods;
     using ExpressionStringEvaluator.Methods.BooleanToBoolean;
@@ -16,7 +14,6 @@
     using ExpressionStringEvaluator.VariableProviders.DateTime;
     using ExpressionStringEvaluator.VariableProviders.FileInfo;
     using FluentAssertions;
-    using FluentAssertions.Execution;
     using Xunit;
     using Xunit.Abstractions;
 

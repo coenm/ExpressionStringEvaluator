@@ -1,34 +1,35 @@
-﻿using System;
-
-namespace ExpressionStringEvaluator.Methods.BooleanToBoolean;
-
-public class AndBooleanMethod : IMethod
+﻿namespace ExpressionStringEvaluator.Methods.BooleanToBoolean
 {
-    public bool CanHandle(string method)
-    {
-        return "And".Equals(method, StringComparison.InvariantCultureIgnoreCase) || "all".Equals(method, StringComparison.InvariantCultureIgnoreCase);
-    }
+    using System;
 
-    public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] arg)
+    public class AndBooleanMethod : IMethod
     {
-        if (arg.Length == 0)
+        public bool CanHandle(string method)
         {
-            throw new Exception();
+            return "And".Equals(method, StringComparison.InvariantCultureIgnoreCase) || "all".Equals(method, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        foreach (var item in arg)
+        public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] arg)
         {
-            if (item.Type != typeof(bool))
+            if (arg.Length == 0)
             {
-                return new CombinedTypeContainer(false);
+                throw new Exception();
             }
 
-            if (item.Bool == false)
+            foreach (var item in arg)
             {
-                return new CombinedTypeContainer(false);
+                if (item.Type != typeof(bool))
+                {
+                    return new CombinedTypeContainer(false);
+                }
+
+                if (item.Bool == false)
+                {
+                    return new CombinedTypeContainer(false);
+                }
             }
+
+            return new CombinedTypeContainer(true);
         }
-
-        return new CombinedTypeContainer(true);
     }
 }

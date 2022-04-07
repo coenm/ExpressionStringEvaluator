@@ -1,29 +1,30 @@
-﻿using System;
-
-namespace ExpressionStringEvaluator.Methods.BooleanToBoolean;
-
-public class OrBooleanMethod : IMethod
+﻿namespace ExpressionStringEvaluator.Methods.BooleanToBoolean
 {
-    public bool CanHandle(string method)
-    {
-        return "any".Equals(method, StringComparison.InvariantCultureIgnoreCase) || "Or".Equals(method, StringComparison.InvariantCultureIgnoreCase);
-    }
+    using System;
 
-    public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] arg)
+    public class OrBooleanMethod : IMethod
     {
-        if (arg.Length == 0)
+        public bool CanHandle(string method)
         {
-            throw new Exception();
+            return "any".Equals(method, StringComparison.InvariantCultureIgnoreCase) || "Or".Equals(method, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        foreach (var item in arg)
+        public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] arg)
         {
-            if (item.Type == typeof(bool) && item.Bool == true)
+            if (arg.Length == 0)
             {
-                return new CombinedTypeContainer(true);
+                throw new Exception();
             }
-        }
 
-        return new CombinedTypeContainer(false);
+            foreach (var item in arg)
+            {
+                if (item.Type == typeof(bool) && item.Bool == true)
+                {
+                    return new CombinedTypeContainer(true);
+                }
+            }
+
+            return new CombinedTypeContainer(false);
+        }
     }
 }

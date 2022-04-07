@@ -1,27 +1,28 @@
-﻿using System;
-using System.IO;
-
-namespace ExpressionStringEvaluator.Methods.StringToBoolean;
-
-public class FileExistsBooleanMethod : IMethod
+﻿namespace ExpressionStringEvaluator.Methods.StringToBoolean
 {
-    public bool CanHandle(string method)
-    {
-        return "FileExists".Equals(method, StringComparison.InvariantCultureIgnoreCase);
-    }
+    using System;
+    using System.IO;
 
-    public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] arg)
+    public class FileExistsBooleanMethod : IMethod
     {
-        if (arg.Length == 0)
+        public bool CanHandle(string method)
         {
-            throw new Exception();
+            return "FileExists".Equals(method, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        if (arg.Length > 1)
+        public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] arg)
         {
-            throw new Exception();
-        }
+            if (arg.Length == 0)
+            {
+                throw new Exception();
+            }
 
-        return new CombinedTypeContainer(File.Exists(arg[0].ToString()));
+            if (arg.Length > 1)
+            {
+                throw new Exception();
+            }
+
+            return new CombinedTypeContainer(File.Exists(arg[0].ToString()));
+        }
     }
 }

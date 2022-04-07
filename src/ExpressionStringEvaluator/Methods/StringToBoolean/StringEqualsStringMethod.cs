@@ -1,38 +1,39 @@
-﻿using System;
-using System.Linq;
-
-namespace ExpressionStringEvaluator.Methods.StringToBoolean;
-
-public class StringEqualsStringMethod : IMethod
+﻿namespace ExpressionStringEvaluator.Methods.StringToBoolean
 {
-    public bool CanHandle(string method)
-    {
-        return "StringEquals".Equals(method, StringComparison.InvariantCultureIgnoreCase);
-    }
+    using System;
+    using System.Linq;
 
-    public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] arg)
+    public class StringEqualsStringMethod : IMethod
     {
-        return new CombinedTypeContainer(HandleInner(method, arg.Select(x => x.ToString()).ToArray()));
-    }
-
-    private bool HandleInner(string method, params string[] arg)
-    {
-        if (arg.Length == 2)
+        public bool CanHandle(string method)
         {
-            return arg[0].Equals(arg[1]);
+            return "StringEquals".Equals(method, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        if (arg.Length == 3)
+        public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] arg)
         {
-            var sc = StringComparison.CurrentCultureIgnoreCase;
-            if ("CurrentCultureIgnoreCase".Equals(arg[2], StringComparison.CurrentCultureIgnoreCase))
+            return new CombinedTypeContainer(HandleInner(method, arg.Select(x => x.ToString()).ToArray()));
+        }
+
+        private bool HandleInner(string method, params string[] arg)
+        {
+            if (arg.Length == 2)
             {
-                sc = StringComparison.CurrentCultureIgnoreCase;
+                return arg[0].Equals(arg[1]);
             }
 
-            return arg[0].Equals(arg[1], sc);
-        }
+            if (arg.Length == 3)
+            {
+                var sc = StringComparison.CurrentCultureIgnoreCase;
+                if ("CurrentCultureIgnoreCase".Equals(arg[2], StringComparison.CurrentCultureIgnoreCase))
+                {
+                    sc = StringComparison.CurrentCultureIgnoreCase;
+                }
 
-        throw new Exception();
+                return arg[0].Equals(arg[1], sc);
+            }
+
+            throw new Exception();
+        }
     }
 }

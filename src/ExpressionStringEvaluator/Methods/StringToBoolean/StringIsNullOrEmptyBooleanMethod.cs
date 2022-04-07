@@ -1,26 +1,27 @@
-﻿using System;
-
-namespace ExpressionStringEvaluator.Methods.StringToBoolean;
-
-public class StringIsNullOrEmptyBooleanMethod : IMethod
+﻿namespace ExpressionStringEvaluator.Methods.StringToBoolean
 {
-    public bool CanHandle(string method)
-    {
-        return "IsNullOrEmpty".Equals(method, StringComparison.InvariantCultureIgnoreCase);
-    }
+    using System;
 
-    public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] arg)
+    public class StringIsNullOrEmptyBooleanMethod : IMethod
     {
-        if (arg.Length == 0)
+        public bool CanHandle(string method)
         {
-            throw new Exception();
+            return "IsNullOrEmpty".Equals(method, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        if (arg.Length > 1)
+        public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] arg)
         {
-            throw new Exception();
-        }
+            if (arg.Length == 0)
+            {
+                throw new Exception();
+            }
 
-        return new CombinedTypeContainer(string.IsNullOrEmpty(arg[0].ToString()));
+            if (arg.Length > 1)
+            {
+                throw new Exception();
+            }
+
+            return new CombinedTypeContainer(string.IsNullOrEmpty(arg[0].ToString()));
+        }
     }
 }
