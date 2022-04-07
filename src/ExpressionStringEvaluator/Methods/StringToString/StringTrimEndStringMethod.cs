@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace ExpressionStringEvaluator.Methods.StringToString
+﻿namespace ExpressionStringEvaluator.Methods.StringToString
 {
+    using System;
+
     public class StringTrimEndStringMethod : IMethod
     {
         public bool CanHandle(string method)

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-
-namespace ExpressionStringEvaluator.VariableProviders
+﻿namespace ExpressionStringEvaluator.VariableProviders
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
     public class PathSeparatorVariableProvider : IVariableProvider
     {
         private const string KEY = "PathSeparator";

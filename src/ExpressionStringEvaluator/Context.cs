@@ -1,8 +1,8 @@
-﻿using System;
-using System.IO;
-
-namespace ExpressionStringEvaluator
+﻿namespace ExpressionStringEvaluator
 {
+    using System;
+    using System.IO;
+
     public readonly struct Context
     {
         public Context(DateTime now, string filename, DefaultFormats defaultDateFormats)

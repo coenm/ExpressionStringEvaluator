@@ -1,8 +1,8 @@
-﻿using System;
-using System.Linq;
-
-namespace ExpressionStringEvaluator.Methods.StringToString
+﻿namespace ExpressionStringEvaluator.Methods.StringToString
 {
+    using System;
+    using System.Linq;
+
     public class StringTrimStartStringMethod : IMethod
     {
         public bool CanHandle(string method)

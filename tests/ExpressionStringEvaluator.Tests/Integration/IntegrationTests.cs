@@ -1,24 +1,22 @@
-﻿using ExpressionStringEvaluator;
-using ExpressionStringEvaluator.Formatters;
-using ExpressionStringEvaluator.Methods;
-using ExpressionStringEvaluator.Methods.BooleanToBoolean;
-using ExpressionStringEvaluator.Methods.StringToBoolean;
-using ExpressionStringEvaluator.Methods.StringToInt;
-using ExpressionStringEvaluator.Methods.StringToString;
-using ExpressionStringEvaluator.Parser;
-using ExpressionStringEvaluator.VariableProviders;
-using ExpressionStringEvaluator.VariableProviders.DateTime;
-using ExpressionStringEvaluator.VariableProviders.FileInfo;
-using FluentAssertions;
-using FluentAssertions.Execution;
-
-namespace Core.Tests.Integration
+﻿namespace Core.Tests.Integration
 {
     using System;
     using System.Collections.Generic;
-
     using Antlr4.Runtime;
     using Core;
+    using ExpressionStringEvaluator;
+    using ExpressionStringEvaluator.Formatters;
+    using ExpressionStringEvaluator.Methods;
+    using ExpressionStringEvaluator.Methods.BooleanToBoolean;
+    using ExpressionStringEvaluator.Methods.StringToBoolean;
+    using ExpressionStringEvaluator.Methods.StringToInt;
+    using ExpressionStringEvaluator.Methods.StringToString;
+    using ExpressionStringEvaluator.Parser;
+    using ExpressionStringEvaluator.VariableProviders;
+    using ExpressionStringEvaluator.VariableProviders.DateTime;
+    using ExpressionStringEvaluator.VariableProviders.FileInfo;
+    using FluentAssertions;
+    using FluentAssertions.Execution;
     using Xunit;
     using Xunit.Abstractions;
 

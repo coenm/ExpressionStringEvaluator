@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace ExpressionStringEvaluator.VariableProviders
+﻿namespace ExpressionStringEvaluator.VariableProviders
 {
+    using System;
+    using System.Collections.Generic;
+
     public class EmptyVariableProvider : IVariableProvider
     {
         private const string KEY = "empty";

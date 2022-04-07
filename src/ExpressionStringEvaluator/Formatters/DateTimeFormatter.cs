@@ -1,8 +1,8 @@
-﻿using System;
-using System.Globalization;
-
-namespace ExpressionStringEvaluator.Formatters
+﻿namespace ExpressionStringEvaluator.Formatters
 {
+    using System;
+    using System.Globalization;
+
     public class DateTimeFormatter : IDateTimeFormatter
     {
         private readonly string _formatDateTime;

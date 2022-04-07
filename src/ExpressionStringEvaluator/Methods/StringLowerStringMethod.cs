@@ -1,8 +1,8 @@
-﻿using System;
-using System.Linq;
-
-namespace ExpressionStringEvaluator.Methods
+﻿namespace ExpressionStringEvaluator.Methods
 {
+    using System;
+    using System.Linq;
+
     public class IfThenElseMethod : IMethod
     {
         public bool CanHandle(string method)

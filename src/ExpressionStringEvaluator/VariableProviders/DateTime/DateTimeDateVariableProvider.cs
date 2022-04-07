@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using ExpressionStringEvaluator.Formatters;
-
-namespace ExpressionStringEvaluator.VariableProviders.DateTime
+﻿namespace ExpressionStringEvaluator.VariableProviders.DateTime
 {
+    using System;
+    using System.Collections.Generic;
+    using ExpressionStringEvaluator.Formatters;
+
     public class DateTimeDateVariableProvider : IVariableProvider
     {
         private const string KEY = "Date";

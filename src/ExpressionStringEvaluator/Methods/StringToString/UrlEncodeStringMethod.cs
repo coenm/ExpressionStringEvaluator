@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Web;
-
-namespace ExpressionStringEvaluator.Methods.StringToString
+﻿namespace ExpressionStringEvaluator.Methods.StringToString
 {
+    using System;
+    using System.Linq;
+    using System.Web;
+
     public class UrlEncodeStringMethod : IMethod
     {
         public bool CanHandle(string method)

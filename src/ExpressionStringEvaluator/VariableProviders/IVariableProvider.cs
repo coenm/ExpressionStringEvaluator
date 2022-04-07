@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace ExpressionStringEvaluator.VariableProviders
+﻿namespace ExpressionStringEvaluator.VariableProviders
 {
+    using System.Collections.Generic;
+
     public interface IVariableProvider
     {
         bool CanProvide(string key);

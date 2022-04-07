@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace ExpressionStringEvaluator.VariableProviders.FileInfo
+﻿namespace ExpressionStringEvaluator.VariableProviders.FileInfo
 {
+    using System;
+    using System.Collections.Generic;
+
     public class FilenameVariableProvider : IVariableProvider
     {
         private const string KEY = "Filename";

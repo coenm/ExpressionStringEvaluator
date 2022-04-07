@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace ExpressionStringEvaluator.Methods.StringToInt
+﻿namespace ExpressionStringEvaluator.Methods.StringToInt
 {
+    using System;
+
     public class StringLengthMethod : IMethod
     {
         public bool CanHandle(string method)

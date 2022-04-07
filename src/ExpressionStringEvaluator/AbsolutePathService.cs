@@ -1,8 +1,8 @@
-﻿using System;
-using System.IO;
-
-namespace ExpressionStringEvaluator
+﻿namespace ExpressionStringEvaluator
 {
+    using System;
+    using System.IO;
+
     public class AbsolutePathService : IAbsolutePathService
     {
         public string GetExistingAbsoluteFilename(string filename)
