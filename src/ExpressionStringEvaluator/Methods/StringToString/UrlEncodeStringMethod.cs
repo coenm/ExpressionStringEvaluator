@@ -1,20 +1,19 @@
-﻿namespace ExpressionStringEvaluator.Methods.StringToString
+namespace ExpressionStringEvaluator.Methods.StringToString;
+
+using System;
+using System.Linq;
+using System.Web;
+
+public class UrlEncodeStringMethod : MethodBase, IMethod
 {
-    using System;
-    using System.Linq;
-    using System.Web;
-
-    public class UrlEncodeStringMethod : MethodBase, IMethod
+    public bool CanHandle(string method)
     {
-        public bool CanHandle(string method)
-        {
-            return IsMethod(method, "UrlEncode");
-        }
+        return IsMethod(method, "UrlEncode");
+    }
 
-        public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] arg)
-        {
-            string stringValue = ExpectSingleString(arg);
-            return new CombinedTypeContainer(HttpUtility.UrlEncode(stringValue));
-        }
+    public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
+    {
+        string stringValue = ExpectSingleString(args);
+        return new CombinedTypeContainer(HttpUtility.UrlEncode(stringValue));
     }
 }

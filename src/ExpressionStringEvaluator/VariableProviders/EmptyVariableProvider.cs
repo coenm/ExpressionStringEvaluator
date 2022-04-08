@@ -1,25 +1,28 @@
-﻿namespace ExpressionStringEvaluator.VariableProviders
+namespace ExpressionStringEvaluator.VariableProviders;
+
+using System;
+using System.Collections.Generic;
+
+/// <inheritdoc cref="IVariableProvider"/>
+public class EmptyVariableProvider : IVariableProvider
 {
-    using System;
-    using System.Collections.Generic;
+    private const string KEY = "empty";
 
-    public class EmptyVariableProvider : IVariableProvider
+    /// <inheritdoc cref="IVariableProvider.CanProvide"/>
+    public bool CanProvide(string key)
     {
-        private const string KEY = "empty";
+        return KEY.Equals(key, StringComparison.CurrentCultureIgnoreCase);
+    }
 
-        public bool CanProvide(string key)
-        {
-            return KEY.Equals(key, StringComparison.CurrentCultureIgnoreCase);
-        }
+    /// <inheritdoc cref="IVariableProvider.Provide"/>
+    public string? Provide(Context context, string key, string? arg)
+    {
+        return string.Empty;
+    }
 
-        public string Provide(Context context, string key, string arg)
-        {
-            return string.Empty;
-        }
-
-        public IEnumerable<VariableDescription> Get()
-        {
-            yield return new VariableDescription(KEY, "Empty string.");
-        }
+    /// <inheritdoc cref="IVariableProvider.Get"/>
+    public IEnumerable<VariableDescription> Get()
+    {
+        yield return new VariableDescription(KEY, "Empty string.");
     }
 }

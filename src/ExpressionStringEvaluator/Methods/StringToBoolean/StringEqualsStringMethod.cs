@@ -1,45 +1,43 @@
-﻿
-namespace ExpressionStringEvaluator.Methods.StringToBoolean
+namespace ExpressionStringEvaluator.Methods.StringToBoolean;
+
+using System;
+using System.Linq;
+
+public class StringEqualsStringMethod : MethodBase, IMethod
 {
-    using System;
-    using System.Linq;
-
-    public class StringEqualsStringMethod : MethodBase, IMethod
+    public bool CanHandle(string method)
     {
-        public bool CanHandle(string method)
+        return IsMethod(method, "StringEquals");
+    }
+
+    public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
+    {
+        ExpectAtLeastArgumentCount(2, args);
+        var count = ExpectAtMostArgumentCount(3, args);
+
+        var strings = ExpectStrings(args);
+
+        if (count == 2)
         {
-            return IsMethod(method, "StringEquals");
+            return string.Equals(strings[0], strings[1])
+                ? CombinedTypeContainer.TrueInstance
+                : CombinedTypeContainer.FalseInstance;
         }
 
-        public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] arg)
+        if (count == 3)
         {
-            ExpectAtLeastArgumentCount(2, arg);
-            var count = ExpectAtMostArgumentCount(3, arg);
+            StringComparison sc = StringComparison.CurrentCultureIgnoreCase;
 
-            ExpectStrings(arg);
-
-            if (count == 2)
+            if ("CurrentCultureIgnoreCase".Equals(strings[2], StringComparison.CurrentCultureIgnoreCase))
             {
-                return string.Equals(arg[0].String, arg[1].String)
-                    ? CombinedTypeContainer.TrueInstance
-                    : CombinedTypeContainer.FalseInstance;
+                sc = StringComparison.CurrentCultureIgnoreCase;
             }
 
-            if (count == 3)
-            {
-                var sc = StringComparison.CurrentCultureIgnoreCase;
-
-                if ("CurrentCultureIgnoreCase".Equals(arg[2].String, StringComparison.CurrentCultureIgnoreCase))
-                {
-                    sc = StringComparison.CurrentCultureIgnoreCase;
-                }
-
-                return string.Equals(arg[0].String, arg[1].String, sc)
-                    ? CombinedTypeContainer.TrueInstance
-                    : CombinedTypeContainer.FalseInstance;
-            }
-
-            throw new NotImplementedException();
+            return string.Equals(strings[0], strings[1], sc)
+                ? CombinedTypeContainer.TrueInstance
+                : CombinedTypeContainer.FalseInstance;
         }
+
+        throw new NotImplementedException();
     }
 }

@@ -1,22 +1,21 @@
-﻿namespace ExpressionStringEvaluator.Methods.StringToBoolean
+namespace ExpressionStringEvaluator.Methods.StringToBoolean;
+
+using System;
+using System.IO;
+
+public class FileExistsBooleanMethod : MethodBase, IMethod
 {
-    using System;
-    using System.IO;
-
-    public class FileExistsBooleanMethod : MethodBase, IMethod
+    public bool CanHandle(string method)
     {
-        public bool CanHandle(string method)
-        {
-            return IsMethod(method, "FileExists");
-        }
+        return IsMethod(method, "FileExists");
+    }
 
-        public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] arg)
-        {
-            ExpectArgumentCount(1, arg);
+    public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
+    {
+        ExpectArgumentCount(1, args);
 
-            var filename = ExpectString(arg[0]);
+        var filename = ExpectString(args[0]);
 
-            return new CombinedTypeContainer(File.Exists(filename));
-        }
+        return new CombinedTypeContainer(File.Exists(filename));
     }
 }

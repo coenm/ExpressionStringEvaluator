@@ -1,25 +1,28 @@
-﻿namespace ExpressionStringEvaluator.VariableProviders.FileInfo
+namespace ExpressionStringEvaluator.VariableProviders.FileInfo;
+
+using System;
+using System.Collections.Generic;
+
+/// <inheritdoc cref="IVariableProvider"/>
+public class FileExtensionVariableProvider : IVariableProvider
 {
-    using System;
-    using System.Collections.Generic;
+    private const string KEY = "FileExtension";
 
-    public class FileExtensionVariableProvider : IVariableProvider
+    /// <inheritdoc cref="IVariableProvider.CanProvide"/>
+    public bool CanProvide(string key)
     {
-        private const string KEY = "FileExtension";
+        return KEY.Equals(key, StringComparison.CurrentCultureIgnoreCase);
+    }
 
-        public bool CanProvide(string key)
-        {
-            return KEY.Equals(key, StringComparison.CurrentCultureIgnoreCase);
-        }
+    /// <inheritdoc cref="IVariableProvider.Provide"/>
+    public string? Provide(Context context, string key, string? arg)
+    {
+        return context.FileInfo.Extension;
+    }
 
-        public string Provide(Context context, string key, string arg)
-        {
-            return context.FileInfo.Extension;
-        }
-
-        public IEnumerable<VariableDescription> Get()
-        {
-            yield return new VariableDescription(KEY, "Extension (including the . (dot)) of the input file.");
-        }
+    /// <inheritdoc cref="IVariableProvider.Get"/>
+    public IEnumerable<VariableDescription> Get()
+    {
+        yield return new VariableDescription(KEY, "Extension (including the . (dot)) of the input file.");
     }
 }

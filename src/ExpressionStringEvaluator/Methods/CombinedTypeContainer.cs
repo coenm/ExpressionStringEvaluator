@@ -1,98 +1,193 @@
-﻿namespace ExpressionStringEvaluator.Methods
+namespace ExpressionStringEvaluator.Methods;
+
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
+
+/// <summary>
+/// CombinedTypeContainer.
+/// </summary>
+public class CombinedTypeContainer
 {
-    using System;
-    using System.Linq;
+    private readonly bool _isNull = false;
+    private readonly Type? _type;
+    private readonly string? _string;
+    private readonly bool? _bool;
+    private readonly int? _int;
 
-    public class CombinedTypeContainer
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CombinedTypeContainer"/> class.
+    /// </summary>
+    /// <param name="s">value.</param>
+    public CombinedTypeContainer(string s)
     {
-        private readonly bool _isNull = false;
+        _string = s;
+        _type = typeof(string);
+        Items = Array.Empty<CombinedTypeContainer>();
+    }
 
-        private CombinedTypeContainer()
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CombinedTypeContainer"/> class.
+    /// </summary>
+    /// <param name="b">value.</param>
+    public CombinedTypeContainer(bool b)
+    {
+        _bool = b;
+        _type = typeof(bool);
+        Items = Array.Empty<CombinedTypeContainer>();
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CombinedTypeContainer"/> class.
+    /// </summary>
+    /// <param name="i">value.</param>
+    public CombinedTypeContainer(int i)
+    {
+        _int = i;
+        _type = typeof(int);
+        Items = Array.Empty<CombinedTypeContainer>();
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CombinedTypeContainer"/> class.
+    /// </summary>
+    /// <param name="array">value.</param>
+    public CombinedTypeContainer(CombinedTypeContainer[] array)
+    {
+        Items = array;
+        _type = typeof(CombinedTypeContainer[]);
+    }
+
+    private CombinedTypeContainer()
+    {
+        _isNull = true;
+        Items = Array.Empty<CombinedTypeContainer>();
+    }
+
+    /// <summary>
+    /// Gets NullInstance.
+    /// </summary>
+    public static CombinedTypeContainer NullInstance { get; } = new CombinedTypeContainer();
+
+    /// <summary>
+    /// Gets TrueInstance.
+    /// </summary>
+    public static CombinedTypeContainer TrueInstance { get; } = new CombinedTypeContainer(true);
+
+    /// <summary>
+    /// Gets FalseInstance.
+    /// </summary>
+    public static CombinedTypeContainer FalseInstance { get; } = new CombinedTypeContainer(false);
+
+    /// <summary>
+    /// Gets Items.
+    /// </summary>
+    public CombinedTypeContainer[] Items { get; }
+
+    /// <summary>
+    /// IsNull.
+    /// </summary>
+    /// <returns>bool.</returns>
+    public bool IsNull()
+    {
+        return _isNull;
+    }
+
+    /// <inheritdoc cref="object.ToString"/>
+    public override string ToString()
+    {
+        if (_isNull)
         {
-            _isNull = true;
+            return string.Empty;
         }
 
-        public CombinedTypeContainer(string s)
+        if (IsString(out var s))
         {
-            String = s;
-            Type = typeof(string);
+            return s! ?? string.Empty;
         }
 
-        public CombinedTypeContainer(bool b)
+        if (IsBool(out var b))
         {
-            Bool = b;
-            Type = typeof(bool);
+            return b.Value ? "true" : "false";
         }
 
-        public CombinedTypeContainer(int i)
+        if (IsInt(out var i))
         {
-            Int = i;
-            Type = typeof(int);
+            return i.Value.ToString();
         }
 
-        public CombinedTypeContainer(CombinedTypeContainer[] array)
+        if (_type == typeof(CombinedTypeContainer[]))
         {
-            Items = array;
-            Type = typeof(CombinedTypeContainer[]);
-        }
-
-        public CombinedTypeContainer[] Items { get; }
-
-        public Type Type { get; }
-
-        public string String { get; set; }
-
-        public bool Bool { get; set; }
-
-        public int Int { get; set; }
-
-        public static CombinedTypeContainer NullInstance { get; } = new CombinedTypeContainer();
-
-        public static CombinedTypeContainer TrueInstance { get; } = new CombinedTypeContainer(true);
-
-        public static CombinedTypeContainer FalseInstance { get; } = new CombinedTypeContainer(false);
-
-        public bool IsNull() => _isNull;
-
-        public override string ToString()
-        {
-            if (_isNull)
+            if (Items.Length == 0)
             {
                 return string.Empty;
             }
 
-            if (Type == typeof(string))
+            if (Items.Length == 1)
             {
-                return String ?? string.Empty;
+                return Items[0].ToString();
             }
 
-            if (Type == typeof(bool))
-            {
-                return Bool ? "true" : "false";
-            }
-
-            if (Type == typeof(int))
-            {
-                return Int.ToString();
-            }
-
-            if (Type == typeof(CombinedTypeContainer[]))
-            {
-                if (Items.Length == 0)
-                {
-                    return string.Empty;
-                }
-
-                if (Items.Length == 1)
-                {
-                    return Items[0].ToString();
-                }
-
-                return string.Join(",", Items.AsEnumerable());
-            }
-
-
-            throw new Exception();
+            return string.Join(",", Items.AsEnumerable());
         }
+
+        throw new NotImplementedException();
+    }
+
+    public Type? GetType()
+    {
+        return _type;
+    }
+
+    /// <summary>
+    /// Is string.
+    /// </summary>
+    /// <param name="value">value.</param>
+    /// <returns>bool.</returns>
+    public bool IsString([NotNullWhen(true)] out string? value)
+    {
+        if (_type != null && _type == typeof(string))
+        {
+            value = _string!;
+            return true;
+        }
+
+        value = null;
+        return false;
+    }
+
+    /// <summary>
+    /// Is boolean.
+    /// </summary>
+    /// <param name="value">value.</param>
+    /// <returns>bool.</returns>
+    public bool IsBool([NotNullWhen(true)] out bool? value)
+    {
+        if (_type != null && _type == typeof(bool))
+        {
+            value = _bool!.Value;
+            return true;
+        }
+
+        value = null;
+        return false;
+    }
+
+    /// <summary>
+    /// Is integer.
+    /// </summary>
+    /// <param name="value">value.</param>
+    /// <returns>bool.</returns>
+    public bool IsInt([NotNullWhen(true)] out int? value)
+    {
+        if (_type != null && _type == typeof(int))
+        {
+            value = _int!.Value;
+            return true;
+        }
+
+        value = null;
+        return false;
     }
 }

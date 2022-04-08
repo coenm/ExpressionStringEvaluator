@@ -1,32 +1,35 @@
-﻿namespace ExpressionStringEvaluator.VariableProviders.DateTime
+namespace ExpressionStringEvaluator.VariableProviders.DateTime;
+
+using System;
+using System.Collections.Generic;
+using ExpressionStringEvaluator.Formatters;
+
+/// <inheritdoc cref="IVariableProvider"/>
+public class DateTimeNowVariableProvider : IVariableProvider
 {
-    using System;
-    using System.Collections.Generic;
-    using ExpressionStringEvaluator.Formatters;
+    private const string KEY = "Now";
+    private readonly IDateTimeFormatter _formatter;
 
-    public class DateTimeNowVariableProvider : IVariableProvider
+    public DateTimeNowVariableProvider(IDateTimeFormatter formatter)
     {
-        private const string KEY = "Now";
-        private readonly IDateTimeFormatter _formatter;
+        _formatter = formatter ?? throw new ArgumentNullException(nameof(formatter));
+    }
 
-        public DateTimeNowVariableProvider(IDateTimeFormatter formatter)
-        {
-            _formatter = formatter ?? throw new ArgumentNullException(nameof(formatter));
-        }
+    /// <inheritdoc cref="IVariableProvider.CanProvide"/>
+    public bool CanProvide(string key)
+    {
+        return KEY.Equals(key, StringComparison.CurrentCultureIgnoreCase);
+    }
 
-        public bool CanProvide(string key)
-        {
-            return KEY.Equals(key, StringComparison.CurrentCultureIgnoreCase);
-        }
+    /// <inheritdoc cref="IVariableProvider.Provide"/>
+    public string? Provide(Context context, string key, string? arg)
+    {
+        return _formatter.FormatDateTime(context.Now, context, arg);
+    }
 
-        public string Provide(Context context, string key, string arg)
-        {
-            return _formatter.FormatDateTime(context.Now, context, arg);
-        }
-
-        public IEnumerable<VariableDescription> Get()
-        {
-            yield return new VariableDescription(KEY, "Now, formatted as date time.");
-        }
+    /// <inheritdoc cref="IVariableProvider.Get"/>
+    public IEnumerable<VariableDescription> Get()
+    {
+        yield return new VariableDescription(KEY, "Now, formatted as date time.");
     }
 }

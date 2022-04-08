@@ -1,26 +1,23 @@
-﻿namespace ExpressionStringEvaluator.Methods.BooleanToBoolean
+namespace ExpressionStringEvaluator.Methods.BooleanToBoolean;
+
+using System;
+using System.Linq;
+
+public class NotBooleanMethod : MethodBase, IMethod
 {
-    using System;
-    using System.Linq;
-
-    public class NotBooleanMethod : MethodBase, IMethod
+    public bool CanHandle(string method)
     {
-        public bool CanHandle(string method)
-        {
-            return IsMethod(method, "Not");
-        }
+        return IsMethod(method, "Not");
+    }
 
-        public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] arg)
-        {
-            ExpectArgumentCount(1, arg);
+    public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
+    {
+        ExpectArgumentCount(1, args);
+        CombinedTypeContainer item = args.Single();
+        var b = ExpectBoolean(item);
 
-            var item = arg.Single();
-
-            ExpectBoolean(item);
-
-            return item.Bool
-                ? CombinedTypeContainer.FalseInstance
-                : CombinedTypeContainer.TrueInstance;
-        }
+        return b
+            ? CombinedTypeContainer.FalseInstance
+            : CombinedTypeContainer.TrueInstance;
     }
 }

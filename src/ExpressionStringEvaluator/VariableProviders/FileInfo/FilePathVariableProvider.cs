@@ -1,25 +1,28 @@
-﻿namespace ExpressionStringEvaluator.VariableProviders.FileInfo
+namespace ExpressionStringEvaluator.VariableProviders.FileInfo;
+
+using System;
+using System.Collections.Generic;
+
+/// <inheritdoc cref="IVariableProvider"/>
+public class FilePathVariableProvider : IVariableProvider
 {
-    using System;
-    using System.Collections.Generic;
+    private const string KEY = "FilePath";
 
-    public class FilePathVariableProvider : IVariableProvider
+    /// <inheritdoc cref="IVariableProvider.CanProvide"/>
+    public bool CanProvide(string key)
     {
-        private const string KEY = "FilePath";
+        return KEY.Equals(key, StringComparison.CurrentCultureIgnoreCase);
+    }
 
-        public bool CanProvide(string key)
-        {
-            return KEY.Equals(key, StringComparison.CurrentCultureIgnoreCase);
-        }
+    /// <inheritdoc cref="IVariableProvider.Provide"/>
+    public string? Provide(Context context, string key, string? arg)
+    {
+        return context.FileInfo.DirectoryName;
+    }
 
-        public string Provide(Context context, string key, string arg)
-        {
-            return context.FileInfo.DirectoryName;
-        }
-
-        public IEnumerable<VariableDescription> Get()
-        {
-            yield return new VariableDescription(KEY, "File path of the input file.");
-        }
+    /// <inheritdoc cref="IVariableProvider.Get"/>
+    public IEnumerable<VariableDescription> Get()
+    {
+        yield return new VariableDescription(KEY, "File path of the input file.");
     }
 }

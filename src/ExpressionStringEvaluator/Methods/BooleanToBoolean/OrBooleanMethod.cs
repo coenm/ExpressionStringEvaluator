@@ -1,27 +1,26 @@
-﻿namespace ExpressionStringEvaluator.Methods.BooleanToBoolean
+namespace ExpressionStringEvaluator.Methods.BooleanToBoolean;
+
+using System;
+
+public class OrBooleanMethod : MethodBase, IMethod
 {
-    using System;
-
-    public class OrBooleanMethod : MethodBase, IMethod
+    public bool CanHandle(string method)
     {
-        public bool CanHandle(string method)
-        {
-            return IsMethod(method, "Or", "Any");
-        }
+        return IsMethod(method, "Or", "Any");
+    }
 
-        public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] arg)
-        {
-            ExpectAtLeastArgumentCount(1, arg);
+    public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
+    {
+        ExpectAtLeastArgumentCount(1, args);
 
-            foreach (var item in arg)
+        foreach (CombinedTypeContainer item in args)
+        {
+            if (item.IsBool(out var b) && b == true)
             {
-                if (!item.IsNull() && item.Type == typeof(bool) && item.Bool)
-                {
-                    return CombinedTypeContainer.TrueInstance;
-                }
+                return CombinedTypeContainer.TrueInstance;
             }
-
-            return CombinedTypeContainer.FalseInstance;
         }
+
+        return CombinedTypeContainer.FalseInstance;
     }
 }

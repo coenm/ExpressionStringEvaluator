@@ -14,8 +14,11 @@
     <PackageReference Update="Antlr4" Version="4.6.6" />
     <PackageReference Update="Antlr4.Runtime" Version="4.6.6" />
     <PackageReference Update="MarkdownSnippets.MsBuild" Version="21.0.1" />
-    
-    <!-- xunit -->
+    <PackageReference Update="Nullable" Version="1.3.0" IsImplicitlyDefined="true" />
+
+<PackageReference Update="Nerdbank.GitVersioning" Version="3.4.255" />
+
+        <!-- xunit -->
     <PackageReference Update="xunit" Version="2.4.1" IsImplicitlyDefined="true"/>
     <PackageReference Update="xunit.analyzers" Version="0.10.0" IsImplicitlyDefined="true"/>
     <PackageReference Update="xunit.categories" Version="2.0.4" IsImplicitlyDefined="true"/>
@@ -38,7 +41,6 @@
     <!-- Test coverage -->
     <PackageReference Update="coverlet.msbuild" Version="2.8.1" IsImplicitlyDefined="true"/>
     <PackageReference Update="coverlet.collector" Version="1.2.1" IsImplicitlyDefined="true"/>
-
   </ItemGroup>
 
 </Project>

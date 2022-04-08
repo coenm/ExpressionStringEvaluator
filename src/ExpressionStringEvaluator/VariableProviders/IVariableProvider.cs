@@ -1,13 +1,31 @@
-﻿namespace ExpressionStringEvaluator.VariableProviders
+namespace ExpressionStringEvaluator.VariableProviders;
+
+using System.Collections.Generic;
+
+/// <summary>
+/// IVariableProvider.
+/// </summary>
+public interface IVariableProvider
 {
-    using System.Collections.Generic;
+    /// <summary>
+    /// CanProvide.
+    /// </summary>
+    /// <param name="key">key.</param>
+    /// <returns>bool.</returns>
+    bool CanProvide(string key);
 
-    public interface IVariableProvider
-    {
-        bool CanProvide(string key);
+    /// <summary>
+    /// Provide.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="key">key.</param>
+    /// <param name="arg">arguments.</param>
+    /// <returns>variable value.</returns>
+    string? Provide(Context context, string key, string? arg);
 
-        string Provide(Context context, string key, string arg);
-
-        IEnumerable<VariableDescription> Get();
-    }
+    /// <summary>
+    /// Get description.
+    /// </summary>
+    /// <returns>descriptions.</returns>
+    IEnumerable<VariableDescription> Get();
 }

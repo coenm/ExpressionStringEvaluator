@@ -1,19 +1,18 @@
-﻿namespace ExpressionStringEvaluator.Methods.StringToString
+namespace ExpressionStringEvaluator.Methods.StringToString;
+
+using System;
+using System.Linq;
+
+public class StringTrimStartStringMethod : MethodBase, IMethod
 {
-    using System;
-    using System.Linq;
-
-    public class StringTrimStartStringMethod : MethodBase, IMethod
+    public bool CanHandle(string method)
     {
-        public bool CanHandle(string method)
-        {
-            return IsMethod(method, "TrimStart");
-        }
+        return IsMethod(method, "TrimStart");
+    }
 
-        public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] arg)
-        {
-            string stringValue = ExpectSingleString(arg);
-            return new CombinedTypeContainer(stringValue.TrimStart());
-        }
+    public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
+    {
+        string stringValue = ExpectSingleString(args);
+        return new CombinedTypeContainer(stringValue.TrimStart());
     }
 }

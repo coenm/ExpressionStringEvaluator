@@ -1,13 +1,36 @@
-﻿namespace ExpressionStringEvaluator.Formatters
+namespace ExpressionStringEvaluator.Formatters;
+
+using System;
+
+/// <summary>
+/// IDateTimeFormatter.
+/// </summary>
+public interface IDateTimeFormatter
 {
-    using System;
+    /// <summary>
+    /// FormatDateTime.
+    /// </summary>
+    /// <param name="dateTime">dateTime.</param>
+    /// <param name="context">context.</param>
+    /// <param name="format">format.</param>
+    /// <returns>string.</returns>
+    string FormatDateTime(DateTime dateTime, Context context, string? format = null);
 
-    public interface IDateTimeFormatter
-    {
-        string FormatDateTime(DateTime dateTime, Context context, string format = null);
+    /// <summary>
+    /// FormatDate.
+    /// </summary>
+    /// <param name="dateTime">dateTime.</param>
+    /// <param name="context">context.</param>
+    /// <param name="format">format.</param>
+    /// <returns>string.</returns>
+    string FormatDate(DateTime dateTime, Context context, string? format = null);
 
-        string FormatDate(DateTime dateTime, Context context, string format = null);
-
-        string FormatTime(DateTime dateTime, Context context, string format = null);
-    }
+    /// <summary>
+    /// FormatTime.
+    /// </summary>
+    /// <param name="dateTime">dateTime.</param>
+    /// <param name="context">context.</param>
+    /// <param name="format">format.</param>
+    /// <returns>string.</returns>
+    string FormatTime(DateTime dateTime, Context context, string? format = null);
 }
