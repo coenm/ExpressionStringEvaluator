@@ -33,7 +33,7 @@ public class EnvironmentVariableVariableProvider : IVariableProvider
     }
 
     /// <inheritdoc cref="IVariableProvider.Provide"/>
-    public string? Provide(Context context, string key, string? arg)
+    public string? Provide(string key, string? arg)
     {
         var prefixLength = PREFIX.Length;
         var envKey = key.Substring(prefixLength, key.Length - prefixLength);

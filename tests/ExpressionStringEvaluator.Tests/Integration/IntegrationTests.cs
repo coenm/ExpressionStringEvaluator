@@ -3,7 +3,6 @@ namespace ExpressionStringEvaluator.Tests.Integration;
 using System;
 using System.Collections.Generic;
 using Antlr4.Runtime;
-using ExpressionStringEvaluator.Formatters;
 using ExpressionStringEvaluator.Methods;
 using ExpressionStringEvaluator.Methods.BooleanToBoolean;
 using ExpressionStringEvaluator.Methods.Flow;
@@ -13,7 +12,6 @@ using ExpressionStringEvaluator.Methods.StringToString;
 using ExpressionStringEvaluator.Parser;
 using ExpressionStringEvaluator.VariableProviders;
 using ExpressionStringEvaluator.VariableProviders.DateTime;
-using ExpressionStringEvaluator.VariableProviders.FileInfo;
 using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
@@ -28,15 +26,26 @@ public class IntegrationTests : IDisposable
     {
         _output = output ?? throw new ArgumentNullException(nameof(output));
 
+        var dateTimeTimeVariableProviderOptions = new DateTimeVariableProviderOptions()
+            {
+                DateTimeProvider = () => new DateTime(2020, 12, 1, 15, 22, 23),
+            };
+
+        var dateTimeNowVariableProviderOptions = new DateTimeNowVariableProviderOptions()
+            {
+                DateTimeProvider = () => new DateTime(2020, 12, 1, 15, 22, 23),
+            };
+
+        var dateTimeDateVariableProviderOptions = new DateTimeDateVariableProviderOptions()
+            {
+                DateTimeProvider = () => new DateTime(2020, 12, 1, 15, 22, 23),
+            };
+
         _providers = new List<IVariableProvider>
             {
-                new DateTimeNowVariableProvider(DateTimeFormatter.Instance),
-                new DateTimeTimeVariableProvider(DateTimeFormatter.Instance),
-                new DateTimeDateVariableProvider(DateTimeFormatter.Instance),
-                new FilenameBaseVariableProvider(),
-                new FilenameVariableProvider(),
-                new FilePathVariableProvider(),
-                new FileExtensionVariableProvider(),
+                new DateTimeNowVariableProvider(dateTimeNowVariableProviderOptions),
+                new DateTimeTimeVariableProvider(dateTimeTimeVariableProviderOptions),
+                new DateTimeDateVariableProvider(dateTimeDateVariableProviderOptions),
                 new PathSeparatorVariableProvider(),
                 new EmptyVariableProvider(),
                 new EnvironmentVariableVariableProvider(),
@@ -71,21 +80,6 @@ public class IntegrationTests : IDisposable
     }
 
     [Theory]
-    [InlineData(
-        "{filepath}{PathSeparator}{now}t a{time} aap {date} {env.ExpressionStringEvaluatorDummy} xx {empty}{fileextension} me  {filenamebase}.pdf ",
-        "D:\\aap\\beer\\cobra\\2020-12-1 15.22.23t a15.22.23 aap 2020-12-1 Dummy value xx .docx me  File 234 Final.pdf ")]
-    [InlineData(
-        "{filepath}{PathSeparator}{now}t a{time} aap {date} %ExpressionStringEvaluatorDummy% xx {empty}{fileextension} me  {filenamebase}.pdf ",
-        "D:\\aap\\beer\\cobra\\2020-12-1 15.22.23t a15.22.23 aap 2020-12-1 Dummy value xx .docx me  File 234 Final.pdf ")]
-
-    [InlineData(
-        "{filepath}{Pathseparator}{now:yyyy}t a{time} aap {date} {env.ExpressionStringEvaluatorDummy} xx {empty}{fileextension} me  {filenamebase}.pdf ",
-        "D:\\aap\\beer\\cobra\\2020t a15.22.23 aap 2020-12-1 Dummy value xx .docx me  File 234 Final.pdf ")]
-
-    [InlineData(
-        "{filepath}{pathSeparator}{now:yyyy}t a{time} aap {date} {Lower({env.ExpressionStringEvaluatorDummy})} xx {empty}{Upper({fileextension})} me  {filenamebase}.pdf ",
-        "D:\\aap\\beer\\cobra\\2020t a15.22.23 aap 2020-12-1 dummy value xx .DOCX me  File 234 Final.pdf ")]
-
     [InlineData("Fixed ",                                                                 "Fixed ")]
     [InlineData(" Fixed",                                                                 " Fixed")]
     [InlineData("Fixed",                                                                  "Fixed")]
@@ -99,12 +93,12 @@ public class IntegrationTests : IDisposable
     [InlineData("{StringEquals({now:yyyy},\"2020\")}",                   "true")]
     [InlineData("{Lower({env.ExpressionStringEvaluatorDummy})}",                                     "dummy value")]
     [InlineData("{Upper({env.ExpressionStringEvaluatorDummy})}", "DUMMY VALUE")]
+    [InlineData("{Upper(%ExpressionStringEvaluatorDummy%)}", "DUMMY VALUE")]
     [InlineData("{env.ExpressionStringEvaluatorDummy}", "Dummy value")]
     [InlineData("http://www.google.com:8000",                            "http://www.google.com:8000")]
     [InlineData("fake@github.com",                                       "fake@github.com")]
     [InlineData("{Upper(text)} x",                                       "TEXT x")]
     [InlineData("{UrlEncode(http://www.google.com:8080/abc)} x",         "http%3a%2f%2fwww.google.com%3a8080%2fabc x")]
-    [InlineData("{Upper({filenamebase}.abc {Lower(TeSt)})} x",           "FILE 234 FINAL.ABC TEST x")]
 
     [InlineData("TrUe", "true")]
     [InlineData("1", "true")]
@@ -168,18 +162,11 @@ public class IntegrationTests : IDisposable
     [InlineData("file does {ifthen({not({FileExists(dummyfile.json)})}, not)}exist", "file does exist")]
     [InlineData("file does {ifthen({not({FileExists(dummyfile2.json)})}, \"not \")}exist", "file does not exist")]
     [InlineData("file does{ifthenelse({FileExists(dummyfile2.json)}, \" \", \" not\")} exist", "file does not exist")]
+    [InlineData("{conditional({FileExists(dummyfile.json)}, \"file does exist\", \"file does not exist\")}", "file does exist")]
     public void Parse(string input, string expectedOutput)
     {
         // arrange
-        var defaultDateFormats = new DefaultFormats(
-            "yyyy-M-d HH.mm.ss",
-            "yyyy-M-d",
-            "HH.mm.ss");
-        var ctx = new Context(
-            new DateTime(2020, 12, 1, 15, 22, 23),
-            @"D:\aap\beer\cobra\File 234 Final.docx",
-            defaultDateFormats);
-        var visitor = new LanguageVisitor(_providers, _methods, ctx);
+        var visitor = new LanguageVisitor<Context>(_providers, _methods, new Context());
 
         // act
         LanguageParser.ExpressionContext context = GetExpressionContext(input);
@@ -192,23 +179,14 @@ public class IntegrationTests : IDisposable
 
     [Theory]
     [InlineData("{not(x)}")] // x is not a boolean, expected
-    [InlineData("Dit is %ExpressionStringEvaluatorDummy ExpressionStringEvaluatorDummy% Aap")] // %OS OS% is not a valid env var.
+    [InlineData("Dit is %ExpressionStringEvaluatorDummy ExpressionStringEvaluatorDummy% abc")] // %ExpressionStringEvaluatorDummy ExpressionStringEvaluatorDummy% is not a valid env var.
     [InlineData("{trimEnd(tRue)}")] // this occurs becuase tRue is evaluated as string, not as text.
-    [InlineData("{conditional({FileExists(dummyfile.json)}, file does exist, file does not exist)}")] // todo fix (spaces)
     [InlineData("x {conditional({FileExists(dummyfile2.json)}, exist, )} y")] // todo fix, third argument is null
     [InlineData("{conditional({FileExists(dummyfile2.json)}, exist, )}")]
     public void Parse_ShouldThrow_WhenInvalidInput(string input)
     {
         // arrange
-        var defaultDateFormats = new DefaultFormats(
-            "yyyy-M-d HH.mm.ss",
-            "yyyy-M-d",
-            "HH.mm.ss");
-        var ctx = new Context(
-            new DateTime(2020, 12, 1, 15, 22, 23),
-            @"D:\aap\beer\cobra\File 234 Final.docx",
-            defaultDateFormats);
-        var visitor = new LanguageVisitor(_providers, _methods, ctx);
+        var visitor = new LanguageVisitor<Context>(_providers, _methods, new Context());
 
         // act
         var context = GetExpressionContext(input);
@@ -224,15 +202,7 @@ public class IntegrationTests : IDisposable
     public void Parse_ShouldReturnNull_WhenInput(string input)
     {
         // arrange
-        var defaultDateFormats = new DefaultFormats(
-            "yyyy-M-d HH.mm.ss",
-            "yyyy-M-d",
-            "HH.mm.ss");
-        var ctx = new Context(
-            new DateTime(2020, 12, 1, 15, 22, 23),
-            @"D:\aap\beer\cobra\File 234 Final.docx",
-            defaultDateFormats);
-        var visitor = new LanguageVisitor(_providers, _methods, ctx);
+        var visitor = new LanguageVisitor<Context>(_providers, _methods, new Context());
 
         // act
         LanguageParser.ExpressionContext context = GetExpressionContext(input);
@@ -258,7 +228,7 @@ public class IntegrationTests : IDisposable
         _output.WriteLine("-- TokenStream --");
         _output.WriteLine(string.Empty);
 
-        foreach (var token in commonTokenStream.GetTokens())
+        foreach (IToken token in commonTokenStream.GetTokens())
         {
             var displayName = "EOF";
 
@@ -271,5 +241,9 @@ public class IntegrationTests : IDisposable
         }
 
         return result;
+    }
+
+    public class Context
+    {
     }
 }

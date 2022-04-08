@@ -2,9 +2,6 @@ namespace ExpressionStringEvaluator.VariableProviders;
 
 using System.Collections.Generic;
 
-/// <summary>
-/// IVariableProvider.
-/// </summary>
 public interface IVariableProvider
 {
     /// <summary>
@@ -17,15 +14,29 @@ public interface IVariableProvider
     /// <summary>
     /// Provide.
     /// </summary>
-    /// <param name="context">The context.</param>
     /// <param name="key">key.</param>
     /// <param name="arg">arguments.</param>
     /// <returns>variable value.</returns>
-    string? Provide(Context context, string key, string? arg);
+    string? Provide(string key, string? arg);
 
     /// <summary>
     /// Get description.
     /// </summary>
     /// <returns>descriptions.</returns>
     IEnumerable<VariableDescription> Get();
+}
+
+/// <summary>
+/// IVariableProvider.
+/// </summary>
+public interface IVariableProvider<T> : IVariableProvider
+{
+    /// <summary>
+    /// Provide.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="key">key.</param>
+    /// <param name="arg">arguments.</param>
+    /// <returns>variable value.</returns>
+    string? Provide(T context, string key, string? arg);
 }

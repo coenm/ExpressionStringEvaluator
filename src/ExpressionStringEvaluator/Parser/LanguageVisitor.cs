@@ -3,17 +3,19 @@ namespace ExpressionStringEvaluator.Parser;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using ExpressionStringEvaluator.Methods;
 using ExpressionStringEvaluator.VariableProviders;
 
-public class LanguageVisitor : LanguageBaseVisitor<CombinedTypeContainer>
+public class LanguageVisitor<T> : LanguageBaseVisitor<CombinedTypeContainer>
+    where T : new()
 {
     private readonly List<IMethod> _methods;
-    private readonly Context _context;
+    private readonly T _context;
     private readonly List<IVariableProvider> _providers;
 
-    public LanguageVisitor(List<IVariableProvider> providers, List<IMethod> methods, Context context)
+    public LanguageVisitor(List<IVariableProvider> providers, List<IMethod> methods, T context)
     {
         _context = context;
         _providers = providers.ToList();
@@ -37,7 +39,12 @@ public class LanguageVisitor : LanguageBaseVisitor<CombinedTypeContainer>
             return new CombinedTypeContainer(string.Empty);
         }
 
-        return new CombinedTypeContainer(selectedProvider.Provide(_context, key, args) ?? string.Empty);
+        if (selectedProvider is IVariableProvider<T> typed)
+        {
+            return new CombinedTypeContainer(typed.Provide(_context, key, args) ?? string.Empty);
+        }
+
+        return new CombinedTypeContainer(selectedProvider.Provide(key, args) ?? string.Empty);
     }
 
     public override CombinedTypeContainer VisitTextWithSpaces(LanguageParser.TextWithSpacesContext context)
@@ -130,9 +137,14 @@ public class LanguageVisitor : LanguageBaseVisitor<CombinedTypeContainer>
         IVariableProvider? m = _providers.FirstOrDefault(x => x.CanProvide(key));
         if (m != null)
         {
-            return new CombinedTypeContainer(m.Provide(_context, key, string.Empty) ?? string.Empty);
-        }
+            if (m is IVariableProvider<T> typed)
+            {
+                return new CombinedTypeContainer(typed.Provide(_context, key, string.Empty) ?? string.Empty);
+            }
 
+            return new CombinedTypeContainer(m.Provide(key, string.Empty) ?? string.Empty);
+        }
+        
         return new CombinedTypeContainer(string.Empty);
     }
 

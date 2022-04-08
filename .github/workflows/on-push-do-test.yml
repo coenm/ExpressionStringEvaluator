@@ -9,9 +9,9 @@ jobs:
   build:
     strategy:
       matrix:
-        # os: [windows-latest, ubuntu-latest, macos-latest]
-        os: [macos-latest]
-    runs-on: ${{ matrix.os }}    
+        os: [windows-latest, ubuntu-latest, macos-latest]
+        # os: [macos-latest]
+    runs-on: ${{ matrix.os }}
 
     steps:
  
@@ -19,11 +19,6 @@ jobs:
       with:
         fetch-depth: 0 # avoid shallow clone so nbgv can do its work.
     
-    # - name: Setup .NET
-    #   uses: actions/setup-dotnet@v1
-    #   with:
-    #     dotnet-version: 2.1.x
-
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:

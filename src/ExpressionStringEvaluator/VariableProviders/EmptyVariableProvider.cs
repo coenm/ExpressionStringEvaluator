@@ -15,7 +15,7 @@ public class EmptyVariableProvider : IVariableProvider
     }
 
     /// <inheritdoc cref="IVariableProvider.Provide"/>
-    public string? Provide(Context context, string key, string? arg)
+    public string? Provide(string key, string? arg)
     {
         return string.Empty;
     }

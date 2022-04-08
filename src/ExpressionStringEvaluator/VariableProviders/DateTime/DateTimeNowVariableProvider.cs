@@ -2,17 +2,23 @@ namespace ExpressionStringEvaluator.VariableProviders.DateTime;
 
 using System;
 using System.Collections.Generic;
-using ExpressionStringEvaluator.Formatters;
+using System.Globalization;
 
 /// <inheritdoc cref="IVariableProvider"/>
 public class DateTimeNowVariableProvider : IVariableProvider
 {
+    private const string DEFAULT_FORMAT_TIME = "yyyy-M-d HH.mm.ss";
     private const string KEY = "Now";
-    private readonly IDateTimeFormatter _formatter;
+    private readonly DateTimeNowVariableProviderOptions _options;
 
-    public DateTimeNowVariableProvider(IDateTimeFormatter formatter)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DateTimeNowVariableProvider"/> class.
+    /// </summary>
+    /// <param name="options">options.</param>
+    /// <exception cref="ArgumentNullException">Thrown when argument is null.</exception>
+    public DateTimeNowVariableProvider(DateTimeNowVariableProviderOptions options)
     {
-        _formatter = formatter ?? throw new ArgumentNullException(nameof(formatter));
+        _options = options;
     }
 
     /// <inheritdoc cref="IVariableProvider.CanProvide"/>
@@ -22,9 +28,17 @@ public class DateTimeNowVariableProvider : IVariableProvider
     }
 
     /// <inheritdoc cref="IVariableProvider.Provide"/>
-    public string? Provide(Context context, string key, string? arg)
+    public string? Provide(string key, string? arg)
     {
-        return _formatter.FormatDateTime(context.Now, context, arg);
+        DateTime now = _options.DateTimeProvider?.Invoke() ?? DateTime.Now;
+        var format = _options.DefaultFormat ?? DEFAULT_FORMAT_TIME;
+
+        if (!string.IsNullOrWhiteSpace(arg))
+        {
+            format = arg;
+        }
+
+        return now.ToString(format, CultureInfo.CurrentUICulture);
     }
 
     /// <inheritdoc cref="IVariableProvider.Get"/>
