@@ -18,7 +18,7 @@ using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
-public class IntegrationTests
+public class IntegrationTests : IDisposable
 {
     private readonly ITestOutputHelper _output;
     private readonly List<IVariableProvider> _providers;
@@ -61,38 +61,45 @@ public class IntegrationTests
                 new IfThenElseMethod(),
                 new IfThenMethod(),
             };
+
+        Environment.SetEnvironmentVariable("ExpressionStringEvaluatorDummy", "Dummy value");
+    }
+
+    public void Dispose()
+    {
+        Environment.SetEnvironmentVariable("ExpressionStringEvaluatorDummy", null);
     }
 
     [Theory]
     [InlineData(
-        "{filepath}{PathSeparator}{now}t a{time} aap {date} {env.OS} xx {empty}{fileextension} me  {filenamebase}.pdf ",
-        "D:\\aap\\beer\\cobra\\2020-12-1 15.22.23t a15.22.23 aap 2020-12-1 Windows_NT xx .docx me  File 234 Final.pdf ")]
+        "{filepath}{PathSeparator}{now}t a{time} aap {date} {env.ExpressionStringEvaluatorDummy} xx {empty}{fileextension} me  {filenamebase}.pdf ",
+        "D:\\aap\\beer\\cobra\\2020-12-1 15.22.23t a15.22.23 aap 2020-12-1 Dummy value xx .docx me  File 234 Final.pdf ")]
     [InlineData(
-        "{filepath}{PathSeparator}{now}t a{time} aap {date} %OS% xx {empty}{fileextension} me  {filenamebase}.pdf ",
-        "D:\\aap\\beer\\cobra\\2020-12-1 15.22.23t a15.22.23 aap 2020-12-1 Windows_NT xx .docx me  File 234 Final.pdf ")]
+        "{filepath}{PathSeparator}{now}t a{time} aap {date} %ExpressionStringEvaluatorDummy% xx {empty}{fileextension} me  {filenamebase}.pdf ",
+        "D:\\aap\\beer\\cobra\\2020-12-1 15.22.23t a15.22.23 aap 2020-12-1 Dummy value xx .docx me  File 234 Final.pdf ")]
 
     [InlineData(
-        "{filepath}{Pathseparator}{now:yyyy}t a{time} aap {date} {env.OS} xx {empty}{fileextension} me  {filenamebase}.pdf ",
-        "D:\\aap\\beer\\cobra\\2020t a15.22.23 aap 2020-12-1 Windows_NT xx .docx me  File 234 Final.pdf ")]
+        "{filepath}{Pathseparator}{now:yyyy}t a{time} aap {date} {env.ExpressionStringEvaluatorDummy} xx {empty}{fileextension} me  {filenamebase}.pdf ",
+        "D:\\aap\\beer\\cobra\\2020t a15.22.23 aap 2020-12-1 Dummy value xx .docx me  File 234 Final.pdf ")]
 
     [InlineData(
-        "{filepath}{pathSeparator}{now:yyyy}t a{time} aap {date} {Lower({env.OS})} xx {empty}{Upper({fileextension})} me  {filenamebase}.pdf ",
-        "D:\\aap\\beer\\cobra\\2020t a15.22.23 aap 2020-12-1 windows_nt xx .DOCX me  File 234 Final.pdf ")]
+        "{filepath}{pathSeparator}{now:yyyy}t a{time} aap {date} {Lower({env.ExpressionStringEvaluatorDummy})} xx {empty}{Upper({fileextension})} me  {filenamebase}.pdf ",
+        "D:\\aap\\beer\\cobra\\2020t a15.22.23 aap 2020-12-1 dummy value xx .DOCX me  File 234 Final.pdf ")]
 
-    [InlineData("Fixed ",                                                "Fixed ")]
-    [InlineData(" Fixed",                                                " Fixed")]
-    [InlineData("Fixed",                                                 "Fixed")]
-    [InlineData("F:i_x.e-d",                                             "F:i_x.e-d")]
-    [InlineData("{now:yyyy:MM _.-  dd}",                                 "2020:12 _.-  01")]
-    [InlineData("{StringEquals({env.OS}, aap)}",                         "false")]
-    [InlineData("{StringEquals({env.OS}, Windows_NT)}",                  "true")]
+    [InlineData("Fixed ",                                                                 "Fixed ")]
+    [InlineData(" Fixed",                                                                 " Fixed")]
+    [InlineData("Fixed",                                                                  "Fixed")]
+    [InlineData("F:i_x.e-d",                                                              "F:i_x.e-d")]
+    [InlineData("{now:yyyy:MM _.-  dd}",                                                  "2020:12 _.-  01")]
+    [InlineData("{StringEquals({env.ExpressionStringEvaluatorDummy}, xxx)}",              "false")]
+    [InlineData("{StringEquals({env.ExpressionStringEvaluatorDummy}, \"Dummy value\")}",  "true")]
 
     [InlineData("{StringEquals({now:yyyy},2020)}",                       "true")]
     [InlineData("{StringEquals({now:yyyy}, 2020)}",                      "true")]
     [InlineData("{StringEquals({now:yyyy},\"2020\")}",                   "true")]
-    [InlineData("{Lower({env.OS})}",                                     "windows_nt")]
-    [InlineData("{Upper({env.OS})}",                                     "WINDOWS_NT")]
-    [InlineData("{env.OS}",                                              "Windows_NT")]
+    [InlineData("{Lower({env.ExpressionStringEvaluatorDummy})}",                                     "dummy value")]
+    [InlineData("{Upper({env.ExpressionStringEvaluatorDummy})}", "DUMMY VALUE")]
+    [InlineData("{env.ExpressionStringEvaluatorDummy}", "Dummy value")]
     [InlineData("http://www.google.com:8000",                            "http://www.google.com:8000")]
     [InlineData("fake@github.com",                                       "fake@github.com")]
     [InlineData("{Upper(text)} x",                                       "TEXT x")]
@@ -107,8 +114,8 @@ public class IntegrationTests
     [InlineData("abc tRuede", "abc tRuede")]
     [InlineData("abc tRue de", "abc tRue de")]
 
-    [InlineData("%OS%", "Windows_NT")]
-    [InlineData("Dit is %OS% Aap", "Dit is Windows_NT Aap")]
+    [InlineData("%ExpressionStringEvaluatorDummy%", "Dummy value")]
+    [InlineData("Dit is %ExpressionStringEvaluatorDummy% Aap", "Dit is Dummy value Aap")]
 
     [InlineData("{And(true, True)}", "true")]
     [InlineData("{And(TRUE)}", "true")]
@@ -135,9 +142,9 @@ public class IntegrationTests
     [InlineData("result is {And(1, {StringEquals({now:yyyy},2020)}, {Or(0, false)})}", "result is false")]
     [InlineData("{IsNullOrEmpty(a)}", "false")]
     [InlineData("{IsNullOrEmpty(%dummyEnvVar%)}", "true")]
-    [InlineData("{IsNullOrEmpty(%OS%)}", "false")]
+    [InlineData("{IsNullOrEmpty(%ExpressionStringEvaluatorDummy%)}", "false")]
 
-    [InlineData("{FileExists(%OS%)}", "false")]
+    [InlineData("{FileExists(%ExpressionStringEvaluatorDummy%)}", "false")]
     [InlineData("{not(true)}", "false")]
     [InlineData("{not(false)}", "true")]
 
@@ -150,7 +157,7 @@ public class IntegrationTests
     [InlineData("{trimstart({trimEnd(  tRue   )})}", "tRue")]
 
     [InlineData("{length(github)}", "6")]
-    [InlineData("{length(%OS%)}", "10")] // Windowns_NT
+    [InlineData("{length(%ExpressionStringEvaluatorDummy%)}", "11")]  // "Dummy value"
 
     [InlineData("{ifthenelse(true, a, b)}", "a")]
     [InlineData("{ifthenelse(false, a, b)}", "b")]
@@ -175,9 +182,9 @@ public class IntegrationTests
         var visitor = new LanguageVisitor(_providers, _methods, ctx);
 
         // act
-        var context = GetExpressionContext(input);
+        LanguageParser.ExpressionContext context = GetExpressionContext(input);
 
-        var result = visitor.Visit(context);
+        CombinedTypeContainer result = visitor.Visit(context);
 
         // assert
         Assert.Equal(expectedOutput, result.ToString());
@@ -185,7 +192,7 @@ public class IntegrationTests
 
     [Theory]
     [InlineData("{not(x)}")] // x is not a boolean, expected
-    [InlineData("Dit is %OS OS% Aap")] // %OS OS% is not a valid env var.
+    [InlineData("Dit is %ExpressionStringEvaluatorDummy ExpressionStringEvaluatorDummy% Aap")] // %OS OS% is not a valid env var.
     [InlineData("{trimEnd(tRue)}")] // this occurs becuase tRue is evaluated as string, not as text.
     [InlineData("{conditional({FileExists(dummyfile.json)}, file does exist, file does not exist)}")] // todo fix (spaces)
     [InlineData("x {conditional({FileExists(dummyfile2.json)}, exist, )} y")] // todo fix, third argument is null
@@ -228,7 +235,7 @@ public class IntegrationTests
         var visitor = new LanguageVisitor(_providers, _methods, ctx);
 
         // act
-        var context = GetExpressionContext(input);
+        LanguageParser.ExpressionContext context = GetExpressionContext(input);
 
         CombinedTypeContainer result = visitor.Visit(context);
 

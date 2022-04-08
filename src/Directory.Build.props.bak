@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)..\docs\icon\ExpressionStringEvaluator.512.png" Pack="true"
+    <None Include="$(MSBuildThisFileDirectory)..\docs\icon\EasyTestFile.512.png" Pack="true"
           PackagePath="$(PackageIcon)" Visible="false" />
   </ItemGroup>
 
