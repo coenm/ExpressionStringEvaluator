@@ -16,7 +16,7 @@ using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
-public class IntegrationTests : IDisposable
+public sealed class IntegrationTests : IDisposable
 {
     private readonly ITestOutputHelper _output;
     private readonly List<IVariableProvider> _providers;
@@ -151,7 +151,7 @@ public class IntegrationTests : IDisposable
     [InlineData("{trimstart({trimEnd(  tRue   )})}", "tRue")]
 
     [InlineData("{length(github)}", "6")]
-    [InlineData("{length(%ExpressionStringEvaluatorDummy%)}", "11")]  // "Dummy value"
+    [InlineData("{length(%ExpressionStringEvaluatorDummy%)}", "11")] // "Dummy value"
 
     [InlineData("{ifthenelse(true, a, b)}", "a")]
     [InlineData("{ifthenelse(false, a, b)}", "b")]
@@ -166,12 +166,10 @@ public class IntegrationTests : IDisposable
     public void Parse(string input, string expectedOutput)
     {
         // arrange
-        var visitor = new LanguageVisitor<Context>(_providers, _methods, new Context());
+        var sut = new ExpressionExecutor(_providers, _methods);
 
         // act
-        LanguageParser.ExpressionContext context = GetExpressionContext(input);
-
-        CombinedTypeContainer result = visitor.Visit(context);
+        CombinedTypeContainer result = sut.Execute(new Context(), input);
 
         // assert
         Assert.Equal(expectedOutput, result.ToString());
@@ -186,12 +184,10 @@ public class IntegrationTests : IDisposable
     public void Parse_ShouldThrow_WhenInvalidInput(string input)
     {
         // arrange
-        var visitor = new LanguageVisitor<Context>(_providers, _methods, new Context());
+        var sut = new ExpressionExecutor(_providers, _methods);
 
         // act
-        var context = GetExpressionContext(input);
-
-        Action act = () => _ = visitor.Visit(context);
+        Action act = () => _ = sut.Execute(new Context(), input);
 
         // assert
         act.Should().Throw<Exception>();
@@ -202,12 +198,10 @@ public class IntegrationTests : IDisposable
     public void Parse_ShouldReturnNull_WhenInput(string input)
     {
         // arrange
-        var visitor = new LanguageVisitor<Context>(_providers, _methods, new Context());
+        var sut = new ExpressionExecutor(_providers, _methods);
 
         // act
-        LanguageParser.ExpressionContext context = GetExpressionContext(input);
-
-        CombinedTypeContainer result = visitor.Visit(context);
+        CombinedTypeContainer result = sut.Execute(new Context(), input);
 
         // assert
         result.Should().Be(CombinedTypeContainer.NullInstance);

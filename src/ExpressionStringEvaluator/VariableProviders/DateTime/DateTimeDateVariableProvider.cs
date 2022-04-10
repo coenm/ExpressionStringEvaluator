@@ -40,10 +40,4 @@ public class DateTimeDateVariableProvider : IVariableProvider
 
         return now.ToString(format, CultureInfo.CurrentUICulture);
     }
-
-    /// <inheritdoc cref="IVariableProvider.Get"/>
-    public IEnumerable<VariableDescription> Get()
-    {
-        yield return new VariableDescription(KEY, "Now, formatted as date.");
-    }
 }

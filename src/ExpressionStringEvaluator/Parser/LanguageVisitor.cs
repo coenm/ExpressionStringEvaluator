@@ -144,7 +144,7 @@ public class LanguageVisitor<T> : LanguageBaseVisitor<CombinedTypeContainer>
 
             return new CombinedTypeContainer(m.Provide(key, string.Empty) ?? string.Empty);
         }
-        
+
         return new CombinedTypeContainer(string.Empty);
     }
 

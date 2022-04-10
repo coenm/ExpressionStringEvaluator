@@ -37,7 +37,7 @@
 
   <ItemGroup>
     <Antlr4 Update="Parser\Language.g4">
-      <Listener>true</Listener>
+      <Listener>false</Listener>
       <Abstract>false</Abstract>
     </Antlr4>
   </ItemGroup>

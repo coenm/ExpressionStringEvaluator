@@ -1,7 +1,6 @@
 namespace ExpressionStringEvaluator.VariableProviders.DateTime;
 
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 
 /// <inheritdoc cref="IVariableProvider"/>
@@ -39,11 +38,5 @@ public class DateTimeTimeVariableProvider : IVariableProvider
         }
 
         return now.ToString(format, CultureInfo.CurrentUICulture);
-    }
-
-    /// <inheritdoc cref="IVariableProvider.Get"/>
-    public IEnumerable<VariableDescription> Get()
-    {
-        yield return new VariableDescription(KEY, "Now, formatted as time.");
     }
 }

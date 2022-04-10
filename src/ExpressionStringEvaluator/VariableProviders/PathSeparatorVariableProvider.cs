@@ -21,10 +21,4 @@ public class PathSeparatorVariableProvider : IVariableProvider
     {
         return _pathSeparator;
     }
-
-    /// <inheritdoc cref="IVariableProvider.Get"/>
-    public IEnumerable<VariableDescription> Get()
-    {
-        yield return new VariableDescription(KEY, $"Path separator. Current value is '{_pathSeparator}'.");
-    }
 }

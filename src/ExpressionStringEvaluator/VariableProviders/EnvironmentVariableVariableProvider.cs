@@ -1,7 +1,6 @@
 namespace ExpressionStringEvaluator.VariableProviders;
 
 using System;
-using System.Collections.Generic;
 
 /// <inheritdoc cref="IVariableProvider"/>
 public class EnvironmentVariableVariableProvider : IVariableProvider
@@ -40,11 +39,5 @@ public class EnvironmentVariableVariableProvider : IVariableProvider
         var result = Environment.GetEnvironmentVariable(envKey) ?? string.Empty;
 
         return result;
-    }
-
-    /// <inheritdoc cref="IVariableProvider.Get"/>
-    public IEnumerable<VariableDescription> Get()
-    {
-        yield return new VariableDescription(PREFIX + "<name>", "Replace <name> with the environment variable you request.");
     }
 }

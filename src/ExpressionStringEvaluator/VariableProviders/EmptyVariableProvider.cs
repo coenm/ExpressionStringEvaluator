@@ -19,10 +19,4 @@ public class EmptyVariableProvider : IVariableProvider
     {
         return string.Empty;
     }
-
-    /// <inheritdoc cref="IVariableProvider.Get"/>
-    public IEnumerable<VariableDescription> Get()
-    {
-        yield return new VariableDescription(KEY, "Empty string.");
-    }
 }
