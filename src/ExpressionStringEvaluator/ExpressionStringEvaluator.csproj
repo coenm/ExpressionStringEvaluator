@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net5;net6</TargetFrameworks>
+    <RootNamespace>ExpressionStringEvaluator</RootNamespace>
+    <PackageId>ExpressionStringEvaluator</PackageId>
+    <PackageTags>ExpressionStringEvaluator;Expressions</PackageTags>
+    <Description>ExpressionStringEvaluator .</Description>
+    <PackageReadmeFile>PackageDescription.md</PackageReadmeFile>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Antlr4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Antlr4.Runtime" />
+  </ItemGroup>
+
+  <Choose>
+    <When Condition=" $(TargetFramework)=='netstandard2.1' OR $(TargetFramework)=='net5' OR $(TargetFramework)=='net6' ">
+    </When>
+  
+    <Otherwise>
+      <ItemGroup>
+        <PackageReference Include="Nullable" Version="1.3.0">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+        </PackageReference>
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)\PackageDescription.md" Pack="true" PackagePath="$(PackageReadmeFile)" Visible="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Antlr4 Update="Parser\Language.g4">
+      <Listener>false</Listener>
+      <Abstract>false</Abstract>
+    </Antlr4>
+  </ItemGroup>
+</Project>
