@@ -41,23 +41,23 @@ stages:
         - script: git submodule update --init --recursive
           displayName: Update git submodules
 
-        - task: UseDotNet@2
-          displayName: "Use dotnet sdk 3.1.x"
-          inputs:
-            version: "3.1.x"
-            includePreviewVersions: false
+        # - task: UseDotNet@2
+        #   displayName: "Use dotnet sdk 3.1.x"
+        #   inputs:
+        #     version: "3.1.x"
+        #     includePreviewVersions: false
 
-        - task: UseDotNet@2
-          displayName: "Use dotnet sdk 5.0.x"
-          inputs:
-            version: 5.0.x
-            includePreviewVersions: false
+        # - task: UseDotNet@2
+        #   displayName: "Use dotnet sdk 5.0.x"
+        #   inputs:
+        #     version: 5.0.x
+        #     includePreviewVersions: false
 
         - task: UseDotNet@2
           displayName: "Use dotnet sdk 6.0.x"
           inputs:
-            version: 6.0.x
-            includePreviewVersions: true
+            version: 6.0.201
+            includePreviewVersions: false
 
         - script: dotnet --info
           displayName: Show dotnet SDK info
@@ -120,7 +120,7 @@ stages:
           inputs:
             command: pack
             configuration: $(BuildConfiguration) 
-            nobuild: true
+            nobuild: false
             includesymbols: true
 
         - task: CopyFiles@2
