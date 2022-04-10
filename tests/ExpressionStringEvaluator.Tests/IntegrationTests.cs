@@ -1,7 +1,8 @@
-namespace ExpressionStringEvaluator.Tests.Integration;
+namespace ExpressionStringEvaluator.Tests;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Antlr4.Runtime;
 using ExpressionStringEvaluator.Methods;
 using ExpressionStringEvaluator.Methods.BooleanToBoolean;

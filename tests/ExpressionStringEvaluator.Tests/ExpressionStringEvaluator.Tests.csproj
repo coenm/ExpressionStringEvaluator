@@ -6,6 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="EasyTestFile.XUnit" Version="2.0.3" />
+    <PackageReference Include="YamlDotNet" Version="11.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\src\ExpressionStringEvaluator\ExpressionStringEvaluator.csproj" />
   </ItemGroup>
 

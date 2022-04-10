@@ -2,6 +2,7 @@ namespace ExpressionStringEvaluator.Parser;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Antlr4.Runtime;
 using ExpressionStringEvaluator.Methods;
 using ExpressionStringEvaluator.VariableProviders;
@@ -19,10 +20,10 @@ public class ExpressionExecutor
     /// </summary>
     /// <param name="providers">providers.</param>
     /// <param name="methods">methods.</param>
-    public ExpressionExecutor(List<IVariableProvider> providers, List<IMethod> methods)
+    public ExpressionExecutor(IEnumerable<IVariableProvider> providers, IEnumerable<IMethod> methods)
     {
-        _providers = providers ?? throw new ArgumentNullException(nameof(providers));
-        _methods = methods ?? throw new ArgumentNullException(nameof(methods));
+        _providers = providers?.ToList() ?? throw new ArgumentNullException(nameof(providers));
+        _methods = methods?.ToList() ?? throw new ArgumentNullException(nameof(methods));
     }
 
     /// <summary>
@@ -45,5 +46,15 @@ public class ExpressionExecutor
         LanguageParser.ExpressionContext expression = parser.expression();
 
         return visitor.Visit(expression);
+    }
+
+    /// <summary>
+    /// Execute.
+    /// </summary>
+    /// <param name="input">input.</param>
+    /// <returns>result.</returns>
+    public CombinedTypeContainer Execute(string input)
+    {
+        return Execute<object>(new object(), input);
     }
 }
