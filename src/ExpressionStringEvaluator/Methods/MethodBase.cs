@@ -43,7 +43,7 @@ public abstract class MethodBase
     {
         if (!arg.IsString(out var @string))
         {
-            throw new Exception($"Expected string type but but found {arg.GetType()?.Name ?? "null"}.");
+            throw new Exception($"Expected string type but but found {arg.GetInnerType()?.Name ?? "null"}.");
         }
 
         return @string;
@@ -71,7 +71,7 @@ public abstract class MethodBase
     {
         if (!arg.IsBool(out var b))
         {
-            throw new Exception($"Expected boolean type but but found {arg.GetType()?.Name ?? "null"}.");
+            throw new Exception($"Expected boolean type but but found {arg.GetInnerType()?.Name ?? "null"}.");
         }
 
         return b.Value;
