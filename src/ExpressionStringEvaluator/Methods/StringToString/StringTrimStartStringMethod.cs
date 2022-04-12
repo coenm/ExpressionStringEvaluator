@@ -6,18 +6,18 @@ using System.Linq;
 /// <summary>
 /// StringTrimStartStringMethod.
 /// </summary>
-public class StringTrimStartStringMethod : MethodBase, IMethod
+public class StringTrimStartStringMethod : IMethod
 {
     /// <inheritdoc cref="IMethod.CanHandle"/>
     public bool CanHandle(string method)
     {
-        return IsMethod(method, "TrimStart");
+        return MethodBase.IsMethod(method, "TrimStart");
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>
     public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
     {
-        var stringValue = ExpectSingleString(args);
+        var stringValue = MethodBase.ExpectSingleString(args);
         return new CombinedTypeContainer(stringValue.TrimStart());
     }
 }

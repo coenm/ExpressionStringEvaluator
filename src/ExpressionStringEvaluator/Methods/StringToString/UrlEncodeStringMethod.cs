@@ -7,18 +7,18 @@ using System.Web;
 /// <summary>
 /// UrlEncodeStringMethod.
 /// </summary>
-public class UrlEncodeStringMethod : MethodBase, IMethod
+public class UrlEncodeStringMethod : IMethod
 {
     /// <inheritdoc cref="IMethod.CanHandle"/>
     public bool CanHandle(string method)
     {
-        return IsMethod(method, "UrlEncode");
+        return MethodBase.IsMethod(method, "UrlEncode");
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>
     public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
     {
-        var stringValue = ExpectSingleString(args);
+        var stringValue = MethodBase.ExpectSingleString(args);
         return new CombinedTypeContainer(HttpUtility.UrlEncode(stringValue));
     }
 }

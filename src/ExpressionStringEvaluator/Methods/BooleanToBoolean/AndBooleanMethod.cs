@@ -5,18 +5,18 @@ using System;
 /// <summary>
 /// AndBooleanMethod.
 /// </summary>
-public class AndBooleanMethod : MethodBase, IMethod
+public class AndBooleanMethod : IMethod
 {
     /// <inheritdoc cref="IMethod.CanHandle"/>
     public bool CanHandle(string method)
     {
-        return IsMethod(method, "And", "All");
+        return MethodBase.IsMethod(method, "And", "All");
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>
     public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
     {
-        ExpectAtLeastArgumentCount(1, args);
+        MethodBase.ExpectAtLeastArgumentCount(1, args);
 
         foreach (CombinedTypeContainer item in args)
         {

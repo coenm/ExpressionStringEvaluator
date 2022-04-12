@@ -4,14 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public abstract class MethodBase
+public static class MethodBase
 {
-    public bool IsMethod(string method, params string[] compareTo)
+    public static bool IsMethod(string method, params string[] compareTo)
     {
         return compareTo.Any(item => method.Equals(item, StringComparison.CurrentCultureIgnoreCase));
     }
 
-    public void ExpectArgumentCount(int expectCount, params CombinedTypeContainer[] arg)
+    public static void ExpectArgumentCount(int expectCount, params CombinedTypeContainer[] arg)
     {
         if (arg.Length != expectCount)
         {
@@ -19,7 +19,7 @@ public abstract class MethodBase
         }
     }
 
-    public int ExpectAtLeastArgumentCount(int expectCount, params CombinedTypeContainer[] arg)
+    public static int ExpectAtLeastArgumentCount(int expectCount, params CombinedTypeContainer[] arg)
     {
         if (arg.Length < expectCount)
         {
@@ -29,7 +29,7 @@ public abstract class MethodBase
         return arg.Length;
     }
 
-    public int ExpectAtMostArgumentCount(int expectCount, params CombinedTypeContainer[] arg)
+    public static int ExpectAtMostArgumentCount(int expectCount, params CombinedTypeContainer[] arg)
     {
         if (arg.Length > expectCount)
         {
@@ -39,7 +39,7 @@ public abstract class MethodBase
         return arg.Length;
     }
 
-    public string ExpectString(CombinedTypeContainer arg)
+    public static string ExpectString(CombinedTypeContainer arg)
     {
         if (!arg.IsString(out var @string))
         {
@@ -49,13 +49,13 @@ public abstract class MethodBase
         return @string;
     }
 
-    public string ExpectSingleString(CombinedTypeContainer[] args)
+    public static string ExpectSingleString(CombinedTypeContainer[] args)
     {
         ExpectArgumentCount(1, args);
         return ExpectString(args[0]);
     }
 
-    public string[] ExpectStrings(CombinedTypeContainer[] arg)
+    public static string[] ExpectStrings(CombinedTypeContainer[] arg)
     {
         var result = new List<string>(arg.Length);
 
@@ -67,7 +67,7 @@ public abstract class MethodBase
         return result.ToArray();
     }
 
-    public bool ExpectBoolean(CombinedTypeContainer arg)
+    public static bool ExpectBoolean(CombinedTypeContainer arg)
     {
         if (!arg.IsBool(out var b))
         {
@@ -77,7 +77,7 @@ public abstract class MethodBase
         return b.Value;
     }
 
-    public void ExpectNotNull(CombinedTypeContainer[] args)
+    public static void ExpectNotNull(CombinedTypeContainer[] args)
     {
         if (args.Any(item => item == null))
         {

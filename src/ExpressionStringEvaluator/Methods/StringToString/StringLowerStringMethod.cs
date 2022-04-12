@@ -6,18 +6,18 @@ using System.Linq;
 /// <summary>
 /// StringLowerStringMethod.
 /// </summary>
-public class StringLowerStringMethod : MethodBase, IMethod
+public class StringLowerStringMethod : IMethod
 {
     /// <inheritdoc cref="IMethod.CanHandle"/>
     public bool CanHandle(string method)
     {
-        return IsMethod(method, "Lower");
+        return MethodBase.IsMethod(method, "Lower");
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>
     public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
     {
-        string stringValue = ExpectSingleString(args);
+        string stringValue = MethodBase.ExpectSingleString(args);
         return new CombinedTypeContainer(stringValue.ToLower());
     }
 }

@@ -6,20 +6,20 @@ using System.Linq;
 /// <summary>
 /// IfThenMethod.
 /// </summary>
-public class IfThenMethod : MethodBase, IMethod
+public class IfThenMethod : IMethod
 {
     /// <inheritdoc cref="IMethod.CanHandle"/>
     public bool CanHandle(string method)
     {
-        return IsMethod(method, "ifthen");
+        return MethodBase.IsMethod(method, "ifthen");
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>
     public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
     {
-        ExpectArgumentCount(2, args);
-        bool b = ExpectBoolean(args[0]);
-        ExpectNotNull(args);
+        MethodBase.ExpectArgumentCount(2, args);
+        bool b = MethodBase.ExpectBoolean(args[0]);
+        MethodBase.ExpectNotNull(args);
         return b ? args[1] : CombinedTypeContainer.NullInstance;
     }
 }
