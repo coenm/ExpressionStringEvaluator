@@ -1,3 +1,6 @@
+// https://github.com/tunnelvisionlabs/antlr4cs/issues/133
+[assembly: System.CLSCompliant(false)]
+
 namespace ExpressionStringEvaluator.Parser;
 
 using System;
