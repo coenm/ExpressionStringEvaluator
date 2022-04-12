@@ -11,15 +11,15 @@ public class FileExistsBooleanMethod : IMethod
     /// <inheritdoc cref="IMethod.CanHandle"/>
     public bool CanHandle(string method)
     {
-        return MethodBase.IsMethod(method, "FileExists");
+        return MethodHelpers.IsMethod(method, "FileExists");
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>
     public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
     {
-        MethodBase.ExpectArgumentCount(1, args);
+        MethodHelpers.ExpectArgumentCount(1, args);
 
-        var filename = MethodBase.ExpectString(args[0]);
+        var filename = MethodHelpers.ExpectString(args[0]);
 
         return new CombinedTypeContainer(File.Exists(filename));
     }

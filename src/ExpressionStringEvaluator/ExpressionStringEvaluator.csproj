@@ -6,8 +6,8 @@
     <PackageTags>ExpressionStringEvaluator;Expressions</PackageTags>
     <Description>ExpressionStringEvaluator .</Description>
     <PackageReadmeFile>PackageDescription.md</PackageReadmeFile>
+    <NoWarn>$(NoWarn);CS3021</NoWarn>
   </PropertyGroup>
-
 
   <ItemGroup>
     <PackageReference Include="Antlr4">

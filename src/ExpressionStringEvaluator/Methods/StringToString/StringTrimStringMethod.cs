@@ -11,13 +11,13 @@ public class StringTrimStringMethod : IMethod
     /// <inheritdoc cref="IMethod.CanHandle"/>
     public bool CanHandle(string method)
     {
-        return MethodBase.IsMethod(method, "Trim");
+        return MethodHelpers.IsMethod(method, "Trim");
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>
     public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
     {
-        var stringValue = MethodBase.ExpectSingleString(args);
+        var stringValue = MethodHelpers.ExpectSingleString(args);
         return new CombinedTypeContainer(stringValue.Trim());
     }
 }

@@ -11,16 +11,16 @@ public class StringEqualsStringMethod : IMethod
     /// <inheritdoc cref="IMethod.CanHandle"/>
     public bool CanHandle(string method)
     {
-        return MethodBase.IsMethod(method, "StringEquals");
+        return MethodHelpers.IsMethod(method, "StringEquals");
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>
     public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
     {
-        MethodBase.ExpectAtLeastArgumentCount(2, args);
-        var count = MethodBase.ExpectAtMostArgumentCount(3, args);
+        MethodHelpers.ExpectAtLeastArgumentCount(2, args);
+        var count = MethodHelpers.ExpectAtMostArgumentCount(3, args);
 
-        var strings = MethodBase.ExpectStrings(args);
+        var strings = MethodHelpers.ExpectStrings(args);
 
         if (count == 2)
         {

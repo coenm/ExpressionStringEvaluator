@@ -11,13 +11,13 @@ public class StringUpperStringMethod : IMethod
     /// <inheritdoc cref="IMethod.CanHandle"/>
     public bool CanHandle(string method)
     {
-        return MethodBase.IsMethod(method, "Upper");
+        return MethodHelpers.IsMethod(method, "Upper");
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>
     public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
     {
-        var stringValue = MethodBase.ExpectSingleString(args);
+        var stringValue = MethodHelpers.ExpectSingleString(args);
         return new CombinedTypeContainer(stringValue.ToUpper());
     }
 }

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public static class MethodBase
+internal static class MethodHelpers
 {
     public static bool IsMethod(string method, params string[] compareTo)
     {

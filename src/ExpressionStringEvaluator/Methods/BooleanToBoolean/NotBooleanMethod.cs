@@ -11,15 +11,15 @@ public class NotBooleanMethod : IMethod
     /// <inheritdoc cref="IMethod.CanHandle"/>
     public bool CanHandle(string method)
     {
-        return MethodBase.IsMethod(method, "Not");
+        return MethodHelpers.IsMethod(method, "Not");
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>
     public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
     {
-        MethodBase.ExpectArgumentCount(1, args);
+        MethodHelpers.ExpectArgumentCount(1, args);
         CombinedTypeContainer item = args.Single();
-        var b = MethodBase.ExpectBoolean(item);
+        var b = MethodHelpers.ExpectBoolean(item);
 
         return b
             ? CombinedTypeContainer.FalseInstance
