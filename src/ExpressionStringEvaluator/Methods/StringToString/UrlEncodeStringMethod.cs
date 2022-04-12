@@ -4,16 +4,21 @@ using System;
 using System.Linq;
 using System.Web;
 
-public class UrlEncodeStringMethod : MethodBase, IMethod
+/// <summary>
+/// UrlEncodeStringMethod.
+/// </summary>
+public class UrlEncodeStringMethod : IMethod
 {
+    /// <inheritdoc cref="IMethod.CanHandle"/>
     public bool CanHandle(string method)
     {
-        return IsMethod(method, "UrlEncode");
+        return MethodHelpers.IsMethod(method, "UrlEncode");
     }
 
+    /// <inheritdoc cref="IMethod.Handle"/>
     public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
     {
-        string stringValue = ExpectSingleString(args);
+        var stringValue = MethodHelpers.ExpectSingleString(args);
         return new CombinedTypeContainer(HttpUtility.UrlEncode(stringValue));
     }
 }

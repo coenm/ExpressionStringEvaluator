@@ -2,17 +2,22 @@ namespace ExpressionStringEvaluator.Methods.StringToInt;
 
 using System;
 
-public class StringLengthMethod : MethodBase, IMethod
+/// <summary>
+/// StringLengthMethod.
+/// </summary>
+public class StringLengthMethod : IMethod
 {
+    /// <inheritdoc cref="IMethod.CanHandle"/>
     public bool CanHandle(string method)
     {
-        return IsMethod(method, "length");
+        return MethodHelpers.IsMethod(method, "length");
     }
 
+    /// <inheritdoc cref="IMethod.Handle"/>
     public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
     {
-        ExpectArgumentCount(1, args);
-        var stringValue = ExpectString(args[0]);
+        MethodHelpers.ExpectArgumentCount(1, args);
+        var stringValue = MethodHelpers.ExpectString(args[0]);
         return new CombinedTypeContainer(stringValue.Length);
     }
 }

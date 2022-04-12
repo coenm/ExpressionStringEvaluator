@@ -1,3 +1,6 @@
+// https://github.com/tunnelvisionlabs/antlr4cs/issues/133
+[assembly: System.CLSCompliant(false)]
+
 namespace ExpressionStringEvaluator.Parser;
 
 using System;
@@ -8,7 +11,7 @@ using Antlr4.Runtime.Tree;
 using ExpressionStringEvaluator.Methods;
 using ExpressionStringEvaluator.VariableProviders;
 
-public class LanguageVisitor<T> : LanguageBaseVisitor<CombinedTypeContainer>
+internal class LanguageVisitor<T> : LanguageBaseVisitor<CombinedTypeContainer>
     where T : new()
 {
     private readonly List<IMethod> _methods;

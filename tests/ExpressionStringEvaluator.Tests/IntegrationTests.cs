@@ -2,7 +2,6 @@ namespace ExpressionStringEvaluator.Tests;
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Antlr4.Runtime;
 using ExpressionStringEvaluator.Methods;
 using ExpressionStringEvaluator.Methods.BooleanToBoolean;
@@ -156,14 +155,13 @@ public sealed class IntegrationTests : IDisposable
 
     [InlineData("{ifthenelse(true, a, b)}", "a")]
     [InlineData("{ifthenelse(false, a, b)}", "b")]
-    [InlineData("{conditional({FileExists(dummyfile.json)}, exist, toCreate)}", "exist")]
-    [InlineData("{conditional({FileExists(dummyfile.json)}, exist, {empty})}", "exist")]
-    [InlineData("{conditional(false, a, b)}", "b")]
+    [InlineData("{ifthenelse({FileExists(dummyfile.json)}, exist, toCreate)}", "exist")]
+    [InlineData("{ifthenelse({FileExists(dummyfile.json)}, exist, {empty})}", "exist")]
     [InlineData("{ifthen({FileExists(dummyfile.json)}, exist)}", "exist")]
     [InlineData("file does {ifthen({not({FileExists(dummyfile.json)})}, not)}exist", "file does exist")]
     [InlineData("file does {ifthen({not({FileExists(dummyfile2.json)})}, \"not \")}exist", "file does not exist")]
     [InlineData("file does{ifthenelse({FileExists(dummyfile2.json)}, \" \", \" not\")} exist", "file does not exist")]
-    [InlineData("{conditional({FileExists(dummyfile.json)}, \"file does exist\", \"file does not exist\")}", "file does exist")]
+    [InlineData("{ifthenelse({FileExists(dummyfile.json)}, \"file does exist\", \"file does not exist\")}", "file does exist")]
     public void Parse(string input, string expectedOutput)
     {
         // arrange
@@ -180,8 +178,8 @@ public sealed class IntegrationTests : IDisposable
     [InlineData("{not(x)}")] // x is not a boolean, expected
     [InlineData("Dit is %ExpressionStringEvaluatorDummy ExpressionStringEvaluatorDummy% abc")] // %ExpressionStringEvaluatorDummy ExpressionStringEvaluatorDummy% is not a valid env var.
     [InlineData("{trimEnd(tRue)}")] // this occurs becuase tRue is evaluated as string, not as text.
-    [InlineData("x {conditional({FileExists(dummyfile2.json)}, exist, )} y")] // todo fix, third argument is null
-    [InlineData("{conditional({FileExists(dummyfile2.json)}, exist, )}")]
+    [InlineData("x {ifthenelse({FileExists(dummyfile2.json)}, exist, )} y")] // todo fix, third argument is null
+    [InlineData("{ifthenelse({FileExists(dummyfile2.json)}, exist, )}")]
     public void Parse_ShouldThrow_WhenInvalidInput(string input)
     {
         // arrange

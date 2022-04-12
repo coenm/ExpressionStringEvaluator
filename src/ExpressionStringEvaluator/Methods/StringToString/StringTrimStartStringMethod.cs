@@ -3,16 +3,21 @@ namespace ExpressionStringEvaluator.Methods.StringToString;
 using System;
 using System.Linq;
 
-public class StringTrimStartStringMethod : MethodBase, IMethod
+/// <summary>
+/// StringTrimStartStringMethod.
+/// </summary>
+public class StringTrimStartStringMethod : IMethod
 {
+    /// <inheritdoc cref="IMethod.CanHandle"/>
     public bool CanHandle(string method)
     {
-        return IsMethod(method, "TrimStart");
+        return MethodHelpers.IsMethod(method, "TrimStart");
     }
 
+    /// <inheritdoc cref="IMethod.Handle"/>
     public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
     {
-        string stringValue = ExpectSingleString(args);
+        var stringValue = MethodHelpers.ExpectSingleString(args);
         return new CombinedTypeContainer(stringValue.TrimStart());
     }
 }

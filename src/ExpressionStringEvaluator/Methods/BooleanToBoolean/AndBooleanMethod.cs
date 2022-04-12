@@ -2,16 +2,21 @@ namespace ExpressionStringEvaluator.Methods.BooleanToBoolean;
 
 using System;
 
-public class AndBooleanMethod : MethodBase, IMethod
+/// <summary>
+/// AndBooleanMethod.
+/// </summary>
+public class AndBooleanMethod : IMethod
 {
+    /// <inheritdoc cref="IMethod.CanHandle"/>
     public bool CanHandle(string method)
     {
-        return IsMethod(method, "And", "All");
+        return MethodHelpers.IsMethod(method, "And", "All");
     }
 
+    /// <inheritdoc cref="IMethod.Handle"/>
     public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
     {
-        ExpectAtLeastArgumentCount(1, args);
+        MethodHelpers.ExpectAtLeastArgumentCount(1, args);
 
         foreach (CombinedTypeContainer item in args)
         {

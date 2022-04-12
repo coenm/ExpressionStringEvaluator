@@ -2,17 +2,22 @@ namespace ExpressionStringEvaluator.Methods.StringToBoolean;
 
 using System;
 
-public class StringIsNullOrEmptyBooleanMethod : MethodBase, IMethod
+/// <summary>
+/// StringIsNullOrEmptyBooleanMethod.
+/// </summary>
+public class StringIsNullOrEmptyBooleanMethod : IMethod
 {
+    /// <inheritdoc cref="IMethod.CanHandle"/>
     public bool CanHandle(string method)
     {
-        return IsMethod(method, "IsNullOrEmpty");
+        return MethodHelpers.IsMethod(method, "IsNullOrEmpty");
     }
 
+    /// <inheritdoc cref="IMethod.Handle"/>
     public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
     {
-        ExpectArgumentCount(1, args);
-        var stringValue = ExpectString(args[0]);
+        MethodHelpers.ExpectArgumentCount(1, args);
+        var stringValue = MethodHelpers.ExpectString(args[0]);
         return string.IsNullOrEmpty(stringValue)
             ? CombinedTypeContainer.TrueInstance
             : CombinedTypeContainer.FalseInstance;

@@ -3,14 +3,13 @@ namespace ExpressionStringEvaluator.Methods;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 
 /// <summary>
 /// CombinedTypeContainer.
 /// </summary>
 public class CombinedTypeContainer
 {
-    private readonly bool _isNull = false;
+    private readonly bool _isNull;
     private readonly Type? _type;
     private readonly string? _string;
     private readonly bool? _bool;
@@ -135,7 +134,11 @@ public class CombinedTypeContainer
         throw new NotImplementedException();
     }
 
-    public Type? GetType()
+    /// <summary>
+    /// Get inner type.
+    /// </summary>
+    /// <returns>Type of the inner type.</returns>
+    public Type? GetInnerType()
     {
         return _type;
     }
