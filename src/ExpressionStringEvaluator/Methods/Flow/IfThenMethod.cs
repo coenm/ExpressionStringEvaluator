@@ -8,11 +8,13 @@ using System.Linq;
 /// </summary>
 public class IfThenMethod : MethodBase, IMethod
 {
+    /// <inheritdoc cref="IMethod.CanHandle"/>
     public bool CanHandle(string method)
     {
         return IsMethod(method, "ifthen");
     }
 
+    /// <inheritdoc cref="IMethod.Handle"/>
     public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
     {
         ExpectArgumentCount(2, args);

@@ -3,13 +3,18 @@ namespace ExpressionStringEvaluator.Methods.StringToBoolean;
 using System;
 using System.Linq;
 
+/// <summary>
+/// StringEqualsStringMethod.
+/// </summary>
 public class StringEqualsStringMethod : MethodBase, IMethod
 {
+    /// <inheritdoc cref="IMethod.CanHandle"/>
     public bool CanHandle(string method)
     {
         return IsMethod(method, "StringEquals");
     }
 
+    /// <inheritdoc cref="IMethod.Handle"/>
     public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
     {
         ExpectAtLeastArgumentCount(2, args);
