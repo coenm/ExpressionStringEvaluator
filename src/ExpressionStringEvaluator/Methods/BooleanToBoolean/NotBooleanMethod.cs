@@ -19,7 +19,7 @@ public class NotBooleanMethod : IMethod
     {
         MethodHelpers.ExpectArgumentCount(1, args);
         CombinedTypeContainer item = args.Single();
-        var b = MethodHelpers.ExpectBoolean(item);
+        var b = MethodHelpers.ExpectBooleanOrBooleanString(item);
 
         return b
             ? CombinedTypeContainer.FalseInstance

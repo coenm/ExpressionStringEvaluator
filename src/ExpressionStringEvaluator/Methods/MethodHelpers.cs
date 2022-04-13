@@ -2,6 +2,8 @@ namespace ExpressionStringEvaluator.Methods;
 
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 internal static class MethodHelpers
@@ -67,14 +69,41 @@ internal static class MethodHelpers
         return result.ToArray();
     }
 
-    public static bool ExpectBoolean(CombinedTypeContainer arg)
+    public static bool IsBooleanOrBooleanString(CombinedTypeContainer arg, [NotNullWhen(true)] out bool? value)
     {
-        if (!arg.IsBool(out var b))
+        if (arg.IsBool(out var b))
         {
-            throw new Exception($"Expected boolean type but but found {arg.GetInnerType()?.Name ?? "null"}.");
+            value = b;
+            return true;
         }
 
-        return b.Value;
+        if (arg.IsString(out var s))
+        {
+            if ("true".Equals(s.Trim(), StringComparison.CurrentCultureIgnoreCase))
+            {
+                value = true;
+                return true;
+            }
+
+            if ("false".Equals(s.Trim(), StringComparison.CurrentCultureIgnoreCase))
+            {
+                value = false;
+                return true;
+            }
+        }
+
+        value = null;
+        return false;
+    }
+
+    public static bool ExpectBooleanOrBooleanString(CombinedTypeContainer arg)
+    {
+        if (IsBooleanOrBooleanString(arg, out var b))
+        {
+            return b.Value;
+        }
+
+        throw new Exception($"Expected boolean but but found {arg.ToString()}.");
     }
 
     public static void ExpectNotNull(CombinedTypeContainer[] args)
