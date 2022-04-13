@@ -20,7 +20,7 @@ public class OrBooleanMethod : IMethod
 
         foreach (CombinedTypeContainer item in args)
         {
-            if (item.IsBool(out var b) && b == true)
+            if (MethodHelpers.IsBooleanOrBooleanString(item, out var b) && b.Value)
             {
                 return CombinedTypeContainer.TrueInstance;
             }

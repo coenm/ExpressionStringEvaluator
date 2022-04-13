@@ -73,6 +73,7 @@ public sealed class IntegrationTests : IDisposable
             };
 
         Environment.SetEnvironmentVariable("ExpressionStringEvaluatorDummy", "Dummy value");
+        Environment.SetEnvironmentVariable("ExpressionStringEvaluatorTrue", "true");
     }
 
     public void Dispose()
@@ -102,9 +103,9 @@ public sealed class IntegrationTests : IDisposable
     [InlineData("{UrlEncode(http://www.google.com:8080/abc)} x",         "http%3a%2f%2fwww.google.com%3a8080%2fabc x")]
 
     [InlineData("TrUe", "true")]
-    [InlineData("1", "true")]
     [InlineData("False", "false")]
-    [InlineData("0", "false")]
+    [InlineData("1", "1")]
+    [InlineData("0", "0")]
     [InlineData("abctRuede", "abctRuede")]
     [InlineData("abc tRuede", "abc tRuede")]
     [InlineData("abc tRue de", "abc tRue de")]
@@ -114,14 +115,14 @@ public sealed class IntegrationTests : IDisposable
 
     [InlineData("{And(true, True)}", "true")]
     [InlineData("{And(TRUE)}", "true")]
-    [InlineData("{And(1, true)}", "true")]
-    [InlineData("{And(1, {StringEquals({now:yyyy},2020)})}", "true")]
+    [InlineData("{And(TrUe, true)}", "true")]
+    [InlineData("{And(true , {StringEquals({now:yyyy},2020)})}", "true")]
 
     [InlineData("{And(true, False, True)}", "false")]
     [InlineData("{And(true, False, True, false)}", "false")]
     [InlineData("{And(TRUE, 0)}", "false")]
-    [InlineData("{And(1, true, FALSE)}", "false")]
-    [InlineData("{And(1,   {StringEquals({now:yyyy},2022)})}", "false")]
+    [InlineData("{And(true, true, FALSE)}", "false")]
+    [InlineData("{And(true,   {StringEquals({now:yyyy},2022)})}", "false")]
 
     [InlineData("{Or(true)}", "true")]
     [InlineData("{Or(true,true)}", "true")]
@@ -163,6 +164,8 @@ public sealed class IntegrationTests : IDisposable
     [InlineData("file does {ifthen({not({FileExists(dummyfile2.json)})}, \"not \")}exist", "file does not exist")]
     [InlineData("file does{ifthenelse({FileExists(dummyfile2.json)}, \" \", \" not\")} exist", "file does not exist")]
     [InlineData("{ifthenelse({FileExists(dummyfile.json)}, \"file does exist\", \"file does not exist\")}", "file does exist")]
+    [InlineData("{not(%ExpressionStringEvaluatorTrue%)", "false")]
+    [InlineData("{not(true)", "false")]
 
     [InlineData("{StringContains(abc, b)}", "true")]
     [InlineData("{StringContains(abc, abc)}", "true")]
