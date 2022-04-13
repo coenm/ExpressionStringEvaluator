@@ -58,6 +58,7 @@ public sealed class IntegrationTests : IDisposable
                 new StringTrimStringMethod(),
                 new StringLowerStringMethod(),
                 new StringUpperStringMethod(),
+                new StringContainsStringMethod(),
                 new UrlEncodeStringMethod(),
                 new UrlDecodeStringMethod(),
                 new StringEqualsStringMethod(),
@@ -165,6 +166,13 @@ public sealed class IntegrationTests : IDisposable
     [InlineData("{ifthenelse({FileExists(dummyfile.json)}, \"file does exist\", \"file does not exist\")}", "file does exist")]
     [InlineData("{not(%ExpressionStringEvaluatorTrue%)", "false")]
     [InlineData("{not(true)", "false")]
+
+    [InlineData("{StringContains(abc, b)}", "true")]
+    [InlineData("{StringContains(abc, abc)}", "true")]
+    [InlineData("{StringContains(abc, abd)}", "false")]
+    [InlineData("{StringContains(abc, A)}", "false")] // case sensitive.
+    [InlineData("{StringContains(abc , bc)}", "true")]
+    [InlineData("{StringContains(abc def , \"c d\")}", "true")]
     public void Parse(string input, string expectedOutput)
     {
         // arrange
@@ -183,6 +191,7 @@ public sealed class IntegrationTests : IDisposable
     [InlineData("{trimEnd(tRue)}")] // this occurs becuase tRue is evaluated as string, not as text.
     [InlineData("x {ifthenelse({FileExists(dummyfile2.json)}, exist, )} y")] // todo fix, third argument is null
     [InlineData("{ifthenelse({FileExists(dummyfile2.json)}, exist, )}")]
+    [InlineData("{StringContains(\"abc def\" , \"c d\")}")]  //todo fix, first argument is different type as second.
     public void Parse_ShouldThrow_WhenInvalidInput(string input)
     {
         // arrange
