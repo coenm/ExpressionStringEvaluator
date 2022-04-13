@@ -53,8 +53,8 @@ fragment SLASH      : '/' ;
 fragment PERCENT    : '%' ;
 fragment ATSIGN     : '@' ;
 
-TRUE                : ( T R U E   | '1');
-FALSE               : ( F A L S E | '0' );
+TRUE                : ( T R U E );
+FALSE               : ( F A L S E );
 
 KEY                 : LETTER(LETTER|DIGIT|UNDERSCORE|DOT|MINUS)+ ;
 WORD                : (LETTER|DIGIT|UNDERSCORE|DOT|MINUS|SLASH|ATSIGN)+;

@@ -18,7 +18,7 @@ public class IfThenMethod : IMethod
     public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
     {
         MethodHelpers.ExpectArgumentCount(2, args);
-        bool b = MethodHelpers.ExpectBoolean(args[0]);
+        bool b = MethodHelpers.ExpectBooleanOrBooleanString(args[0]);
         MethodHelpers.ExpectNotNull(args);
         return b ? args[1] : CombinedTypeContainer.NullInstance;
     }

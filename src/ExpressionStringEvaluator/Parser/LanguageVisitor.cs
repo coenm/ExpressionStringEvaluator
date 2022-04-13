@@ -64,9 +64,9 @@ internal class LanguageVisitor<T> : LanguageBaseVisitor<CombinedTypeContainer>
     public override CombinedTypeContainer VisitFunction(LanguageParser.FunctionContext context)
     {
         var method = context.KEY().GetText();
-        var arg = VisitArgs(context.arg);
+        CombinedTypeContainer arg = VisitArgs(context.arg);
 
-        var m = _methods.FirstOrDefault(x => x.CanHandle(method));
+        IMethod? m = _methods.FirstOrDefault(x => x.CanHandle(method));
         if (m == null)
         {
             return new CombinedTypeContainer(method + arg);
@@ -87,11 +87,11 @@ internal class LanguageVisitor<T> : LanguageBaseVisitor<CombinedTypeContainer>
                 Visit(context.ar1),
             };
 
-        var multipleArguments = context.expression2();
+        LanguageParser.Expression2Context[]? multipleArguments = context.expression2();
 
         if (multipleArguments != null)
         {
-            foreach (var item in multipleArguments)
+            foreach (LanguageParser.Expression2Context item in multipleArguments)
             {
                 args.Add(Visit(item));
             }
@@ -109,17 +109,7 @@ internal class LanguageVisitor<T> : LanguageBaseVisitor<CombinedTypeContainer>
             return new CombinedTypeContainer(true);
         }
 
-        if ("1".Equals(text, StringComparison.CurrentCultureIgnoreCase))
-        {
-            return new CombinedTypeContainer(true);
-        }
-
         if ("false".Equals(text, StringComparison.CurrentCultureIgnoreCase))
-        {
-            return new CombinedTypeContainer(false);
-        }
-
-        if ("0".Equals(text, StringComparison.CurrentCultureIgnoreCase))
         {
             return new CombinedTypeContainer(false);
         }
@@ -161,13 +151,6 @@ internal class LanguageVisitor<T> : LanguageBaseVisitor<CombinedTypeContainer>
         if (nextResult is null)
         {
             return aggregate;
-        }
-
-        if (aggregate.IsBool(out var b1) && nextResult.IsBool(out var b2) && b1.Value == b2.Value)
-        {
-            return b1.Value
-                ? CombinedTypeContainer.TrueInstance
-                : CombinedTypeContainer.FalseInstance;
         }
 
         return new CombinedTypeContainer(aggregate.ToString() + nextResult.ToString());

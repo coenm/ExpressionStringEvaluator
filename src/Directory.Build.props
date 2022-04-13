@@ -3,7 +3,7 @@
 <Project>
   <PropertyGroup>
     <Nullable>enable</Nullable>
-    <!-- <TreatWarningsAsErrors>true</TreatWarningsAsErrors> -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 
     <Authors>Coen van den Munckhof</Authors>
     <Owners>$(Authors)</Owners>

@@ -25,12 +25,12 @@ public class AndBooleanMethod : IMethod
                 return CombinedTypeContainer.FalseInstance;
             }
 
-            if (!item.IsBool(out var @bool))
+            if (!MethodHelpers.IsBooleanOrBooleanString(item, out var b))
             {
                 return CombinedTypeContainer.FalseInstance;
             }
 
-            if (!@bool.Value)
+            if (!b.Value)
             {
                 return CombinedTypeContainer.FalseInstance;
             }
