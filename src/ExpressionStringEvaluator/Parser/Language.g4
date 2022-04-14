@@ -50,13 +50,17 @@ fragment DOT        : '.' ;
 fragment MINUS      : '-' ;
 fragment SEMICOLUMN : ':' ;
 fragment SLASH      : '/' ;
-fragment PERCENT    : '%' ;
+fragment BACKSLASH  : '\\' '\\' ;
+fragment PERCENT    : '\\' '%' ;
+fragment BRACKET_OPEN    : '\\' '{' ;
+fragment BRACKET_CLOSE    : '\\' '}' ;
 fragment ATSIGN     : '@' ;
+fragment SYMBOLS    : ('?'|'!'|'#'|'$'|'^'|'&'|'*'|'=') ;
 
 TRUE                : ( T R U E );
 FALSE               : ( F A L S E );
 
 KEY                 : LETTER(LETTER|DIGIT|UNDERSCORE|DOT|MINUS)+ ;
-WORD                : (LETTER|DIGIT|UNDERSCORE|DOT|MINUS|SLASH|ATSIGN)+;
+WORD                : (LETTER|DIGIT|UNDERSCORE|DOT|MINUS|SLASH|BACKSLASH|PERCENT|BRACKET_OPEN|BRACKET_CLOSE|ATSIGN|SYMBOLS)+;
 NEWLINE             : ('\r'? '\n' | '\r') -> channel(HIDDEN) ;
 WHITESPACE          : (' ' | '\t' ) -> channel(HIDDEN) ;

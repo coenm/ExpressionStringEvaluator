@@ -52,7 +52,11 @@ internal class LanguageVisitor<T> : LanguageBaseVisitor<CombinedTypeContainer>
 
     public override CombinedTypeContainer VisitTextWithSpaces(LanguageParser.TextWithSpacesContext context)
     {
-        var text = context.GetText();
+        var text = context.GetText()
+           .Replace("\\%", "%")
+           .Replace("\\{", "{")
+           .Replace("\\}", "}")
+           .Replace("\\\\", "\\");
         return new CombinedTypeContainer(text);
     }
 
@@ -119,7 +123,13 @@ internal class LanguageVisitor<T> : LanguageBaseVisitor<CombinedTypeContainer>
 
     public override CombinedTypeContainer VisitEnvvariable(LanguageParser.EnvvariableContext context)
     {
-        var envVariable = context.KEY().GetText();
+        ITerminalNode envVarKey = context.KEY();
+        if (envVarKey == null)
+        {
+            throw new Exception("Could not determine key in environment variable.");
+        }
+
+        var envVariable = envVarKey.GetText();
         IParseTree? closingSymbol = context.children[2];
         if (!"%".Equals(closingSymbol.GetText(), StringComparison.CurrentCultureIgnoreCase))
         {
