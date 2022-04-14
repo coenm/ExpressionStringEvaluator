@@ -173,6 +173,15 @@ public sealed class IntegrationTests : IDisposable
     [InlineData("{StringContains(abc, A)}", "false")] // case sensitive.
     [InlineData("{StringContains(abc , bc)}", "true")]
     [InlineData("{StringContains(abc def , \"c d\")}", "true")]
+    [InlineData("https://dev.azure.com/xx/_git {Env.ExpressionStringEvaluatorDummy}", "https://dev.azure.com/xx/_git Dummy value")]
+    [InlineData("https://dev.azure.com/xx/_git{Env.ExpressionStringEvaluatorDummy}", "https://dev.azure.com/xx/_gitDummy value")]
+    [InlineData("https://dev.azure.com/xx/_git2/{Env.ExpressionStringEvaluatorDummy}", "https://dev.azure.com/xx/_git2/Dummy value")]
+    [InlineData("https://dev.azure.com/xx/_git2/%ExpressionStringEvaluatorDummy%", "https://dev.azure.com/xx/_git2/Dummy value")]
+    [InlineData("https://dev.azure.com/xx/_git2/\\%%ExpressionStringEvaluatorDummy%", "https://dev.azure.com/xx/_git2/%Dummy value")]
+    [InlineData("https://dev.azure.com/xx/build?definitionScope=\\%5CIntegrations\\%5CData\\%5CAPI", "https://dev.azure.com/xx/build?definitionScope=%5CIntegrations%5CData%5CAPI")]
+    [InlineData("ABC\\{DEF", "ABC{DEF")]
+    [InlineData("ABC\\}DEF", "ABC}DEF")]
+    [InlineData("ABC\\\\DEF", "ABC\\DEF")]
     public void Parse(string input, string expectedOutput)
     {
         // arrange
@@ -191,7 +200,7 @@ public sealed class IntegrationTests : IDisposable
     [InlineData("{trimEnd(tRue)}")] // this occurs becuase tRue is evaluated as string, not as text.
     [InlineData("x {ifthenelse({FileExists(dummyfile2.json)}, exist, )} y")] // todo fix, third argument is null
     [InlineData("{ifthenelse({FileExists(dummyfile2.json)}, exist, )}")]
-    [InlineData("{StringContains(\"abc def\" , \"c d\")}")]  //todo fix, first argument is different type as second.
+    [InlineData("{StringContains(\"abc def\" , \"c d\")}")] // todo fix, first argument is different type as second.
     public void Parse_ShouldThrow_WhenInvalidInput(string input)
     {
         // arrange
