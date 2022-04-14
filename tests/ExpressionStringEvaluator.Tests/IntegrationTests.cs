@@ -200,7 +200,7 @@ public sealed class IntegrationTests : IDisposable
     [InlineData("{trimEnd(tRue)}")] // this occurs becuase tRue is evaluated as string, not as text.
     [InlineData("x {ifthenelse({FileExists(dummyfile2.json)}, exist, )} y")] // todo fix, third argument is null
     [InlineData("{ifthenelse({FileExists(dummyfile2.json)}, exist, )}")]
-    [InlineData("{StringContains(\"abc def\" , \"c d\")}")] //todo fix, first argument is different type as second.
+    [InlineData("{StringContains(\"abc def\" , \"c d\")}")] // todo fix, first argument is different type as second.
     public void Parse_ShouldThrow_WhenInvalidInput(string input)
     {
         // arrange
