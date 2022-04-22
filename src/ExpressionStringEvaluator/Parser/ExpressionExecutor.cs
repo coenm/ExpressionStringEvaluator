@@ -43,7 +43,7 @@ public class ExpressionExecutor
         var commonTokenStream = new CommonTokenStream(lexer);
 
         var parser = new LanguageParser(commonTokenStream);
-        LanguageParser.ExpressionContext expression = parser.expression();
+        LanguageParser.TextExpressionContext expression = parser.textExpression();
 
         return visitor.Visit(expression);
     }

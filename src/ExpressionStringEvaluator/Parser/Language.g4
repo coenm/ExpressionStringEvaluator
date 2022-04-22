@@ -3,32 +3,38 @@
 /*------------------------------------------------------------------
  * PARSER RULES
  *------------------------------------------------------------------*/
-expression          : ( envvariable | booleanexpression | textWithSpaces | variable | function )*
-                    ;
+textExpression          : ( envvariable | booleanexpression | textWithSpaces | variable | function )*
+                        ;
 
-expression2         : ( envvariable | booleanexpression | words | variable | function )* | '"' expression '"'
-                    ;
+argumentExpression      : ( envvariable | booleanexpression | words | variable | function )* | '"' argumentTextExpression '"'
+                        ;
 
-booleanexpression   : ( TRUE | FALSE )
-                    ;
+argumentTextExpression  : ( envvariable | booleanexpression | textWithSpacesEscaped | variable | function )*
+                        ;
 
-envvariable         : '%' KEY '%'
-                    ;
+booleanexpression       : ( TRUE | FALSE )
+                        ;
 
-variable            : '{' var=KEY (':' arg=textWithSpaces)? '}'
-                    ;
+envvariable             : '%' KEY '%'
+                        ;
 
-function            : '{' func=KEY '(' arg=args ')' '}'
-                    ;
+variable                : '{' var=KEY (':' arg=textWithSpaces)? '}'
+                        ;
 
-args                : ar1=expression ( ' '* ',' ' '* expression2 )+
-                    ;
+function                : '{' func=KEY '(' ' '* arg=args ' '* ')' '}'
+                        ;
 
-textWithSpaces      : (WORD | KEY | ':' | ' ' | TRUE | FALSE )+
-                    ;
+args                    : argumentExpression ( ' '* ',' ' '* argumentExpression ' '*)* 
+                        ;
 
-words               : ( WORD | KEY | ':' )+
-                    ;
+textWithSpaces          : (WORD | KEY | ':' | ' ' | ',' | TRUE | FALSE | '"' )+
+                        ;
+
+textWithSpacesEscaped   : (WORD | KEY | ':' | ' ' | ',' | TRUE | FALSE | '\\' '"' )+
+                        ;
+
+words                   : ( WORD | KEY | ':' )+
+                        ;
 
 /*------------------------------------------------------------------
  * LEXER RULES
