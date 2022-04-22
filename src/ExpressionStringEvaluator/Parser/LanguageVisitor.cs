@@ -52,11 +52,13 @@ internal class LanguageVisitor<T> : LanguageBaseVisitor<CombinedTypeContainer>
 
     public override CombinedTypeContainer VisitTextWithSpaces(LanguageParser.TextWithSpacesContext context)
     {
-        var text = context.GetText()
-           .Replace("\\%", "%")
-           .Replace("\\{", "{")
-           .Replace("\\}", "}")
-           .Replace("\\\\", "\\");
+        var text = Escape(context.GetText());
+        return new CombinedTypeContainer(text);
+    }
+
+    public override CombinedTypeContainer VisitTextWithSpacesEscaped(LanguageParser.TextWithSpacesEscapedContext context)
+    {
+        var text = Escape(context.GetText()).Replace("\\\"", "\"");
         return new CombinedTypeContainer(text);
     }
 
@@ -86,16 +88,16 @@ internal class LanguageVisitor<T> : LanguageBaseVisitor<CombinedTypeContainer>
 
     public override CombinedTypeContainer VisitArgs(LanguageParser.ArgsContext context)
     {
-        var args = new List<CombinedTypeContainer>
-            {
+        var args = new List<CombinedTypeContainer>();
+            /*{
                 Visit(context.ar1),
-            };
+            };*/
 
-        LanguageParser.Expression2Context[]? multipleArguments = context.expression2();
+        LanguageParser.ArgumentExpressionContext[]? multipleArguments = context.argumentExpression();
 
         if (multipleArguments != null)
         {
-            foreach (LanguageParser.Expression2Context item in multipleArguments)
+            foreach (LanguageParser.ArgumentExpressionContext item in multipleArguments)
             {
                 args.Add(Visit(item));
             }
@@ -164,5 +166,14 @@ internal class LanguageVisitor<T> : LanguageBaseVisitor<CombinedTypeContainer>
         }
 
         return new CombinedTypeContainer(aggregate.ToString() + nextResult.ToString());
+    }
+
+    private static string Escape(string input)
+    {
+        return input
+               .Replace("\\%", "%")
+               .Replace("\\{", "{")
+               .Replace("\\}", "}")
+               .Replace("\\\\", "\\");
     }
 }
