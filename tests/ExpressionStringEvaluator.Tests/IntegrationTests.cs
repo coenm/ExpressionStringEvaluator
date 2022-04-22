@@ -2,6 +2,7 @@ namespace ExpressionStringEvaluator.Tests;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Antlr4.Runtime;
 using ExpressionStringEvaluator.Methods;
 using ExpressionStringEvaluator.Methods.BooleanToBoolean;
@@ -49,6 +50,8 @@ public sealed class IntegrationTests : IDisposable
                 new PathSeparatorVariableProvider(),
                 new EmptyVariableProvider(),
                 new EnvironmentVariableVariableProvider(),
+                new SlashVariableProvider(),
+                new BackslashVariableProvider(),
             };
 
         _methods = new List<IMethod>
@@ -189,7 +192,8 @@ public sealed class IntegrationTests : IDisposable
     [InlineData("{in(a, c, d, A, e)}", "false")]
     [InlineData("abc {in(\"abc def\", c, \"abc def\", A, e)}", "abc true")]
     [InlineData("abc {in(\"abc,def\", c, \"abc,def\", A, e)}", "abc true")]
-    [InlineData("-d \"C:/Projects/bdo/Alerts\"", "-d \"C:/Projects/bdo/Alerts\"")]
+    [InlineData("-d \"C:/Projects/abc/def\"", "-d \"C:/Projects/abc/def\"")]
+    [InlineData("-d \"C:{slash}Projects/abc{backslash}def\"", "-d \"C:/Projects/abc\\def\"")]
     public void Parse(string input, string expectedOutput)
     {
         // arrange
@@ -197,6 +201,31 @@ public sealed class IntegrationTests : IDisposable
 
         // act
         CombinedTypeContainer result = sut.Execute(new Context(), input);
+
+        // assert
+        Assert.Equal(expectedOutput, result.ToString());
+    }
+
+    [Theory]
+    [InlineData("-f \"{Repository.Location} {Repository.Name}\"", "-f \"D:\\repositories ExpressionStringEvaluator\"")]
+    [InlineData("-f \"{Repository.Location}\\\\{Repository.Name}\"", "-f \"D:\\repositories\\ExpressionStringEvaluator\"")]
+    [InlineData("-f \"{Repository.Location}{backslash}{Repository.Name}\"", "-f \"D:\\repositories\\ExpressionStringEvaluator\"")]
+    /*[InlineData("-f \"{Repository.Location}{PathSeparator}{Repository.Name}\"", "-f \"D:\\repositories\\ExpressionStringEvaluator\"")] // depends on system*/
+    public void ParseRepoContext(string input, string expectedOutput)
+    {
+        // arrange
+        var repo = new Repository()
+            {
+                Location = "D:\\repositories",
+                Name = "ExpressionStringEvaluator",
+            };
+
+        var providers = _providers.ToList();
+        providers.Add(new RepositoryVariableProvider());
+        var sut = new ExpressionExecutor(providers, _methods);
+
+        // act
+        CombinedTypeContainer result = sut.Execute(repo, input);
 
         // assert
         Assert.Equal(expectedOutput, result.ToString());
