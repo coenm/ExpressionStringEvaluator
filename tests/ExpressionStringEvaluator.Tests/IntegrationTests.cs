@@ -149,9 +149,11 @@ public sealed class IntegrationTests : IDisposable
     [InlineData("{FileExists(dummyfile2.json)}", "false")]
     [InlineData("{not({FileExists(dummyfile2.json)})}", "true")]
 
-    [InlineData("{trimEnd(  aaaa   )}", "  aaaa")]
-    [InlineData("{trimstart({trimEnd(  aaaa   )})}", "aaaa")]
-    [InlineData("{trimstart({trimEnd(  tRue   )})}", "tRue")]
+    [InlineData("{trimEnd(\"  aaaa   \")}", "  aaaa")]
+    [InlineData("{trimEnd(\"  \\\"aaaa   \")}", "  \"aaaa")]
+    [InlineData("{trimstart({trimEnd(\"  aaaa2  \" )})}", "aaaa2")]
+    [InlineData("{trimstart({trimEnd( \"  tRue  \")})}", "tRue")]
+    [InlineData("{trimstart({trimEnd( \"  tRxxue  \" )})}", "tRxxue")]
 
     [InlineData("{length(github)}", "6")]
     [InlineData("{length(%ExpressionStringEvaluatorDummy%)}", "11")] // "Dummy value"
@@ -173,7 +175,7 @@ public sealed class IntegrationTests : IDisposable
     [InlineData("{StringContains(abc, abd)}", "false")]
     [InlineData("{StringContains(abc, A)}", "false")] // case sensitive.
     [InlineData("{StringContains(abc , bc)}", "true")]
-    [InlineData("{StringContains(abc def , \"c d\")}", "true")]
+    [InlineData("{StringContains(\"abc def\" , \"c d\")}", "true")]
     [InlineData("https://dev.azure.com/xx/_git {Env.ExpressionStringEvaluatorDummy}", "https://dev.azure.com/xx/_git Dummy value")]
     [InlineData("https://dev.azure.com/xx/_git{Env.ExpressionStringEvaluatorDummy}", "https://dev.azure.com/xx/_gitDummy value")]
     [InlineData("https://dev.azure.com/xx/_git2/{Env.ExpressionStringEvaluatorDummy}", "https://dev.azure.com/xx/_git2/Dummy value")]
@@ -185,7 +187,9 @@ public sealed class IntegrationTests : IDisposable
     [InlineData("ABC\\\\DEF", "ABC\\DEF")]
     [InlineData("{in(a, c, d, a, e)}", "true")]
     [InlineData("{in(a, c, d, A, e)}", "false")]
-    [InlineData("abc {in(abc def, c, \"abc def\", A, e)}", "abc true")]
+    [InlineData("abc {in(\"abc def\", c, \"abc def\", A, e)}", "abc true")]
+    [InlineData("abc {in(\"abc,def\", c, \"abc,def\", A, e)}", "abc true")]
+    [InlineData("-d \"C:/Projects/bdo/Alerts\"", "-d \"C:/Projects/bdo/Alerts\"")]
     public void Parse(string input, string expectedOutput)
     {
         // arrange
@@ -204,7 +208,6 @@ public sealed class IntegrationTests : IDisposable
     [InlineData("{trimEnd(tRue)}")] // this occurs becuase tRue is evaluated as string, not as text.
     [InlineData("x {ifthenelse({FileExists(dummyfile2.json)}, exist, )} y")] // todo fix, third argument is null
     [InlineData("{ifthenelse({FileExists(dummyfile2.json)}, exist, )}")]
-    [InlineData("{StringContains(\"abc def\" , \"c d\")}")] // todo fix, first argument is different type as second.
     public void Parse_ShouldThrow_WhenInvalidInput(string input)
     {
         // arrange
@@ -231,14 +234,14 @@ public sealed class IntegrationTests : IDisposable
         result.Should().Be(CombinedTypeContainer.NullInstance);
     }
 
-    private LanguageParser.ExpressionContext GetExpressionContext(string input)
+    private LanguageParser.TextExpressionContext GetExpressionContext(string input)
     {
         var inputStream = new AntlrInputStream(input);
         var lexer = new LanguageLexer(inputStream);
         var commonTokenStream = new CommonTokenStream(lexer);
 
         var parser = new LanguageParser(commonTokenStream);
-        LanguageParser.ExpressionContext result = parser.expression();
+        LanguageParser.TextExpressionContext result = parser.textExpression();
 
         _output.WriteLine($"input: '{input}'");
         _output.WriteLine(string.Empty);
