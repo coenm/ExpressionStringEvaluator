@@ -62,6 +62,7 @@ public sealed class IntegrationTests : IDisposable
                 new UrlEncodeStringMethod(),
                 new UrlDecodeStringMethod(),
                 new StringEqualsStringMethod(),
+                new InMethod(),
                 new AndBooleanMethod(),
                 new OrBooleanMethod(),
                 new StringIsNullOrEmptyBooleanMethod(),
@@ -182,6 +183,9 @@ public sealed class IntegrationTests : IDisposable
     [InlineData("ABC\\{DEF", "ABC{DEF")]
     [InlineData("ABC\\}DEF", "ABC}DEF")]
     [InlineData("ABC\\\\DEF", "ABC\\DEF")]
+    [InlineData("{in(a, c, d, a, e)}", "true")]
+    [InlineData("{in(a, c, d, A, e)}", "false")]
+    [InlineData("abc {in(abc def, c, \"abc def\", A, e)}", "abc true")]
     public void Parse(string input, string expectedOutput)
     {
         // arrange
