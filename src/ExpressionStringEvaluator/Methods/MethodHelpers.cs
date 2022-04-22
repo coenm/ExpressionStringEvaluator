@@ -103,7 +103,7 @@ internal static class MethodHelpers
             return b.Value;
         }
 
-        throw new Exception($"Expected boolean but but found {arg.ToString()}.");
+        throw new Exception($"Expected boolean but but found {arg}.");
     }
 
     public static void ExpectNotNull(CombinedTypeContainer[] args)
