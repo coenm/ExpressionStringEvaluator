@@ -74,6 +74,8 @@ public sealed class IntegrationTests : IDisposable
                 new StringLengthMethod(),
                 new IfThenElseMethod(),
                 new IfThenMethod(),
+                new SubstringMethod(),
+                new StringReplaceMethod(),
             };
 
         Environment.SetEnvironmentVariable("ExpressionStringEvaluatorDummy", "Dummy value");
@@ -194,6 +196,14 @@ public sealed class IntegrationTests : IDisposable
     [InlineData("abc {in(\"abc,def\", c, \"abc,def\", A, e)}", "abc true")]
     [InlineData("-d \"C:/Projects/abc/def\"", "-d \"C:/Projects/abc/def\"")]
     [InlineData("-d \"C:{slash}Projects/abc{backslash}def\"", "-d \"C:/Projects/abc\\def\"")]
+
+    [InlineData("StringReplace {StringReplace(\"x yz\", x, yy)}", "StringReplace yy yz")]
+    [InlineData("StringReplace {StringReplace(\"x yz\", X, yy)}", "StringReplace x yz")] // do not replace, case sensitive
+    [InlineData("StringReplace {StringReplace(\"x yz\", y, z)}", "StringReplace x zz")] // character replacement
+
+    [InlineData("substring {Substring(\"abcdefghijklmnop\", 3)}", "substring defghijklmnop")] // start index only
+    [InlineData("substring {Substring(\"abcdefghijklmnop\", 4, 2)}", "substring ef")] // startindex and length
+    [InlineData("substring {Substring(\"abcdefghijklmnop\", 4, 0)}", "substring ")] // length is 0
     public void Parse(string input, string expectedOutput)
     {
         // arrange
@@ -237,6 +247,7 @@ public sealed class IntegrationTests : IDisposable
     [InlineData("{trimEnd(tRue)}")] // this occurs becuase tRue is evaluated as string, not as text.
     [InlineData("x {ifthenelse({FileExists(dummyfile2.json)}, exist, )} y")] // todo fix, third argument is null
     [InlineData("{ifthenelse({FileExists(dummyfile2.json)}, exist, )}")]
+    [InlineData("substring {Substring(\"abcdefghijklmnop\", 4, -1)}")] // System.ArgumentOutOfRangeException, Length cannot be less than zero. (Parameter 'length')
     public void Parse_ShouldThrow_WhenInvalidInput(string input)
     {
         // arrange

@@ -2,8 +2,8 @@ namespace ExpressionStringEvaluator.Methods;
 
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 
 internal static class MethodHelpers
@@ -39,6 +39,24 @@ internal static class MethodHelpers
         }
 
         return arg.Length;
+    }
+
+    public static int ExpectIntegerOrIntegerString(CombinedTypeContainer arg)
+    {
+        if (arg.IsInt(out var @int))
+        {
+            return @int.Value;
+        }
+
+        if (arg.IsString(out var @string))
+        {
+            if (int.TryParse(@string, NumberStyles.Any, CultureInfo.CurrentCulture, out var value))
+            {
+                return value;
+            }
+        }
+
+        throw new Exception($"Expected integer type or string with integer value but but found {arg.GetInnerType()?.Name ?? "null"}.");
     }
 
     public static string ExpectString(CombinedTypeContainer arg)
