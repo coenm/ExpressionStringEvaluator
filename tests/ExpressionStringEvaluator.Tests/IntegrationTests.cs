@@ -204,6 +204,7 @@ public sealed class IntegrationTests : IDisposable
     [InlineData("substring {Substring(\"abcdefghijklmnop\", 3)}", "substring defghijklmnop")] // start index only
     [InlineData("substring {Substring(\"abcdefghijklmnop\", 4, 2)}", "substring ef")] // startindex and length
     [InlineData("substring {Substring(\"abcdefghijklmnop\", 4, 0)}", "substring ")] // length is 0
+    [InlineData("plaintext abc;def", "plaintext abc;def")]
     public void Parse(string input, string expectedOutput)
     {
         // arrange
