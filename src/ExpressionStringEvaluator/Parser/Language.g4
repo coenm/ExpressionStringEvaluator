@@ -61,7 +61,7 @@ fragment PERCENT    : '\\' '%' ;
 fragment BRACKET_OPEN    : '\\' '{' ;
 fragment BRACKET_CLOSE    : '\\' '}' ;
 fragment ATSIGN     : '@' ;
-fragment SYMBOLS    : ('?'|'!'|'#'|'$'|'^'|'&'|'*'|'=') ;
+fragment SYMBOLS    : ('?'|'!'|'#'|'$'|'^'|'&'|'*'|'='|';') ;
 
 TRUE                : ( T R U E );
 FALSE               : ( F A L S E );
