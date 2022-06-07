@@ -44,10 +44,10 @@ internal class LanguageVisitor<T> : LanguageBaseVisitor<CombinedTypeContainer>
 
         if (selectedProvider is IVariableProvider<T> typed)
         {
-            return new CombinedTypeContainer(typed.Provide(_context, key, args) ?? string.Empty);
+            return typed.Provide(_context, key, args) ?? CombinedTypeContainer.NullInstance;
         }
 
-        return new CombinedTypeContainer(selectedProvider.Provide(key, args) ?? string.Empty);
+        return selectedProvider.Provide(key, args) ?? CombinedTypeContainer.NullInstance;
     }
 
     public override CombinedTypeContainer VisitTextWithSpaces(LanguageParser.TextWithSpacesContext context)
@@ -58,7 +58,7 @@ internal class LanguageVisitor<T> : LanguageBaseVisitor<CombinedTypeContainer>
 
     public override CombinedTypeContainer VisitTextWithSpacesEscaped(LanguageParser.TextWithSpacesEscapedContext context)
     {
-        var text = Escape(context.GetText()).Replace("\\\"", "\"");
+        var text = Escape(context.GetText())?.Replace("\\\"", "\"");
         return new CombinedTypeContainer(text);
     }
 
@@ -144,10 +144,10 @@ internal class LanguageVisitor<T> : LanguageBaseVisitor<CombinedTypeContainer>
         {
             if (m is IVariableProvider<T> typed)
             {
-                return new CombinedTypeContainer(typed.Provide(_context, key, string.Empty) ?? string.Empty);
+                return typed.Provide(_context, key, string.Empty) ?? CombinedTypeContainer.NullInstance;
             }
 
-            return new CombinedTypeContainer(m.Provide(key, string.Empty) ?? string.Empty);
+            return m.Provide(key, string.Empty) ?? CombinedTypeContainer.NullInstance;
         }
 
         return new CombinedTypeContainer(string.Empty);
@@ -168,7 +168,7 @@ internal class LanguageVisitor<T> : LanguageBaseVisitor<CombinedTypeContainer>
         return new CombinedTypeContainer(aggregate.ToString() + nextResult.ToString());
     }
 
-    private static string Escape(string input)
+    private static string? Escape(string input)
     {
         return input
                .Replace("\\%", "%")

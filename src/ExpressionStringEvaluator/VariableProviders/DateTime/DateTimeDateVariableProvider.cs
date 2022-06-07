@@ -3,6 +3,7 @@ namespace ExpressionStringEvaluator.VariableProviders.DateTime;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using ExpressionStringEvaluator.Methods;
 
 /// <inheritdoc cref="IVariableProvider"/>
 public class DateTimeDateVariableProvider : IVariableProvider
@@ -28,7 +29,7 @@ public class DateTimeDateVariableProvider : IVariableProvider
     }
 
     /// <inheritdoc cref="IVariableProvider.Provide"/>
-    public string? Provide(string key, string? arg)
+    public CombinedTypeContainer? Provide(string key, string? arg)
     {
         DateTime now = _options.DateTimeProvider?.Invoke() ?? DateTime.Now;
         var format = _options.DefaultFormat ?? DEFAULT_FORMAT_TIME;
@@ -38,6 +39,6 @@ public class DateTimeDateVariableProvider : IVariableProvider
             format = arg;
         }
 
-        return now.ToString(format, CultureInfo.CurrentUICulture);
+        return new CombinedTypeContainer(now.ToString(format, CultureInfo.CurrentUICulture));
     }
 }

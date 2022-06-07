@@ -1,18 +1,20 @@
 namespace ExpressionStringEvaluator.Tests;
 
+using System;
+
 public class Repository
 {
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
-    public string Path { get; set; }
+    public string? Path { get; set; }
 
-    public string Location { get; set; }
+    public string? Location { get; set; }
 
-    public string CurrentBranch { get; set; }
+    public string? CurrentBranch { get; set; }
 
-    public string[] Branches { get; set; }
+    public string[]? Branches { get; set; }
 
-    public string[] LocalBranches { get; set; }
+    public string[]? LocalBranches { get; set; }
 
     public bool CurrentBranchHasUpstream { get; set; }
 
@@ -40,9 +42,9 @@ public class Repository
 
     public int? StashCount { get; set; }
 
-    public string[] RemoteUrls { get; set; }
+    public string[]? RemoteUrls { get; set; }
 
-    public string SafePath
+    public string? SafePath
     {
         // use '/' for linux systems and bash command line (will work on cmd and powershell as well)
         get
@@ -50,7 +52,7 @@ public class Repository
             var safePath = Path?.Replace(@"\", "/") ?? string.Empty;
             if (safePath.EndsWith("/"))
             {
-                safePath = safePath.Substring(0, safePath.Length - 1);
+                safePath = safePath[..^1];
             }
 
             return safePath;

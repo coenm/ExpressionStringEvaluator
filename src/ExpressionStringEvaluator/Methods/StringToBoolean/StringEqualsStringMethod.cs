@@ -11,7 +11,7 @@ public class StringEqualsStringMethod : IMethod
     /// <inheritdoc cref="IMethod.CanHandle"/>
     public bool CanHandle(string method)
     {
-        return MethodHelpers.IsMethod(method, "StringEquals");
+        return MethodHelpers.IsMethod(method, "StringEquals", "string.Equals");
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>

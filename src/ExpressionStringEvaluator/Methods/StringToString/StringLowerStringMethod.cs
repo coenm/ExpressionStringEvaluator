@@ -11,13 +11,13 @@ public class StringLowerStringMethod : IMethod
     /// <inheritdoc cref="IMethod.CanHandle"/>
     public bool CanHandle(string method)
     {
-        return MethodHelpers.IsMethod(method, "Lower");
+        return MethodHelpers.IsMethod(method, "Lower", "ToLower");
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>
     public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
     {
-        string stringValue = MethodHelpers.ExpectSingleString(args);
+        var stringValue = MethodHelpers.ExpectSingleString(args);
         return new CombinedTypeContainer(stringValue.ToLower());
     }
 }

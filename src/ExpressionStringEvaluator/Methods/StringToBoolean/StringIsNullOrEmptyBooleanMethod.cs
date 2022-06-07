@@ -10,7 +10,7 @@ public class StringIsNullOrEmptyBooleanMethod : IMethod
     /// <inheritdoc cref="IMethod.CanHandle"/>
     public bool CanHandle(string method)
     {
-        return MethodHelpers.IsMethod(method, "IsNullOrEmpty");
+        return MethodHelpers.IsMethod(method, "IsNullOrEmpty", "string.IsNullOrEmpty");
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>

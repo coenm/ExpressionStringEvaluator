@@ -1,6 +1,7 @@
 namespace ExpressionStringEvaluator.VariableProviders;
 
 using System;
+using ExpressionStringEvaluator.Methods;
 
 /// <inheritdoc cref="IVariableProvider"/>
 public class EnvironmentVariableVariableProvider : IVariableProvider
@@ -32,12 +33,11 @@ public class EnvironmentVariableVariableProvider : IVariableProvider
     }
 
     /// <inheritdoc cref="IVariableProvider.Provide"/>
-    public string? Provide(string key, string? arg)
+    public CombinedTypeContainer? Provide(string key, string? arg)
     {
         var prefixLength = PREFIX.Length;
         var envKey = key.Substring(prefixLength, key.Length - prefixLength);
         var result = Environment.GetEnvironmentVariable(envKey) ?? string.Empty;
-
-        return result;
+        return new CombinedTypeContainer(result);
     }
 }

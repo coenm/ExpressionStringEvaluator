@@ -1,6 +1,7 @@
 namespace ExpressionStringEvaluator.VariableProviders;
 
 using System;
+using ExpressionStringEvaluator.Methods;
 
 /// <inheritdoc cref="IVariableProvider"/>
 public class SlashVariableProvider : IVariableProvider
@@ -14,8 +15,8 @@ public class SlashVariableProvider : IVariableProvider
     }
 
     /// <inheritdoc cref="IVariableProvider.Provide"/>
-    public string? Provide(string key, string? arg)
+    public CombinedTypeContainer? Provide(string key, string? arg)
     {
-        return "/";
+        return new CombinedTypeContainer("/");
     }
 }
