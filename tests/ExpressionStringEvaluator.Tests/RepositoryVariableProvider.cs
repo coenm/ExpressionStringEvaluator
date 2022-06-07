@@ -25,7 +25,7 @@ public class RepositoryVariableProvider : IVariableProvider<Repository>
     private static string? ProvideInner(Repository context, string key)
     {
         var startIndex = "Repository.".Length;
-        var k = key.Substring(startIndex, key.Length - startIndex);
+        var k = key[startIndex..];
 
         if ("Name".Equals(k, StringComparison.CurrentCultureIgnoreCase))
         {
