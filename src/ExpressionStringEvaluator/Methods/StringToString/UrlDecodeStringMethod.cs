@@ -12,7 +12,7 @@ public class UrlDecodeStringMethod : IMethod
     /// <inheritdoc cref="IMethod.CanHandle"/>
     public bool CanHandle(string method)
     {
-        return MethodHelpers.IsMethod(method, "UrlDecode");
+        return MethodHelpers.IsMethod(method, "UrlDecode", "HttpUtility.UrlDecode");
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>

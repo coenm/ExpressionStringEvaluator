@@ -1,6 +1,7 @@
 namespace ExpressionStringEvaluator.Tests;
 
 using System;
+using ExpressionStringEvaluator.Methods;
 using ExpressionStringEvaluator.VariableProviders;
 
 public class RepositoryVariableProvider : IVariableProvider<Repository>
@@ -10,7 +11,18 @@ public class RepositoryVariableProvider : IVariableProvider<Repository>
         return !string.IsNullOrWhiteSpace(key) && key.StartsWith("Repository.", StringComparison.CurrentCultureIgnoreCase);
     }
 
-    public string Provide(Repository context, string key, string arg)
+    public CombinedTypeContainer? Provide(Repository context, string key, string? arg)
+    {
+        var result = ProvideInner(context, key);
+        return new CombinedTypeContainer(result);
+    }
+
+    public CombinedTypeContainer? Provide(string key, string? arg)
+    {
+        throw new NotImplementedException();
+    }
+
+    private static string? ProvideInner(Repository context, string key)
     {
         var startIndex = "Repository.".Length;
         var k = key.Substring(startIndex, key.Length - startIndex);
@@ -42,24 +54,19 @@ public class RepositoryVariableProvider : IVariableProvider<Repository>
 
         if ("Branches".Equals(k, StringComparison.CurrentCultureIgnoreCase))
         {
-            return string.Join("|", context.Branches);
+            return string.Join("|", context.Branches ?? Array.Empty<string>());
         }
 
         if ("LocalBranches".Equals(k, StringComparison.CurrentCultureIgnoreCase))
         {
-            return string.Join("|", context.LocalBranches);
+            return string.Join("|", context.LocalBranches ?? Array.Empty<string>());
         }
 
         if ("RemoteUrls".Equals(k, StringComparison.CurrentCultureIgnoreCase))
         {
-            return string.Join("|", context.RemoteUrls);
+            return string.Join("|", context.RemoteUrls ?? Array.Empty<string>());
         }
 
-        throw new NotImplementedException();
-    }
-
-    public string Provide(string key, string arg)
-    {
         throw new NotImplementedException();
     }
 }

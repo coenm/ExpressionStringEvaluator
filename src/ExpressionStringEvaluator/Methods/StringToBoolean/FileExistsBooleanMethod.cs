@@ -11,7 +11,7 @@ public class FileExistsBooleanMethod : IMethod
     /// <inheritdoc cref="IMethod.CanHandle"/>
     public bool CanHandle(string method)
     {
-        return MethodHelpers.IsMethod(method, "FileExists");
+        return MethodHelpers.IsMethod(method, "FileExists", "File.Exists");
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>

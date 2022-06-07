@@ -80,6 +80,7 @@ public sealed class IntegrationTests : IDisposable
 
         Environment.SetEnvironmentVariable("ExpressionStringEvaluatorDummy", "Dummy value");
         Environment.SetEnvironmentVariable("ExpressionStringEvaluatorTrue", "true");
+        Environment.SetEnvironmentVariable("ExpressionStringEvaluatorEmpty", string.Empty);
     }
 
     public void Dispose()
@@ -205,6 +206,9 @@ public sealed class IntegrationTests : IDisposable
     [InlineData("substring {Substring(\"abcdefghijklmnop\", 4, 2)}", "substring ef")] // startindex and length
     [InlineData("substring {Substring(\"abcdefghijklmnop\", 4, 0)}", "substring ")] // length is 0
     [InlineData("plaintext abc;def", "plaintext abc;def")]
+
+    [InlineData("string.IsNullOrEmpty = {string.IsNullOrEmpty(  aaa  )}", "string.IsNullOrEmpty = false")]
+    [InlineData("string.IsNullOrEmpty = {string.IsNullOrEmpty(%ExpressionStringEvaluatorEmpty%)}", "string.IsNullOrEmpty = true")]
     public void Parse(string input, string expectedOutput)
     {
         // arrange

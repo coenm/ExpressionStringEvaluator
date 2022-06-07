@@ -2,6 +2,7 @@ namespace ExpressionStringEvaluator.VariableProviders;
 
 using System;
 using System.Collections.Generic;
+using ExpressionStringEvaluator.Methods;
 
 /// <inheritdoc cref="IVariableProvider"/>
 public class EmptyVariableProvider : IVariableProvider
@@ -15,8 +16,8 @@ public class EmptyVariableProvider : IVariableProvider
     }
 
     /// <inheritdoc cref="IVariableProvider.Provide"/>
-    public string? Provide(string key, string? arg)
+    public CombinedTypeContainer? Provide(string key, string? arg)
     {
-        return string.Empty;
+        return new CombinedTypeContainer(string.Empty);
     }
 }

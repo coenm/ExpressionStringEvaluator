@@ -19,7 +19,7 @@ public class CombinedTypeContainer
     /// Initializes a new instance of the <see cref="CombinedTypeContainer"/> class.
     /// </summary>
     /// <param name="s">value.</param>
-    public CombinedTypeContainer(string s)
+    public CombinedTypeContainer(string? s)
     {
         _string = s;
         _type = typeof(string);
