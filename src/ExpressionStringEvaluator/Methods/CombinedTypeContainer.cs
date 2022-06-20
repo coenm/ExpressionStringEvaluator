@@ -144,6 +144,23 @@ public class CombinedTypeContainer
     }
 
     /// <summary>
+    /// Is array.
+    /// </summary>
+    /// <param name="value">value.</param>
+    /// <returns>bool.</returns>
+    public bool IsArray([NotNullWhen(true)] out CombinedTypeContainer[]? value)
+    {
+        if (_type != null && _type == typeof(CombinedTypeContainer[]))
+        {
+            value = Items;
+            return true;
+        }
+
+        value = null;
+        return false;
+    }
+
+    /// <summary>
     /// Is string.
     /// </summary>
     /// <param name="value">value.</param>
