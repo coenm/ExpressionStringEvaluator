@@ -45,7 +45,7 @@ public class CountMethodTest
         // arrange
 
         // act
-        CombinedTypeContainer result = _sut.Handle(METHOD_NAME, CombinedTypeContainerHelper.CreateArray("1", "2"));
+        CombinedTypeContainer result = _sut.Handle(METHOD_NAME, CombinedTypeContainerHelper.CreateArrayContainer("1", "2"));
 
         // assert
         result.IsInt(out var intValue).Should().BeTrue();

@@ -45,10 +45,10 @@ public class FirstMethodTest
         // arrange
 
         // act
-        CombinedTypeContainer result = _sut.Handle(METHOD_NAME, CombinedTypeContainerHelper.CreateArrayContainer("1", "2"), new CombinedTypeContainer(1));
+        CombinedTypeContainer result = _sut.Handle(METHOD_NAME, CombinedTypeContainerHelper.CreateArrayContainer("1", "2"));
 
         // assert
-        result.IsString(out string? stringValue).Should().BeTrue();
+        result.IsString(out var stringValue).Should().BeTrue();
         stringValue.Should().Be("1");
     }
 }
