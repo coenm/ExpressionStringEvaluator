@@ -10,7 +10,7 @@ internal static class MethodHelpers
 {
     public static bool IsMethod(string method, params string[] compareTo)
     {
-        return compareTo.Any(item => method.Equals(item, StringComparison.CurrentCultureIgnoreCase));
+        return compareTo.Any(item => item.Equals(method, StringComparison.CurrentCultureIgnoreCase));
     }
 
     public static void ExpectArgumentCount(int expectCount, params CombinedTypeContainer[] arg)
