@@ -14,4 +14,14 @@ internal static class CombinedTypeContainerHelper
     {
         return input.Select(x => new CombinedTypeContainer(x)).ToArray();
     }
+
+    public static CombinedTypeContainer CreateArrayContainer(params int[] input)
+    {
+        return new CombinedTypeContainer(CreateArray(input));
+    }
+
+    public static CombinedTypeContainer[] CreateArray(params int[] input)
+    {
+        return input.Select(x => new CombinedTypeContainer(x)).ToArray();
+    }
 }
