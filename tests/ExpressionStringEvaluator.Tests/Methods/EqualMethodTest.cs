@@ -1,7 +1,6 @@
 namespace ExpressionStringEvaluator.Tests.Methods;
 
 using ExpressionStringEvaluator.Methods;
-using ExpressionStringEvaluator.Methods.Linq;
 using ExpressionStringEvaluator.Tests.TestHelpers;
 using FluentAssertions;
 using Xunit;
@@ -40,7 +39,7 @@ public class EqualMethodTest
     }
 
     [Fact]
-    public void Handle_ShouldReturnTrue_WhenInputIsEqual()
+    public void Handle_ShouldReturnTrue_WhenStringInputIsEqual()
     {
         // arrange
 
@@ -52,4 +51,54 @@ public class EqualMethodTest
         result.IsBool(out var boolValue).Should().BeTrue();
         boolValue.Should().BeTrue();
     }
+
+    [Theory]
+    [InlineData("1 ")]
+    [InlineData(" 1")]
+    [InlineData("adsf")]
+    [InlineData("")]
+    public void Handle_ShouldReturnFalse_WhenStringInputIsEqual(string input)
+    {
+        // arrange
+
+        // act
+        CombinedTypeContainer result = _sut.Handle(
+            METHOD_NAME, CombinedTypeContainerHelper.CreateArray("1", input));
+
+        // assert
+        result.IsBool(out var boolValue).Should().BeTrue();
+        boolValue.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Handle_ShouldReturnTrue_WhenIntInputIsEqual()
+    {
+        // arrange
+
+        // act
+        CombinedTypeContainer result = _sut.Handle(
+            METHOD_NAME, CombinedTypeContainerHelper.CreateArray(1, 1));
+
+        // assert
+        result.IsBool(out var boolValue).Should().BeTrue();
+        boolValue.Should().BeTrue();
+    }
+
+    [Theory]
+    [InlineData(-1)]
+    [InlineData(0)]
+    [InlineData(int.MaxValue)]
+    public void Handle_ShouldReturnFalse_WhenIntInputIsEqual(int input)
+    {
+        // arrange
+
+        // act
+        CombinedTypeContainer result = _sut.Handle(
+            METHOD_NAME, CombinedTypeContainerHelper.CreateArray(1, input));
+
+        // assert
+        result.IsBool(out var boolValue).Should().BeTrue();
+        boolValue.Should().BeFalse();
+    }
 }
+

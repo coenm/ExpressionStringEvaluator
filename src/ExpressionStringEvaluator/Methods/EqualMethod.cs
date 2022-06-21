@@ -1,6 +1,4 @@
-namespace ExpressionStringEvaluator.Methods.Linq;
-
-using System.Threading;
+namespace ExpressionStringEvaluator.Methods;
 
 /// <summary>
 /// CountMethod.
