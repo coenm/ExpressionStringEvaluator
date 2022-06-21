@@ -1,7 +1,7 @@
 namespace ExpressionStringEvaluator.Methods;
 
 /// <summary>
-/// CountMethod.
+/// EqualMethod.
 /// </summary>
 public class EqualMethod : IMethod
 {
@@ -21,23 +21,19 @@ public class EqualMethod : IMethod
         if (v0.IsBool(out var boolValue0))
         {
             // expect second to be bool
-            if (v1.IsBool(out var boolValue1))
-            {
-                return boolValue1 == boolValue0
-                    ? CombinedTypeContainer.TrueInstance
-                    : CombinedTypeContainer.FalseInstance;
-            }
+            var boolValue1 = MethodHelpers.ExpectBooleanOrBooleanString(v1);
+            return boolValue1 == boolValue0
+                ? CombinedTypeContainer.TrueInstance
+                : CombinedTypeContainer.FalseInstance;
         }
 
         if (v0.IsInt(out var intValue0))
         {
             // expect second to be int
-            if (v1.IsInt(out var intValue1))
-            {
-                return intValue1 == intValue0
-                    ? CombinedTypeContainer.TrueInstance
-                    : CombinedTypeContainer.FalseInstance;
-            }
+            var intValue1 = MethodHelpers.ExpectIntegerOrIntegerString(v1);
+            return intValue1 == intValue0
+                ? CombinedTypeContainer.TrueInstance
+                : CombinedTypeContainer.FalseInstance;
         }
 
         if (v0.IsNull())
@@ -55,6 +51,22 @@ public class EqualMethod : IMethod
             if (v1.IsString(out var stringValue1))
             {
                 return stringValue0.Equals(stringValue1)
+                    ? CombinedTypeContainer.TrueInstance
+                    : CombinedTypeContainer.FalseInstance;
+            }
+
+            if (v1.IsBool(out var boolValue1))
+            {
+                boolValue0 = MethodHelpers.ExpectBooleanOrBooleanString(v0);
+                return boolValue1 == boolValue0
+                    ? CombinedTypeContainer.TrueInstance
+                    : CombinedTypeContainer.FalseInstance;
+            }
+
+            if (v1.IsInt(out var intValue1))
+            {
+                intValue0 = MethodHelpers.ExpectIntegerOrIntegerString(v0);
+                return intValue1 == intValue0
                     ? CombinedTypeContainer.TrueInstance
                     : CombinedTypeContainer.FalseInstance;
             }
