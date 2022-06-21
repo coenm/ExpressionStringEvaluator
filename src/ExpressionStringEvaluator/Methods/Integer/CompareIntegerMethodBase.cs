@@ -1,7 +1,5 @@
 namespace ExpressionStringEvaluator.Methods.Integer;
 
-using System;
-
 /// <summary>
 /// Base method to compare to integers.
 /// </summary>
