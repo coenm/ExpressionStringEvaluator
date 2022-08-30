@@ -209,6 +209,8 @@ public sealed class IntegrationTests : IDisposable
 
     [InlineData("string.IsNullOrEmpty = {string.IsNullOrEmpty(  aaa  )}", "string.IsNullOrEmpty = false")]
     [InlineData("string.IsNullOrEmpty = {string.IsNullOrEmpty(%ExpressionStringEvaluatorEmpty%)}", "string.IsNullOrEmpty = true")]
+
+    [InlineData("echo # abc >> def", "echo # abc >> def")]
     public void Parse(string input, string expectedOutput)
     {
         // arrange
