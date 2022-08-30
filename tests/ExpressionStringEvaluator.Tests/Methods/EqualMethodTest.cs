@@ -101,4 +101,3 @@ public class EqualMethodTest
         boolValue.Should().BeFalse();
     }
 }
-
