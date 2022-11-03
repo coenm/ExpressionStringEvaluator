@@ -1,9 +1,7 @@
 namespace ExpressionStringEvaluator.VariableProviders.DateTime;
 
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using ExpressionStringEvaluator.Methods;
 
 /// <inheritdoc cref="IVariableProvider"/>
 public class DateTimeNowVariableProvider : IVariableProvider
@@ -29,7 +27,7 @@ public class DateTimeNowVariableProvider : IVariableProvider
     }
 
     /// <inheritdoc cref="IVariableProvider.Provide"/>
-    public CombinedTypeContainer? Provide(string key, string? arg)
+    public object? Provide(string key, string? arg)
     {
         DateTime now = _options.DateTimeProvider?.Invoke() ?? DateTime.Now;
         var format = _options.DefaultFormat ?? DEFAULT_FORMAT_TIME;
@@ -39,6 +37,6 @@ public class DateTimeNowVariableProvider : IVariableProvider
             format = arg;
         }
 
-        return new CombinedTypeContainer(now.ToString(format, CultureInfo.CurrentUICulture));
+        return now.ToString(format, CultureInfo.CurrentUICulture);
     }
 }

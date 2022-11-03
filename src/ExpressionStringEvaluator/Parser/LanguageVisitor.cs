@@ -6,26 +6,28 @@ namespace ExpressionStringEvaluator.Parser;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using ExpressionStringEvaluator.Methods;
 using ExpressionStringEvaluator.VariableProviders;
 
-internal class LanguageVisitor<T> : LanguageBaseVisitor<CombinedTypeContainer>
+internal class LanguageVisitor<T> : LanguageBaseVisitor<object?>
     where T : new()
 {
     private readonly List<IMethod> _methods;
     private readonly T _context;
     private readonly List<IVariableProvider> _providers;
 
-    public LanguageVisitor(List<IVariableProvider> providers, List<IMethod> methods, T context)
+    public LanguageVisitor(
+        IEnumerable<IVariableProvider> providers,
+        IEnumerable<IMethod> methods,
+        T context)
     {
         _context = context;
         _providers = providers.ToList();
         _methods = methods.ToList();
     }
 
-    public override CombinedTypeContainer VisitVariable(LanguageParser.VariableContext context)
+    public override object? VisitVariable(LanguageParser.VariableContext context)
     {
         var key = context.KEY().GetText();
         string? args = null;
@@ -39,91 +41,79 @@ internal class LanguageVisitor<T> : LanguageBaseVisitor<CombinedTypeContainer>
         IVariableProvider? selectedProvider = _providers.FirstOrDefault(p => p.CanProvide(key));
         if (selectedProvider == null)
         {
-            return new CombinedTypeContainer(string.Empty);
+            return string.Empty;
         }
 
         if (selectedProvider is IVariableProvider<T> typed)
         {
-            return typed.Provide(_context, key, args) ?? CombinedTypeContainer.NullInstance;
+            return typed.Provide(_context, key, args);
         }
 
-        return selectedProvider.Provide(key, args) ?? CombinedTypeContainer.NullInstance;
+        return selectedProvider.Provide(key, args);
     }
 
-    public override CombinedTypeContainer VisitTextWithSpaces(LanguageParser.TextWithSpacesContext context)
+    public override object? VisitTextWithSpaces(LanguageParser.TextWithSpacesContext context)
     {
         var text = Escape(context.GetText());
-        return new CombinedTypeContainer(text);
+        return text;
     }
 
-    public override CombinedTypeContainer VisitTextWithSpacesEscaped(LanguageParser.TextWithSpacesEscapedContext context)
+    public override object? VisitTextWithSpacesEscaped(LanguageParser.TextWithSpacesEscapedContext context)
     {
         var text = Escape(context.GetText())?.Replace("\\\"", "\"");
-        return new CombinedTypeContainer(text);
+        return text;
     }
 
-    public override CombinedTypeContainer VisitWords(LanguageParser.WordsContext context)
+    public override object? VisitWords(LanguageParser.WordsContext context)
     {
-        return new CombinedTypeContainer(context.GetText());
+        return context.GetText();
     }
 
-    public override CombinedTypeContainer VisitFunction(LanguageParser.FunctionContext context)
+    public override object? VisitFunction(LanguageParser.FunctionContext context)
     {
         var method = context.KEY().GetText();
-        CombinedTypeContainer arg = VisitArgs(context.arg);
+        var arg = VisitArgs(context.arg);
 
         IMethod? m = _methods.FirstOrDefault(x => x.CanHandle(method));
         if (m == null)
         {
-            return new CombinedTypeContainer(method + arg);
+            return method + arg;
         }
 
-        if (arg.Items != null)
+        if (arg is object[] a)
         {
-            return m.Handle(method, arg.Items.ToArray());
+            return m.Handle(method, a);
         }
 
         return m.Handle(method, arg);
     }
 
-    public override CombinedTypeContainer VisitArgs(LanguageParser.ArgsContext context)
+    public override object? VisitArgs(LanguageParser.ArgsContext context)
     {
-        var args = new List<CombinedTypeContainer>();
-            /*{
-                Visit(context.ar1),
-            };*/
-
         LanguageParser.ArgumentExpressionContext[]? multipleArguments = context.argumentExpression();
 
         if (multipleArguments != null)
         {
+            var args = new List<object?>();
+
             foreach (LanguageParser.ArgumentExpressionContext item in multipleArguments)
             {
                 args.Add(Visit(item));
             }
+
+            return args.ToArray();
         }
 
-        return new CombinedTypeContainer(args.ToArray());
+        return Array.Empty<object?>();
     }
 
-    public override CombinedTypeContainer VisitBooleanexpression(LanguageParser.BooleanexpressionContext context)
+    public override object? VisitBooleanexpression(LanguageParser.BooleanexpressionContext context)
     {
         var text = context.GetText();
-
-        if ("true".Equals(text, StringComparison.CurrentCultureIgnoreCase))
-        {
-            return new CombinedTypeContainer(true);
-        }
-
-        if ("false".Equals(text, StringComparison.CurrentCultureIgnoreCase))
-        {
-            return new CombinedTypeContainer(false);
-        }
-
-        throw new NotImplementedException();
+        return text;
     }
 
-    public override CombinedTypeContainer VisitEnvvariable(LanguageParser.EnvvariableContext context)
+    public override object? VisitEnvvariable(LanguageParser.EnvvariableContext context)
     {
         ITerminalNode envVarKey = context.KEY();
         if (envVarKey == null)
@@ -144,16 +134,16 @@ internal class LanguageVisitor<T> : LanguageBaseVisitor<CombinedTypeContainer>
         {
             if (m is IVariableProvider<T> typed)
             {
-                return typed.Provide(_context, key, string.Empty) ?? CombinedTypeContainer.NullInstance;
+                return typed.Provide(_context, key, string.Empty);
             }
 
-            return m.Provide(key, string.Empty) ?? CombinedTypeContainer.NullInstance;
+            return m.Provide(key, string.Empty);
         }
 
-        return new CombinedTypeContainer(string.Empty);
+        return string.Empty; // todo
     }
 
-    protected override CombinedTypeContainer AggregateResult(CombinedTypeContainer aggregate, CombinedTypeContainer nextResult)
+    protected override object? AggregateResult(object? aggregate, object? nextResult)
     {
         if (aggregate is null)
         {
@@ -165,7 +155,27 @@ internal class LanguageVisitor<T> : LanguageBaseVisitor<CombinedTypeContainer>
             return aggregate;
         }
 
-        return new CombinedTypeContainer(aggregate.ToString() + nextResult.ToString());
+        string? result;
+
+        if (aggregate is bool b)
+        {
+            result = b.ToString().ToLower();
+        }
+        else
+        {
+            result = aggregate.ToString();
+        }
+
+        if (nextResult is bool b2)
+        {
+            result += b2.ToString().ToLower();
+        }
+        else
+        {
+            result += nextResult.ToString();
+        }
+
+        return result;
     }
 
     private static string? Escape(string input)

@@ -12,13 +12,11 @@ public class StringContainsStringMethod : IMethod
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>
-    public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
+    public object? Handle(string method, params object?[] args)
     {
         MethodHelpers.ExpectArgumentCount(2, args);
 
         var strings = MethodHelpers.ExpectStrings(args);
-        return strings[0].Contains(strings[1])
-            ? CombinedTypeContainer.TrueInstance
-            : CombinedTypeContainer.FalseInstance;
+        return strings[0].Contains(strings[1]);
     }
 }

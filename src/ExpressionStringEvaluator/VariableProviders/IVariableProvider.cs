@@ -1,8 +1,5 @@
 namespace ExpressionStringEvaluator.VariableProviders;
 
-using System.Collections.Generic;
-using ExpressionStringEvaluator.Methods;
-
 /// <summary>
 /// IVariableProvider.
 /// </summary>
@@ -21,7 +18,7 @@ public interface IVariableProvider
     /// <param name="key">key.</param>
     /// <param name="arg">arguments.</param>
     /// <returns>variable value.</returns>
-    CombinedTypeContainer? Provide(string key, string? arg);
+    object? Provide(string key, string? arg);
 }
 
 /// <summary>
@@ -37,5 +34,5 @@ public interface IVariableProvider<in T> : IVariableProvider
     /// <param name="key">key.</param>
     /// <param name="arg">arguments.</param>
     /// <returns>variable value.</returns>
-    CombinedTypeContainer? Provide(T context, string key, string? arg);
+    object? Provide(T context, string key, string? arg);
 }

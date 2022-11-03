@@ -1,6 +1,6 @@
-﻿namespace ExpressionStringEvaluator.Methods.Linq;
+namespace ExpressionStringEvaluator.Methods.Linq;
 
-using System.Linq;
+using System.Collections;
 
 /// <summary>
 /// FirstMethod.
@@ -14,18 +14,20 @@ public class FirstMethod : IMethod
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>
-    public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
+    public object? Handle(string method, params object?[] args)
     {
         MethodHelpers.ExpectArgumentCount(1, args);
-        CombinedTypeContainer values = args[0];
 
-        if (values.IsArray(out CombinedTypeContainer[]? value))
+        if (args[0] is IList list)
         {
-            // can throws, when empty
-            return value.First();
+            return list[0];
         }
 
-        // or should this throw?
-        return CombinedTypeContainer.NullInstance;
+        if (args[0] is object[] array)
+        {
+            return array[0];
+        }
+
+        return args[0];
     }
 }

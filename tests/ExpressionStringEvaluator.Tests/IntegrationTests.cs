@@ -109,8 +109,8 @@ public sealed class IntegrationTests : IDisposable
     [InlineData("{Upper(text)} x",                                       "TEXT x")]
     [InlineData("{UrlEncode(http://www.google.com:8080/abc)} x",         "http%3a%2f%2fwww.google.com%3a8080%2fabc x")]
 
-    [InlineData("TrUe", "true")]
-    [InlineData("False", "false")]
+    [InlineData("TrUe", "TrUe")]
+    [InlineData("False", "False")]
     [InlineData("1", "1")]
     [InlineData("0", "0")]
     [InlineData("abctRuede", "abctRuede")]
@@ -211,16 +211,28 @@ public sealed class IntegrationTests : IDisposable
     [InlineData("string.IsNullOrEmpty = {string.IsNullOrEmpty(%ExpressionStringEvaluatorEmpty%)}", "string.IsNullOrEmpty = true")]
 
     [InlineData("echo # abc >> def", "echo # abc >> def")]
+    [InlineData("{trimEnd(tRue)}", "tRue")]
     public void Parse(string input, string expectedOutput)
     {
         // arrange
+        _output.WriteLine(input);
+        _output.WriteLine(expectedOutput);
+
         var sut = new ExpressionExecutor(_providers, _methods);
 
         // act
-        CombinedTypeContainer result = sut.Execute(new Context(), input);
+        var result = sut.Execute(new Context(), input);
 
         // assert
-        Assert.Equal(expectedOutput, result.ToString());
+        if (result is bool b)
+        {
+            _output.WriteLine("result is boolean.");
+            Assert.Equal(expectedOutput, b.ToString().ToLower());
+        }
+        else
+        {
+            Assert.Equal(expectedOutput, result?.ToString());
+        }
     }
 
     [Theory]
@@ -231,7 +243,7 @@ public sealed class IntegrationTests : IDisposable
     public void ParseRepoContext(string input, string expectedOutput)
     {
         // arrange
-        var repo = new Repository()
+        var repo = new Repository
             {
                 Location = "D:\\repositories",
                 Name = "ExpressionStringEvaluator",
@@ -242,16 +254,15 @@ public sealed class IntegrationTests : IDisposable
         var sut = new ExpressionExecutor(providers, _methods);
 
         // act
-        CombinedTypeContainer result = sut.Execute(repo, input);
+        var result = sut.Execute(repo, input);
 
         // assert
-        Assert.Equal(expectedOutput, result.ToString());
+        Assert.Equal(expectedOutput, result?.ToString());
     }
 
     [Theory]
     [InlineData("{not(x)}")] // x is not a boolean, expected
     [InlineData("Dit is %ExpressionStringEvaluatorDummy ExpressionStringEvaluatorDummy% abc")] // %ExpressionStringEvaluatorDummy ExpressionStringEvaluatorDummy% is not a valid env var.
-    [InlineData("{trimEnd(tRue)}")] // this occurs becuase tRue is evaluated as string, not as text.
     [InlineData("x {ifthenelse({FileExists(dummyfile2.json)}, exist, )} y")] // todo fix, third argument is null
     [InlineData("{ifthenelse({FileExists(dummyfile2.json)}, exist, )}")]
     [InlineData("substring {Substring(\"abcdefghijklmnop\", 4, -1)}")] // System.ArgumentOutOfRangeException, Length cannot be less than zero. (Parameter 'length')
@@ -275,10 +286,10 @@ public sealed class IntegrationTests : IDisposable
         var sut = new ExpressionExecutor(_providers, _methods);
 
         // act
-        CombinedTypeContainer result = sut.Execute(new Context(), input);
+        var result = sut.Execute(new Context(), input);
 
         // assert
-        result.Should().Be(CombinedTypeContainer.NullInstance);
+        result.Should().BeNull();
     }
 
     private LanguageParser.TextExpressionContext GetExpressionContext(string input)

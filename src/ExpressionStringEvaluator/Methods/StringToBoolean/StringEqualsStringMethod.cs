@@ -1,7 +1,6 @@
 namespace ExpressionStringEvaluator.Methods.StringToBoolean;
 
 using System;
-using System.Linq;
 
 /// <summary>
 /// StringEqualsStringMethod.
@@ -15,7 +14,7 @@ public class StringEqualsStringMethod : IMethod
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>
-    public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
+    public object? Handle(string method, params object?[] args)
     {
         MethodHelpers.ExpectAtLeastArgumentCount(2, args);
         var count = MethodHelpers.ExpectAtMostArgumentCount(3, args);
@@ -24,9 +23,7 @@ public class StringEqualsStringMethod : IMethod
 
         if (count == 2)
         {
-            return string.Equals(strings[0], strings[1])
-                ? CombinedTypeContainer.TrueInstance
-                : CombinedTypeContainer.FalseInstance;
+            return string.Equals(strings[0], strings[1]);
         }
 
         if (count == 3)
@@ -38,9 +35,7 @@ public class StringEqualsStringMethod : IMethod
                 sc = StringComparison.CurrentCultureIgnoreCase;
             }
 
-            return string.Equals(strings[0], strings[1], sc)
-                ? CombinedTypeContainer.TrueInstance
-                : CombinedTypeContainer.FalseInstance;
+            return string.Equals(strings[0], strings[1], sc);
         }
 
         throw new NotImplementedException();

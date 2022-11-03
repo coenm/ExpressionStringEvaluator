@@ -12,6 +12,7 @@ using ExpressionStringEvaluator.VariableProviders;
 /// </summary>
 public class ExpressionExecutor
 {
+    private static readonly object _object = new object();
     private readonly List<IVariableProvider> _providers;
     private readonly List<IMethod> _methods;
 
@@ -22,8 +23,8 @@ public class ExpressionExecutor
     /// <param name="methods">methods.</param>
     public ExpressionExecutor(IEnumerable<IVariableProvider> providers, IEnumerable<IMethod> methods)
     {
-        _providers = providers?.ToList() ?? throw new ArgumentNullException(nameof(providers));
-        _methods = methods?.ToList() ?? throw new ArgumentNullException(nameof(methods));
+        _providers = providers.ToList() ?? throw new ArgumentNullException(nameof(providers));
+        _methods = methods.ToList() ?? throw new ArgumentNullException(nameof(methods));
     }
 
     /// <summary>
@@ -33,7 +34,7 @@ public class ExpressionExecutor
     /// <param name="input">input.</param>
     /// <typeparam name="T">Type of context.</typeparam>
     /// <returns>result.</returns>
-    public CombinedTypeContainer Execute<T>(T context, string input)
+    public object? Execute<T>(T context, string input)
         where T : new()
     {
         var visitor = new LanguageVisitor<T>(_providers, _methods, context);
@@ -53,8 +54,8 @@ public class ExpressionExecutor
     /// </summary>
     /// <param name="input">input.</param>
     /// <returns>result.</returns>
-    public CombinedTypeContainer Execute(string input)
+    public object? Execute(string input)
     {
-        return Execute<object>(new object(), input);
+        return Execute(_object, input);
     }
 }

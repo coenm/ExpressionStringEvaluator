@@ -1,7 +1,5 @@
 namespace ExpressionStringEvaluator.Tests;
 
-using System;
-
 public class Repository
 {
     public string? Name { get; set; }

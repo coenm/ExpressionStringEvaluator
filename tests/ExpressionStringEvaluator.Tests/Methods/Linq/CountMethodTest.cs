@@ -1,6 +1,5 @@
 namespace ExpressionStringEvaluator.Tests.Methods.Linq;
 
-using ExpressionStringEvaluator.Methods;
 using ExpressionStringEvaluator.Methods.Linq;
 using ExpressionStringEvaluator.Tests.TestHelpers;
 using FluentAssertions;
@@ -45,10 +44,10 @@ public class CountMethodTest
         // arrange
 
         // act
-        CombinedTypeContainer result = _sut.Handle(METHOD_NAME, CombinedTypeContainerHelper.CreateArrayContainer("1", "2"));
+        var result = _sut.Handle(METHOD_NAME, ObjectHelper.CreateArrayContainer("1", "2"));
 
         // assert
-        result.IsInt(out var intValue).Should().BeTrue();
+        var intValue = result.Should().BeOfType<int>().Subject;
         intValue.Should().Be(2);
     }
 }

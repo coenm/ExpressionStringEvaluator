@@ -1,7 +1,5 @@
 namespace ExpressionStringEvaluator.Methods.BooleanToBoolean;
 
-using System;
-
 /// <summary>
 /// OrBooleanMethod.
 /// </summary>
@@ -14,18 +12,18 @@ public class OrBooleanMethod : IMethod
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>
-    public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
+    public object? Handle(string method, params object?[] args)
     {
         MethodHelpers.ExpectAtLeastArgumentCount(1, args);
 
-        foreach (CombinedTypeContainer item in args)
+        foreach (var item in args)
         {
             if (MethodHelpers.IsBooleanOrBooleanString(item, out var b) && b.Value)
             {
-                return CombinedTypeContainer.TrueInstance;
+                return true;
             }
         }
 
-        return CombinedTypeContainer.FalseInstance;
+        return false;
     }
 }

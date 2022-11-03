@@ -13,7 +13,7 @@ internal static class MethodHelpers
         return compareTo.Any(item => item.Equals(method, StringComparison.CurrentCultureIgnoreCase));
     }
 
-    public static void ExpectArgumentCount(int expectCount, params CombinedTypeContainer[] arg)
+    public static void ExpectArgumentCount(int expectCount, params object?[] arg)
     {
         if (arg.Length != expectCount)
         {
@@ -21,7 +21,7 @@ internal static class MethodHelpers
         }
     }
 
-    public static int ExpectAtLeastArgumentCount(int expectCount, params CombinedTypeContainer[] arg)
+    public static int ExpectAtLeastArgumentCount(int expectCount, params object?[] arg)
     {
         if (arg.Length < expectCount)
         {
@@ -31,7 +31,7 @@ internal static class MethodHelpers
         return arg.Length;
     }
 
-    public static int ExpectAtMostArgumentCount(int expectCount, params CombinedTypeContainer[] arg)
+    public static int ExpectAtMostArgumentCount(int expectCount, params object?[] arg)
     {
         if (arg.Length > expectCount)
         {
@@ -41,61 +41,93 @@ internal static class MethodHelpers
         return arg.Length;
     }
 
-    public static int ExpectIntegerOrIntegerString(CombinedTypeContainer arg)
+    public static bool IsIntegerOrIntegerString(object? arg, [NotNullWhen(true)] out int? value)
     {
-        if (arg.IsInt(out var @int))
+        if (arg is null)
         {
-            return @int.Value;
+            value = null;
+            return false;
         }
 
-        if (arg.IsString(out var @string))
+        if (arg is int @int)
         {
-            if (int.TryParse(@string, NumberStyles.Any, CultureInfo.CurrentCulture, out var value))
-            {
-                return value;
-            }
+            value = @int;
+            return true;
         }
 
-        throw new Exception($"Expected integer type or string with integer value but but found {arg.GetInnerType()?.Name ?? "null"}.");
+        if (arg is string @string && int.TryParse(@string, NumberStyles.Any, CultureInfo.CurrentCulture, out var tryParseValue))
+        {
+            value = tryParseValue;
+            return true;
+        }
+
+        value = null;
+        return false;
     }
 
-    public static string ExpectString(CombinedTypeContainer arg)
+    public static int ExpectIntegerOrIntegerString(object? arg)
     {
-        if (!arg.IsString(out var @string))
+        if (arg is null)
         {
-            throw new Exception($"Expected string type but but found {arg.GetInnerType()?.Name ?? "null"}.");
+            throw new Exception($"Expected integer type or string with integer value but but found null.");
+        }
+
+        if (arg is int @int)
+        {
+            return @int;
+        }
+
+        if (arg is string @string && int.TryParse(@string, NumberStyles.Any, CultureInfo.CurrentCulture, out var value))
+        {
+            return value;
+        }
+
+        throw new Exception($"Expected integer type or string with integer value but but found {arg.GetType().Name ?? "null"}.");
+    }
+
+    public static string ExpectString(object? arg)
+    {
+        if (arg == null)
+        {
+            throw new Exception($"Expected string type but");
+        }
+
+        if (arg is not string @string)
+        {
+            throw new Exception($"Expected string type but found {arg.GetType()?.Name ?? "null"}.");
         }
 
         return @string;
     }
 
-    public static string ExpectSingleString(CombinedTypeContainer[] args)
+    public static string ExpectSingleString(object?[] args)
     {
         ExpectArgumentCount(1, args);
         return ExpectString(args[0]);
     }
 
-    public static string[] ExpectStrings(CombinedTypeContainer[] arg)
+    public static string[] ExpectStrings(object?[] arg)
     {
         var result = new List<string>(arg.Length);
-
-        foreach (CombinedTypeContainer a in arg)
-        {
-            result.Add(ExpectString(a));
-        }
-
+        result.AddRange(arg.Select(ExpectString));
         return result.ToArray();
     }
 
-    public static bool IsBooleanOrBooleanString(CombinedTypeContainer arg, [NotNullWhen(true)] out bool? value)
+    public static bool IsBooleanOrBooleanString(object? arg, [NotNullWhen(true)] out bool? value)
     {
-        if (arg.IsBool(out var b))
+        if (arg == null)
+        {
+            value = null;
+            return false;
+        }
+
+        if (arg is bool b)
         {
             value = b;
             return true;
         }
 
-        if (arg.IsString(out var s))
+        if (arg is string s)
         {
             if ("true".Equals(s.Trim(), StringComparison.CurrentCultureIgnoreCase))
             {
@@ -114,7 +146,7 @@ internal static class MethodHelpers
         return false;
     }
 
-    public static bool ExpectBooleanOrBooleanString(CombinedTypeContainer arg)
+    public static bool ExpectBooleanOrBooleanString(object? arg)
     {
         if (IsBooleanOrBooleanString(arg, out var b))
         {
@@ -124,7 +156,7 @@ internal static class MethodHelpers
         throw new Exception($"Expected boolean but but found {arg}.");
     }
 
-    public static void ExpectNotNull(CombinedTypeContainer[] args)
+    public static void ExpectNotNull(object?[] args)
     {
         if (args.Any(item => item == null))
         {

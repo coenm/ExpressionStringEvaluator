@@ -12,66 +12,62 @@ public class EqualMethod : IMethod
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>
-    public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
+    public object? Handle(string method, params object?[] args)
     {
         MethodHelpers.ExpectArgumentCount(2, args);
-        CombinedTypeContainer v0 = args[0];
-        CombinedTypeContainer v1 = args[1];
+        var v0 = args[0];
+        var v1 = args[1];
 
-        if (v0.IsBool(out var boolValue0))
+        if (v0 == null && v1 == null)
         {
-            // expect second to be bool
-            var boolValue1 = MethodHelpers.ExpectBooleanOrBooleanString(v1);
-            return boolValue1 == boolValue0
-                ? CombinedTypeContainer.TrueInstance
-                : CombinedTypeContainer.FalseInstance;
+            return true;
         }
 
-        if (v0.IsInt(out var intValue0))
+        if (v0 == null || v1 == null)
         {
-            // expect second to be int
-            var intValue1 = MethodHelpers.ExpectIntegerOrIntegerString(v1);
-            return intValue1 == intValue0
-                ? CombinedTypeContainer.TrueInstance
-                : CombinedTypeContainer.FalseInstance;
+            return false;
         }
 
-        if (v0.IsNull())
+        if (v0 is string s && v1 is bool b)
         {
-            // expect second to be int
-            if (v1.IsNull())
-            {
-                return CombinedTypeContainer.TrueInstance;
-            }
+            return CompareBooleanAndString(b, s);
         }
 
-        if (v0.IsString(out var stringValue0))
+        if (v1 is string s1 && v0 is bool b1)
         {
-            // expect second to be int
-            if (v1.IsString(out var stringValue1))
-            {
-                return stringValue0.Equals(stringValue1)
-                    ? CombinedTypeContainer.TrueInstance
-                    : CombinedTypeContainer.FalseInstance;
-            }
-
-            if (v1.IsBool(out var boolValue1))
-            {
-                boolValue0 = MethodHelpers.ExpectBooleanOrBooleanString(v0);
-                return boolValue1 == boolValue0
-                    ? CombinedTypeContainer.TrueInstance
-                    : CombinedTypeContainer.FalseInstance;
-            }
-
-            if (v1.IsInt(out var intValue1))
-            {
-                intValue0 = MethodHelpers.ExpectIntegerOrIntegerString(v0);
-                return intValue1 == intValue0
-                    ? CombinedTypeContainer.TrueInstance
-                    : CombinedTypeContainer.FalseInstance;
-            }
+            return CompareBooleanAndString(b1, s1);
         }
 
-        return CombinedTypeContainer.NullInstance;
+        if (v0 is string s2 && v1 is int i)
+        {
+            return CompareIntAndString(i, s2);
+        }
+
+        if (v1 is string s3 && v0 is int i1)
+        {
+            return CompareIntAndString(i1, s3);
+        }
+
+        return v0.Equals(v1);
+    }
+
+    private static bool CompareIntAndString(int @int, string @string)
+    {
+        if (MethodHelpers.IsIntegerOrIntegerString(@string, out var intValue))
+        {
+            return @int == intValue;
+        }
+
+        return false;
+    }
+
+    private static bool CompareBooleanAndString(bool @bool, string @string)
+    {
+        if (MethodHelpers.IsBooleanOrBooleanString(@string, out var boolValue))
+        {
+            return boolValue == @bool;
+        }
+
+        return false;
     }
 }

@@ -1,7 +1,5 @@
 namespace ExpressionStringEvaluator.Methods.StringToInt;
 
-using System;
-
 /// <summary>
 /// StringLengthMethod.
 /// </summary>
@@ -14,10 +12,10 @@ public class StringLengthMethod : IMethod
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>
-    public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
+    public object? Handle(string method, params object?[] args)
     {
         MethodHelpers.ExpectArgumentCount(1, args);
         var stringValue = MethodHelpers.ExpectString(args[0]);
-        return new CombinedTypeContainer(stringValue.Length);
+        return stringValue.Length;
     }
 }

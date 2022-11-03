@@ -1,5 +1,6 @@
-﻿namespace ExpressionStringEvaluator.Methods.Linq;
+namespace ExpressionStringEvaluator.Methods.Linq;
 
+using System;
 using System.Linq;
 
 /// <summary>
@@ -14,20 +15,23 @@ public class SkipMethod : IMethod
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>
-    public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
+    public object? Handle(string method, params object?[] args)
     {
         MethodHelpers.ExpectArgumentCount(2, args);
-        CombinedTypeContainer values = args[0];
-        CombinedTypeContainer skipContainer = args[1];
-        var skip = MethodHelpers.ExpectIntegerOrIntegerString(skipContainer);
+        object? values = args[0];
+        var skip = MethodHelpers.ExpectIntegerOrIntegerString(args[1]);
 
-        if (values.IsArray(out CombinedTypeContainer[]? value))
+        if (values == null)
         {
-            // can throws, when empty
-            return new CombinedTypeContainer(value.Skip(skip).ToArray());
+            throw new Exception("Cannot skip on null");
+        }
+
+        if (values is Array array)
+        {
+            return ((object[])array).Skip(skip).ToArray();
         }
 
         // or should this throw?
-        return CombinedTypeContainer.NullInstance;
+        throw new Exception($"Cannot skip on non array {values.GetType().Name}");
     }
 }
