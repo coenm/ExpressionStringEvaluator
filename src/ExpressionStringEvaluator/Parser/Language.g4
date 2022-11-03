@@ -3,13 +3,13 @@
 /*------------------------------------------------------------------
  * PARSER RULES
  *------------------------------------------------------------------*/
-textExpression          : ( envvariable | booleanexpression | textWithSpaces | variable | function )*
+textExpression          : ( envvariable | booleanexpression |textWithSpaces | variable | function )*
                         ;
 
-argumentExpression      : ( envvariable | booleanexpression | words | variable | function )* | '"' argumentTextExpression '"'
+argumentExpression      : ( envvariable | booleanexpression |words | variable | function )* | '"' argumentTextExpression '"'
                         ;
 
-argumentTextExpression  : ( envvariable | booleanexpression | textWithSpacesEscaped | variable | function )*
+argumentTextExpression  : ( envvariable | booleanexpression |textWithSpacesEscaped | variable | function )*
                         ;
 
 booleanexpression       : ( TRUE | FALSE )

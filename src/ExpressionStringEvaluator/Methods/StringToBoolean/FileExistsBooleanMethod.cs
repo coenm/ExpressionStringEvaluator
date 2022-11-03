@@ -1,6 +1,5 @@
 namespace ExpressionStringEvaluator.Methods.StringToBoolean;
 
-using System;
 using System.IO;
 
 /// <summary>
@@ -15,12 +14,12 @@ public class FileExistsBooleanMethod : IMethod
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>
-    public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
+    public object? Handle(string method, params object?[] args)
     {
         MethodHelpers.ExpectArgumentCount(1, args);
 
         var filename = MethodHelpers.ExpectString(args[0]);
 
-        return new CombinedTypeContainer(File.Exists(filename));
+        return File.Exists(filename);
     }
 }

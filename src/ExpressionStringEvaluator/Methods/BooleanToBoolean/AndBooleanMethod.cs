@@ -1,7 +1,5 @@
 namespace ExpressionStringEvaluator.Methods.BooleanToBoolean;
 
-using System;
-
 /// <summary>
 /// AndBooleanMethod.
 /// </summary>
@@ -14,28 +12,28 @@ public class AndBooleanMethod : IMethod
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>
-    public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
+    public object? Handle(string method, params object?[] args)
     {
         MethodHelpers.ExpectAtLeastArgumentCount(1, args);
 
-        foreach (CombinedTypeContainer item in args)
+        foreach (object? item in args)
         {
-            if (item.IsNull())
+            if (item == null)
             {
-                return CombinedTypeContainer.FalseInstance;
+                return false;
             }
 
             if (!MethodHelpers.IsBooleanOrBooleanString(item, out var b))
             {
-                return CombinedTypeContainer.FalseInstance;
+                return false;
             }
 
             if (!b.Value)
             {
-                return CombinedTypeContainer.FalseInstance;
+                return false;
             }
         }
 
-        return CombinedTypeContainer.TrueInstance;
+        return true;
     }
 }

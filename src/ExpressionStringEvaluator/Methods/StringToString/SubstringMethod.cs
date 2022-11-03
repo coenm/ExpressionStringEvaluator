@@ -12,7 +12,7 @@ public class SubstringMethod : IMethod
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>
-    public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
+    public object? Handle(string method, params object?[] args)
     {
         MethodHelpers.ExpectAtLeastArgumentCount(2, args);
         var count = MethodHelpers.ExpectAtMostArgumentCount(3, args);
@@ -22,10 +22,10 @@ public class SubstringMethod : IMethod
 
         if (count == 2)
         {
-            return new CombinedTypeContainer(@string.Substring(startIndex));
+            return @string.Substring(startIndex);
         }
 
         var length = MethodHelpers.ExpectIntegerOrIntegerString(args[2]);
-        return new CombinedTypeContainer(@string.Substring(startIndex, length));
+        return @string.Substring(startIndex, length);
     }
 }

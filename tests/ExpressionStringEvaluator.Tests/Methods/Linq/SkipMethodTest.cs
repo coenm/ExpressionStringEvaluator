@@ -1,6 +1,6 @@
 namespace ExpressionStringEvaluator.Tests.Methods.Linq;
 
-using ExpressionStringEvaluator.Methods;
+using System;
 using ExpressionStringEvaluator.Methods.Linq;
 using ExpressionStringEvaluator.Tests.TestHelpers;
 using FluentAssertions;
@@ -45,10 +45,16 @@ public class SkipMethodTest
         // arrange
 
         // act
-        CombinedTypeContainer result = _sut.Handle(METHOD_NAME, CombinedTypeContainerHelper.CreateArrayContainer("1", "2"), new CombinedTypeContainer(1));
+        var result = _sut.Handle(METHOD_NAME, ObjectHelper.CreateArrayContainer("1", "2"), 1);
 
         // assert
-        result.IsArray(out CombinedTypeContainer[]? arrayValue).Should().BeTrue();
-        arrayValue.Should().BeEquivalentTo(CombinedTypeContainerHelper.CreateArray("2"));
+        if (result is object[] arrayValue)
+        {
+            arrayValue.Should().BeEquivalentTo(ObjectHelper.CreateArray("2"));
+        }
+        else
+        {
+            throw new Exception();
+        }
     }
 }

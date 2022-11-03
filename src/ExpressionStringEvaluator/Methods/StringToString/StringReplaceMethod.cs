@@ -12,7 +12,7 @@ public class StringReplaceMethod : IMethod
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>
-    public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
+    public object? Handle(string method, params object?[] args)
     {
         MethodHelpers.ExpectArgumentCount(3, args);
         var strings = MethodHelpers.ExpectStrings(args);
@@ -20,9 +20,9 @@ public class StringReplaceMethod : IMethod
         if (strings[1].Length == 1 && strings[2].Length == 1)
         {
             // use characters (probably better performance)
-            return new CombinedTypeContainer(strings[0].Replace(strings[1][0], strings[2][0]));
+            return strings[0].Replace(strings[1][0], strings[2][0]);
         }
 
-        return new CombinedTypeContainer(strings[0].Replace(strings[1], strings[2]));
+        return strings[0].Replace(strings[1], strings[2]);
     }
 }

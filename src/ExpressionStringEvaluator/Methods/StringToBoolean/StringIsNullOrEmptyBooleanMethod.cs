@@ -1,7 +1,5 @@
 namespace ExpressionStringEvaluator.Methods.StringToBoolean;
 
-using System;
-
 /// <summary>
 /// StringIsNullOrEmptyBooleanMethod.
 /// </summary>
@@ -14,12 +12,10 @@ public class StringIsNullOrEmptyBooleanMethod : IMethod
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>
-    public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
+    public object? Handle(string method, params object?[] args)
     {
         MethodHelpers.ExpectArgumentCount(1, args);
         var stringValue = MethodHelpers.ExpectString(args[0]);
-        return string.IsNullOrEmpty(stringValue)
-            ? CombinedTypeContainer.TrueInstance
-            : CombinedTypeContainer.FalseInstance;
+        return string.IsNullOrEmpty(stringValue);
     }
 }

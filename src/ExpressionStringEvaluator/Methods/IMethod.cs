@@ -18,5 +18,5 @@ public interface IMethod
     /// <param name="method">Name of the method.</param>
     /// <param name="args">arguments.</param>
     /// <returns>Result.</returns>
-    CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args);
+    object? Handle(string method, params object?[] args);
 }

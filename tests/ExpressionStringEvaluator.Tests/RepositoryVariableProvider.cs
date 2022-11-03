@@ -1,7 +1,6 @@
 namespace ExpressionStringEvaluator.Tests;
 
 using System;
-using ExpressionStringEvaluator.Methods;
 using ExpressionStringEvaluator.VariableProviders;
 
 public class RepositoryVariableProvider : IVariableProvider<Repository>
@@ -11,13 +10,13 @@ public class RepositoryVariableProvider : IVariableProvider<Repository>
         return !string.IsNullOrWhiteSpace(key) && key.StartsWith("Repository.", StringComparison.CurrentCultureIgnoreCase);
     }
 
-    public CombinedTypeContainer? Provide(Repository context, string key, string? arg)
+    public object? Provide(Repository context, string key, string? arg)
     {
         var result = ProvideInner(context, key);
-        return new CombinedTypeContainer(result);
+        return result;
     }
 
-    public CombinedTypeContainer? Provide(string key, string? arg)
+    public object? Provide(string key, string? arg)
     {
         throw new NotImplementedException();
     }

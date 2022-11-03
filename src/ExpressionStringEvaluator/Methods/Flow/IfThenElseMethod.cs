@@ -1,8 +1,5 @@
 namespace ExpressionStringEvaluator.Methods.Flow;
 
-using System;
-using System.Linq;
-
 /// <summary>
 /// IfThenElseMethod.
 /// </summary>
@@ -15,7 +12,7 @@ public class IfThenElseMethod : IMethod
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>
-    public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
+    public object? Handle(string method, params object?[] args)
     {
         MethodHelpers.ExpectArgumentCount(3, args);
         var b = MethodHelpers.ExpectBooleanOrBooleanString(args[0]);

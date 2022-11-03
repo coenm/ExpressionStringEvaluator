@@ -1,6 +1,5 @@
 namespace ExpressionStringEvaluator.Tests.Methods.Linq;
 
-using ExpressionStringEvaluator.Methods;
 using ExpressionStringEvaluator.Methods.Linq;
 using ExpressionStringEvaluator.Tests.TestHelpers;
 using FluentAssertions;
@@ -45,10 +44,10 @@ public class TakeMethodTest
         // arrange
 
         // act
-        CombinedTypeContainer result = _sut.Handle(METHOD_NAME, CombinedTypeContainerHelper.CreateArrayContainer("1", "2"), new CombinedTypeContainer(1));
+        var result = _sut.Handle(METHOD_NAME, ObjectHelper.CreateArrayContainer("1", "2"), 1);
 
         // assert
-        result.IsArray(out CombinedTypeContainer[]? arrayValue).Should().BeTrue();
-        arrayValue.Should().BeEquivalentTo(CombinedTypeContainerHelper.CreateArray("1"));
+        var arrayValue = result.Should().BeOfType<object[]>().Subject;
+        arrayValue.Should().BeEquivalentTo(ObjectHelper.CreateArray("1"));
     }
 }

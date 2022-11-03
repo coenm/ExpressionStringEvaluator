@@ -44,11 +44,10 @@ public class EqualMethodTest
         // arrange
 
         // act
-        CombinedTypeContainer result = _sut.Handle(
-            METHOD_NAME, CombinedTypeContainerHelper.CreateArray("1", "1"));
+        var result = _sut.Handle(METHOD_NAME, ObjectHelper.CreateArray("1", "1"));
 
         // assert
-        result.IsBool(out var boolValue).Should().BeTrue();
+        var boolValue = result.Should().BeOfType<bool>().Subject;
         boolValue.Should().BeTrue();
     }
 
@@ -62,11 +61,10 @@ public class EqualMethodTest
         // arrange
 
         // act
-        CombinedTypeContainer result = _sut.Handle(
-            METHOD_NAME, CombinedTypeContainerHelper.CreateArray("1", input));
+        var result = _sut.Handle(METHOD_NAME, ObjectHelper.CreateArray("1", input));
 
         // assert
-        result.IsBool(out var boolValue).Should().BeTrue();
+        var boolValue = result.Should().BeOfType<bool>().Subject;
         boolValue.Should().BeFalse();
     }
 
@@ -76,11 +74,10 @@ public class EqualMethodTest
         // arrange
 
         // act
-        CombinedTypeContainer result = _sut.Handle(
-            METHOD_NAME, CombinedTypeContainerHelper.CreateArray(1, 1));
+        var result = _sut.Handle(METHOD_NAME, ObjectHelper.CreateArray(1, 1));
 
         // assert
-        result.IsBool(out var boolValue).Should().BeTrue();
+        var boolValue = result.Should().BeOfType<bool>().Subject;
         boolValue.Should().BeTrue();
     }
 
@@ -93,11 +90,10 @@ public class EqualMethodTest
         // arrange
 
         // act
-        CombinedTypeContainer result = _sut.Handle(
-            METHOD_NAME, CombinedTypeContainerHelper.CreateArray(1, input));
+        var result = _sut.Handle(METHOD_NAME, ObjectHelper.CreateArray(1, input));
 
         // assert
-        result.IsBool(out var boolValue).Should().BeTrue();
+        var boolValue = result.Should().BeOfType<bool>().Subject;
         boolValue.Should().BeFalse();
     }
 }

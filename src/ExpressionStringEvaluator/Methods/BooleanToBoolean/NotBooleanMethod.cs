@@ -1,6 +1,5 @@
 namespace ExpressionStringEvaluator.Methods.BooleanToBoolean;
 
-using System;
 using System.Linq;
 
 /// <summary>
@@ -15,14 +14,9 @@ public class NotBooleanMethod : IMethod
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>
-    public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
+    public object? Handle(string method, params object?[] args)
     {
         MethodHelpers.ExpectArgumentCount(1, args);
-        CombinedTypeContainer item = args.Single();
-        var b = MethodHelpers.ExpectBooleanOrBooleanString(item);
-
-        return b
-            ? CombinedTypeContainer.FalseInstance
-            : CombinedTypeContainer.TrueInstance;
+        return !MethodHelpers.ExpectBooleanOrBooleanString(args.Single());
     }
 }

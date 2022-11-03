@@ -1,6 +1,7 @@
 namespace ExpressionStringEvaluator.Methods.Linq;
 
-using System.Threading;
+using System;
+using System.Collections;
 
 /// <summary>
 /// CountMethod.
@@ -14,16 +15,31 @@ public class CountMethod : IMethod
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>
-    public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
+    public object? Handle(string method, params object?[] args)
     {
         MethodHelpers.ExpectArgumentCount(1, args);
-        CombinedTypeContainer values = args[0];
+        var values = args[0];
 
-        if (values.IsArray(out CombinedTypeContainer[]? value))
+        if (values == null)
         {
-            return new CombinedTypeContainer(value.Length);
+            throw new Exception("Cannot get length of null");
         }
 
-        return new CombinedTypeContainer(0);
+        if (values is Array a)
+        {
+            return a.Length;
+        }
+
+        if (values is IList list)
+        {
+            return list.Count;
+        }
+
+        if (values is IDictionary dictionary)
+        {
+            return dictionary.Count;
+        }
+
+        return 0;
     }
 }

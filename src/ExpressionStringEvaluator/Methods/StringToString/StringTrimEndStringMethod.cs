@@ -1,7 +1,5 @@
 namespace ExpressionStringEvaluator.Methods.StringToString;
 
-using System;
-
 /// <summary>
 /// StringTrimEndStringMethod.
 /// </summary>
@@ -14,9 +12,9 @@ public class StringTrimEndStringMethod : IMethod
     }
 
     /// <inheritdoc cref="IMethod.Handle"/>
-    public CombinedTypeContainer Handle(string method, params CombinedTypeContainer[] args)
+    public object? Handle(string method, params object?[] args)
     {
         var stringValue = MethodHelpers.ExpectSingleString(args);
-        return new CombinedTypeContainer(stringValue.TrimEnd());
+        return stringValue.TrimEnd();
     }
 }
