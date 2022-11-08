@@ -3,13 +3,13 @@
 /*------------------------------------------------------------------
  * PARSER RULES
  *------------------------------------------------------------------*/
-textExpression          : ( envvariable | booleanexpression |textWithSpaces | variable | function )*
+textExpression          : ( envvariable | booleanexpression | textWithSpaces | variable | function )*
                         ;
 
-argumentExpression      : ( envvariable | booleanexpression |words | variable | function )* | '"' argumentTextExpression '"'
+argumentExpression      : ( envvariable | booleanexpression | words | variable | function )* | '"' argumentTextExpression '"'
                         ;
 
-argumentTextExpression  : ( envvariable | booleanexpression |textWithSpacesEscaped | variable | function )*
+argumentTextExpression  : ( envvariable | booleanexpression | textWithSpacesEscaped | variable | function )*
                         ;
 
 booleanexpression       : ( TRUE | FALSE )
@@ -62,11 +62,13 @@ fragment BRACKET_OPEN    : '\\' '{' ;
 fragment BRACKET_CLOSE    : '\\' '}' ;
 fragment ATSIGN     : '@' ;
 fragment SYMBOLS    : ('?'|'!'|'#'|'$'|'^'|'&'|'*'|'='|';'|'>'|'<') ;
+fragment BR_OPEN : '[';
+fragment BR_CLOSE : ']';
 
 TRUE                : ( T R U E );
 FALSE               : ( F A L S E );
 
-KEY                 : LETTER(LETTER|DIGIT|UNDERSCORE|DOT|MINUS)+ ;
+KEY                 : LETTER(LETTER|DIGIT|UNDERSCORE|DOT|MINUS|BR_OPEN|BR_CLOSE)+ ;
 WORD                : (LETTER|DIGIT|UNDERSCORE|DOT|MINUS|SLASH|BACKSLASH|PERCENT|BRACKET_OPEN|BRACKET_CLOSE|ATSIGN|SYMBOLS)+;
 NEWLINE             : ('\r'? '\n' | '\r') -> channel(HIDDEN) ;
 WHITESPACE          : (' ' | '\t' ) -> channel(HIDDEN) ;
