@@ -70,6 +70,7 @@ public sealed class IntegrationTests : IDisposable
                 new OrBooleanMethod(),
                 new StringIsNullOrEmptyBooleanMethod(),
                 new FileExistsBooleanMethod(),
+                new DirectoryExistsBooleanMethod(),
                 new NotBooleanMethod(),
                 new StringLengthMethod(),
                 new IfThenElseMethod(),
@@ -212,6 +213,10 @@ public sealed class IntegrationTests : IDisposable
 
     [InlineData("echo # abc >> def", "echo # abc >> def")]
     [InlineData("{trimEnd(tRue)}", "tRue")]
+    [InlineData("{Directory.Exists(abc_dummy)}", "false")] // with dot
+    [InlineData("{DirectoryExists(abc_dummy)}", "false")] // without dot
+    [InlineData("{directoryexists(abc_dummy)}", "false")] // case insensitive
+    [InlineData("{directoryexists(\"abc_dummy\")}", "false")] // quotes
     public void Parse(string input, string expectedOutput)
     {
         // arrange
@@ -233,6 +238,14 @@ public sealed class IntegrationTests : IDisposable
         {
             Assert.Equal(expectedOutput, result?.ToString());
         }
+    }
+
+    [Fact]
+    public void DirectoryExistsMethodTest()
+    {
+        Parse("{DirectoryExists(\"" + System.IO.Path.GetTempPath().Replace("\\", "\\\\") + "\"}", "true");
+        Parse("{DirectoryExists(\"" + System.IO.Path.GetTempPath().TrimEnd('\\').Replace("\\", "\\\\") + "\"}", "true");
+        Parse("{DirectoryExists(\"" + System.IO.Path.GetTempPath().ToLower().Replace("\\", "\\\\") + "\"}", "true");
     }
 
     [Theory]

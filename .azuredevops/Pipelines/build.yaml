@@ -58,11 +58,18 @@ stages:
             includePreviewVersions: false
 
         - task: UseDotNet@2
-          displayName: "Use dotnet sdk 6.0.x"
+          displayName: "Use dotnet runtime 6.0.x"
+          inputs:
+            version: 6.0.x          
+            packageType: runtime
+            includePreviewVersions: false
+
+        - task: UseDotNet@2
+          displayName: "Use dotnet sdk 7.0.x"
           inputs:
             packageType: sdk
-            version: 6.0.201
-            includePreviewVersions: false
+            version: 7.0.102
+            includePreviewVersions: false            
 
         - script: dotnet --info
           displayName: Show dotnet SDK info
